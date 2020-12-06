@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+	PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<!-- myBatis의 활동 방식 설정 -->
+	<settings>
+		<setting name="cacheEnabled" value="false" />
+		<setting name="useGeneratedKeys" value="true" />
+		<setting name="defaultExecutorType" value="REUSE" />
+	</settings>
+
+	
+	<typeAliases>
+		<typeAlias alias="mVO" type="com.luxurycity.clc.vo.MemberVO" />
+		<typeAlias alias="aVO" type="com.luxurycity.clc.vo.AvatarVO" />
+		<typeAlias alias="bVO" type="com.luxurycity.clc.vo.BoardVO" />
+		<typeAlias alias="bmVO" type="com.luxurycity.clc.vo.BookmarkVO" />
+		<typeAlias alias="fVO" type="com.luxurycity.clc.vo.FindVO" />
+		<typeAlias alias="rVO" type="com.luxurycity.clc.vo.RouteVO" />
+		<typeAlias alias="sVO" type="com.luxurycity.clc.vo.StationVO" />
+		<typeAlias alias="page" type="com.luxurycity.clc.util.PageUtil" />
+	</typeAliases>
+
+	
+	<mappers>
+		<mapper resource="com/luxurycity/clc/sql/MemberSQL.xml" />
+		<mapper resource="com/luxurycity/clc/sql/BoardSQL.xml" />
+		<mapper resource="com/luxurycity/clc/sql/BookmarkSQL.xml" />
+		<mapper resource="com/luxurycity/clc/sql/BusDBInitSQL.xml" />
+		<mapper resource="com/luxurycity/clc/sql/FindSQL.xml" />
+		<mapper resource="com/luxurycity/clc/sql/SearchSQL.xml" />
+	</mappers>
+	
+</configuration>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans 
+	xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+						https://www.springframework.org/schema/beans/spring-beans.xsd
+						http://www.springframework.org/schema/context
+						https://www.springframework.org/schema/context/spring-context-4.3.xsd">
+	
+	<bean id="mDao" class="com.luxurycity.clc.dao.MemberDao" />
+	<bean id="bDao" class="com.luxurycity.clc.dao.BoardDao" />
+	<bean id="bmDao" class="com.luxurycity.clc.dao.BookmarkDao" />
+	<bean id="bdDao" class="com.luxurycity.clc.dao.BusDBInitDao" />
+	<bean id="fDao" class="com.luxurycity.clc.dao.FindDao" />
+	<bean id="sDao" class="com.luxurycity.clc.dao.SearchDao" />
+	
+</beans>
