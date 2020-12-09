@@ -8,6 +8,7 @@ $(document).ready(function(){
 			return;
 		}
 		
+		$('#frm').attr('action', '/clc/member/loginProc.clc');
 		$('#frm').submit();
 	});
 	
