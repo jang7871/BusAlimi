@@ -12,4 +12,17 @@ $(document).ready(function(){
 		$('#frm').submit();
 	});
 	
+	$('#idCk').click(function(){
+		$('#findType').val('idCk');
+		
+		$('#frm').attr('action', '/clc/member/findpage.clc');
+		$('#frm').submit();
+	});
+	
+	$('#pwCk').click(function(){
+		$('#findType').val('pwCk');
+		
+		$('#frm').attr('action', '/clc/member/findpage.clc');
+		$('#frm').submit();
+	});
 })

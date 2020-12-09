@@ -1,9 +1,24 @@
 package com.luxurycity.clc.vo;
 
+import com.luxurycity.clc.util.*;
+
 public class BookmarkVO {
 	private int bmno, mno, route_id, station_id, route_cd, bdistrict_cd, sdistrict_cd;
-	private String sid, station_nm, mobile_no, route_nm, ed_station_nm, region, route_tp;
+	private String sid, station_nm, mobile_no, route_nm, ed_station_nm, region, route_tp, id;
+	private PageUtil page;
 	
+	public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
+	}
+	public PageUtil getPage() {
+		return page;
+	}
+	public void setPage(PageUtil page) {
+		this.page = page;
+	}
 	public String getRoute_tp() {
 		return route_tp;
 	}

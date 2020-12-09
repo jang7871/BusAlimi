@@ -2,7 +2,14 @@ package com.luxurycity.clc.vo;
 
 public class FindVO {
 	private int fno, mno, qno;
-	private String answer, quest, pw;
+	private String answer, quest, pw, id;
+	
+	public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
+	}
 	public int getFno() {
 		return fno;
 	}

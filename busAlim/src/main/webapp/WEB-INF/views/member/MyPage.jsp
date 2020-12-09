@@ -41,7 +41,7 @@ a:visited {
     </div>
     <div class="w3-col s8">
       <span>Welcome, <strong>${SID}</strong></span><br>
-      <a href="#" class="w3-col m9 w3-tiny w3-round w3-button w3-orange w3-text-white" style="margin-top: 5px;">Logout</a>
+      <a href="/clc/member/logout.clc" class="w3-col m9 w3-tiny w3-round w3-button w3-orange w3-text-white" style="margin-top: 5px;">Logout</a>
     </div>
   </div>
 </c:if>
@@ -53,8 +53,8 @@ a:visited {
     <div class="w3-col w3-center">
       <span>로그인 후 이용해주세요.</span><br>
       <div class="w3-bar w3-center w3-margin-top">
-	      <a href="#" class="w3-bar-item w3-button w3-small w3-green w3-round w3-margin-right">Login</a>
-	      <a href="#" class="w3-bar-item w3-small w3-button w3-red w3-round">Join</a>
+	      <a href="/clc/member/login.clc" class="w3-bar-item w3-button w3-small w3-green w3-round w3-margin-right">Login</a>
+	      <a href="/clc/member/join.clc" class="w3-bar-item w3-small w3-button w3-red w3-round">Join</a>
       </div>
     </div>
   </div>
@@ -67,7 +67,7 @@ a:visited {
     <h5>Menu</h5>
   </div>
   <div class="w3-bar-block">
-    <a href="/clc/main.clc" class="w3-bar-item w3-button w3-padding-16 w3-hide-large w3-dark-grey w3-hover-black" onclick="w3_close()" title="close menu"><i class="fa fa-remove fa-fw"></i>  Close Menu</a>
+    <a class="w3-bar-item w3-button w3-padding-16 w3-hide-large w3-dark-grey w3-hover-black" onclick="w3_close()" title="close menu"><i class="fa fa-remove fa-fw"></i>  Close Menu</a>
     <a href="/clc/board/board.clc" class="w3-bar-item w3-button w3-padding"><i class="fa fa-pencil fa-fw" aria-hidden="true"></i>  문의게시판</a>
     <a href="" class="w3-bar-item w3-button w3-padding"><i class="fa fa-map-marker fa-fw" aria-hidden="true"></i>  지도 검색</a>
 <c:if test="${not empty SID}">
@@ -96,30 +96,28 @@ a:visited {
 
   <hr>
   <form method="POST" id="frm" class="w3-container w3-padding-32">
+  	<input type="hidden" name="nowPage" value="${PAGE.nowPage}">
   	<h5 class="w3-margin-bottom"><b><i class="fa fa-star" aria-hidden="true"></i>  즐겨찾기</b></h5>
     <div class="w3-row">
       <div class="w3-container w3-half">
         <h5 class="w3-bottombar w3-border-green">버스</h5>
 
 <c:forEach var="blist" items="${BLIST}">
-		<div class="w3-col w3-card-4 w3-white w3-margin-bottom" id="${blist.bmno}">
+		<div class="w3-col w3-card-4 w3-white w3-margin-bottom w3-hover-pale-green" id="${blist.bmno}" style="cursor: pointer;">
 			<div class="w3-col w3-padding">
 				<div class="w3-col w3-border-bottom w3-border-blue w3-text-gray">${blist.route_tp}</div>
-				<div class="w3-col m10" style="padding-top: 5px;">
-					<div class="w3-col m4 w3-border-right w3-border-blue" style="font-size: 40px;">${blist.route_nm}</div>
-					<div class="w3-col m8 w3-padding">
-						<div class="w3-col w3-text-blue w3-small">${blist.ed_station_nm} 방면</div>
-				<c:if test="${blist.station_nm ne '0'}">
-						<div class="w3-col"><b>${blist.station_nm}</b></div>
-				</c:if>
+				<div class="w3-col" style="padding-top: 5px;">
+					<div class="w3-col m10">
+						<div class="w3-col m4 w3-border-right w3-border-blue" style="font-size: 40px;">${blist.route_nm}</div>
+						<div class="w3-col m8 w3-padding">
+							<div class="w3-col w3-text-blue w3-small">${blist.ed_station_nm} 방면</div>
+					<c:if test="${blist.station_nm ne '0'}">
+							<div class="w3-col"><b>${blist.station_nm}</b></div>
+					</c:if>
+						</div>
 					</div>
-				</div>
-				<div class="w3-col m2 w3-display-container" style="height: 120px;">
-					<div class="w3-col" style="height: 60px;">
-						<input type="checkbox" class="w3-check w3-display-middle w3-hide ckbox" name="dellist" value="${blist.bmno}">
-					</div>
-					<div class="w3-col" style="height: 60px;">
-						 <h5 class="w3-button w3-green" id="bsearch">검색</h5>
+					<div class="w3-col m2 w3-display-container" style="height: 60px;">
+							<input type="checkbox" class="w3-check w3-display-middle w3-hide ckbox" name="dellist" value="${blist.bmno}">
 					</div>
 				</div>
 			</div>
@@ -132,40 +130,62 @@ a:visited {
         <h5 class="w3-bottombar w3-border-orange">정류소</h5>
 
 <c:forEach var="slist" items="${SLIST}">        
-		<div class="w3-col w3-card-4 w3-white w3-margin-bottom" id="${slist.bmno}">
+		<div class="w3-col w3-card-4 w3-white w3-margin-bottom w3-hover-pale-yellow" id="${slist.bmno}" style="cursor: pointer;">
 			<div class="w3-col w3-padding">
 				<div class="w3-col w3-border-bottom w3-border-blue w3-text-gray">${slist.region}</div>
-				<div class="w3-col m10" style="padding-top: 5px;">
-					<div class="w3-col m4 w3-border-right w3-border-blue" style="font-size: 40px;">${slist.mobile_no}</div>
-					<div class="w3-col m8 w3-padding">
-						<div class="w3-col w3-small" style="visibility: hidden;"><b>　　　　　　</b></div>
-						<div class="w3-col"><b>${slist.station_nm}</b></div>
+				<div class="w3-col" style="padding-top: 5px;">	
+					<div class="w3-col m10">
+						<div class="w3-col m4 w3-border-right w3-border-blue" style="font-size: 40px;">${slist.mobile_no}</div>
+						<div class="w3-col m8 w3-padding">
+							<div class="w3-col w3-small" style="visibility: hidden;"><b>　　　　　　</b></div>
+							<div class="w3-col"><b>${slist.station_nm}</b></div>
+						</div>
 					</div>
-				</div>
-				<div class="w3-col m2 w3-display-container" style="height: 120px;">
-					<div class="w3-col" style="height: 60px;">
+					<div class="w3-col m2 w3-display-container" style="height: 60px;">
 						<input type="checkbox" class="w3-check w3-display-middle w3-hide ckbox" name="dellist" value="${slist.bmno}">
 					</div>
-					<div class="w3-col" style="height: 60px;">
-						 <h5 class="w3-button w3-green" id="bssearch">검색</h5>
-					</div>
 				</div>
-				
 			</div>
 		</div>
 </c:forEach>
 
       </div>
     </div>
+
+<c:if test="${not empty BLIST or not empty SLIST}">
     <div class="w3-row-third w3-margin-top">
   			<div class="w3-container">
-       			 <h5 class="w3-button w3-right w3-green" id="delbtn">삭제</h5>
-       			 <h5 class="w3-button w3-right w3-green w3-hide" id="deletebtn">삭제</h5>
-       			 <h5 class="w3-button w3-border-right w3-right w3-green w3-hide" id="redelbtn">취소</h5>
+       			 <h5 class="w3-button w3-right w3-red" id="delbtn">삭제</h5>
+       			 <h5 class="w3-button w3-right w3-red w3-hide" id="deletebtn">삭제</h5>
+       			 <h5 class="w3-button w3-right w3-green w3-hide" id="selectAll">전체선택</h5>
+       			 <h5 class="w3-button w3-border-right w3-right w3-blue w3-hide" id="redelbtn">취소</h5>
        		 </div>
     </div>
+</c:if>
     
   </form>
+  <div class="w3-container w3-center">
+	<!-- 페이징 버튼 -->
+	<div class="w3-col w3-margin-top">
+		<form method="POST" action="/clc/member/mypage.clc" name="pfrm" id="pfrm" class="w3-bar w3-border w3-round">
+			<input type="hidden" id="nowPage" name="nowPage">
+			<!-- 이전 버튼 처리 -->
+		  	<c:if test="${PAGE.startPage != 1}">
+		  		<span class="w3-bar-item w3-button pagebtn" id="${PAGE.startPage - 1}">&laquo;</span>
+		  	</c:if>
+		  
+		  	<c:forEach var="page" begin="${PAGE.startPage}" end="${PAGE.endPage}">
+		  		<span class="w3-bar-item w3-button pagebtn" id="${page}">${page}</span>
+		  	</c:forEach>
+		  
+			<!-- 다음 버튼 처리 -->
+		  	<c:if test="${PAGE.endPage != PAGE.totalPage}">
+		  		<span class="w3-bar-item w3-button pagebtn" id="${PAGE.endPage + 1}">&raquo;</span>
+		  	</c:if>
+		</form>
+	</div>
+  </div>
+  
   
 <hr>
 

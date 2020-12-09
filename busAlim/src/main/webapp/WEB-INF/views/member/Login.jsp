@@ -49,11 +49,11 @@ a:visited {
   	<div class="w3-col"><div class="w3-col w3-button w3-blue w3-round w3-margin-top w3-padding-large" id="lbtn">LOGIN</div></div>
   </form>
   	
-  	<div class="w3-content w3-center" style="max-width: 300px;">
+  	<div class="w3-content w3-center w3-container" style="max-width: 300px;">
 	  	<div class="w3-col w3-center" style="font-size: 14px; margin-top: 20px;">
 	  	<!-- 아이디 찾기와 비번 찾기의 href는 javascript단에서 처리하기로 한다. -->
-	  		<div class="w3-third w3-text-gray"><a href="/clc/member/idfindpage.clc" id="idCk">아이디찾기</a></div>
-	  		<div class="w3-third w3-text-gray"><a href="/clc/member/findpage.clc" id="pwCk">비밀번호찾기</a></div>
+	  		<div class="w3-third w3-text-gray"><a id="idCk" style="cursor: pointer;">아이디찾기</a></div>
+	  		<div class="w3-third w3-text-gray"><a id="pwCk" style="cursor: pointer;">비밀번호찾기</a></div>
 	  		<div class="w3-third w3-text-gray"><a href="/clc/member/join.clc">회원가입</a></div>
 	  	</div>
 	</div>
