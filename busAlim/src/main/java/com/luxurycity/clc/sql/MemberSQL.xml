@@ -25,4 +25,49 @@
 			m.ano = a.ano 
 		    AND id = #{id}
 	</select>
+	<select id="getAvt" resultType="aVO" >
+		SELECT
+		    ano, afile, dir, gen
+		FROM
+		    avatar
+	</select>
+	<select id="getQuest" resultType="fVO" >
+		SELECT
+			qno, quest
+		FROM
+			quest
+		ORDER BY
+			qno ASC
+	</select>
+	<select id="idCheck" resultType="int" parameterType="string">
+		SELECT 
+			count(*) cnt 
+		FROM 
+			member 
+		WHERE 
+			id = #{id}
+			AND isshow = 'Y'
+	</select>
+	<insert id="addMemb" parameterType="mVO" >
+		INSERT INTO
+			member(mno, id, pw, name, mail, gen, ano)
+		VALUES(
+			(SELECT NVL(MAX(mno) + 1, 1001) FROM member),
+		 #{id}, #{pw}, #{name}, #{mail}, #{gen}, #{ano})
+	</insert>
+	<insert id="addFind" parameterType="fVO" >
+		<selectKey keyProperty="mno" resultType="int" order="BEFORE">
+			SELECT
+				MAX(mno)
+			From 
+				member
+		</selectKey>
+		INSERT INTO 
+		    find(fno, mno, qno, answer) 
+		VALUES( 
+		    ( 
+		        SELECT NVL(MAX(fno) + 1, 1001) FROM find 
+		    ), 
+		    #{mno}, #{qno}, #{answer}) 
+	</insert>
 </mapper>

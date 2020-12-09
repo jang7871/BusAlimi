@@ -69,13 +69,13 @@ a:visited {
   
   	<div class="w3-col w3-margin-bottom">
   <c:forEach var="data" items="${LIST}">	
-  		<div class="w3-third w3-circle w3-padding w3-center gen${data.gen}" style="display: none;"><img src="/clc${data.dir}${data.afile}" class="w3-circle w3-card-4" width="100%" height="auto"><input class="w3-radio w3-tiny" type="radio" id="avatar" name="avatar" value="${data.ano}"></div>
+  		<div class="w3-third w3-circle w3-padding w3-center gen${data.gen}" style="display: none;"><img src="/clc${data.dir}${data.afile}" class="w3-circle w3-card-4" width="100%" height="auto"><input class="w3-radio w3-tiny" type="radio" id="avatar" name="ano" value="${data.ano}"></div>
   </c:forEach>
   	</div>
     
   	<div class="w3-col w3-padding w3-margin-top"><b>Quetion</b></div>
     <div class="w3-col">
-    	<select id="qt" name="qt" class="w3-select w3-border w3-round w3-padding-large">
+    	<select id="qt" name="qno" class="w3-select w3-border w3-round w3-padding-large">
     		    <option value="" disabled selected>Choose</option>
     		<c:forEach var="quetion" items="${QUE}">
 			    <option value="${quetion.qno}">${quetion.quest}</option>
@@ -84,7 +84,7 @@ a:visited {
     </div>
     	
   	<div class="w3-col w3-padding"><b>Answer</b></div>
-    <div class="w3-col"><input type="text" id="ans" name="ans" class="w3-input w3-border w3-round w3-padding-large" placeholder="Answer"></div>
+    <div class="w3-col"><input type="text" id="ans" name="answer" class="w3-input w3-border w3-round w3-padding-large" placeholder="Answer"></div>
   
   	<div class="w3-col"><div class="w3-col w3-button w3-teal w3-round w3-margin-top w3-padding-large" id="submit">JOIN</div></div>
   	
