@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import com.luxurycity.clc.dao.*;
+import com.luxurycity.clc.service.MemberService;
 import com.luxurycity.clc.vo.*;
 import java.util.*;
 import com.luxurycity.clc.util.*;
@@ -23,6 +24,8 @@ public class Member {
 	FindDao fDao;
 	@Autowired
 	BookmarkDao bmDao;
+	@Autowired
+	MemberService mService;
 	
 	@RequestMapping("/login.clc")
 	public ModelAndView login(ModelAndView mv) {
@@ -220,4 +223,19 @@ public class Member {
 		mv.setViewName("redirect:/member/mypage.clc?nowPage=" + nowPage);
 		return mv;
 	}
+	
+	@RequestMapping("/myinfo.clc")
+	public ModelAndView myInfo(ModelAndView mv, MemberVO mVO, AvatarVO aVO, HttpSession session) {
+		mService.setMyInfo(mv, mVO, aVO, session);
+		return mv;
+	}
+	
+	
+	 
+	@RequestMapping("/myinfoedit.clc")
+	public ModelAndView myInfoEdit(ModelAndView mv, MemberVO mVO, HttpSession session) {
+		mService.setMyInfoEdit(mv, mVO, session);
+		return mv;
+	}
+	 
 }

@@ -5,7 +5,7 @@
 컨트롤러 : com.luxurycity.clc.controller.Main
 뷰	  : /WEB-INF/views/com/luxurycity/clc/main.jsp
 ------------------------------------------------------------
-# 마이페이지 폼보기 요청
+# 마이페이지 폼보기 요청 (권영선)
 요청내용 : /clc/member/mypage.clc
 파라미터 : SID, list<BookmarkVO>
 컨트롤러 : com.luxurycity.clc.controller.member.MyPage
@@ -17,13 +17,13 @@
 컨트롤러 : com.luxurycity.clc.controller.member.BookDelProc
 뷰	  : redirect] /clc/member/mypage.clc
 ------------------------------------------------------------
-# 회원정보 페이지 폼 보기 요청
+# 회원정보 페이지 폼 보기 요청 (장성환)
 요청내용 : /clc/member/myinfo.clc
 파라미터 : SID, memberVO
 컨트롤러 : com.luxurycity.clc.controller.member.MyInfo
 뷰	  : /WEB-INF/views/com/luxurycity/clc/member/MyInfo.jsp
 ------------------------------------------------------------
-# 마이페이지 개인정보 수정 요청
+# 마이페이지 개인정보 수정 요청 (장성환)
 요청내용 : /clc/member/myinfoedit.clc
 파라미터 : mail, ano
 컨트롤러 : com.luxurycity.clc.controller.member.MyInfoEdit
