@@ -87,7 +87,7 @@ a:visited {
 	 <div class="w3-col"><input type="text" id="answer" name="answer" class="w3-input w3-border w3-round w3-padding-large" placeholder="정답"></div>
 
 	 <div class="w3-col"><div class="w3-col w3-button w3-teal w3-round w3-margin-top w3-padding-large" id="fPwbtn">제출</div></div>
-	 
+	 <div class="w3-col"><div class="w3-col w3-button w3-teal w3-round w3-margin-top w3-padding-large" id="logbtn">로그인창으로</div></div>
    </form>
    
    <!-- 제출 버튼을 누르면 비동기 통신 처리를 통해 나타나는 영역(모달창)-->

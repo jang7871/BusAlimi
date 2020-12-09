@@ -66,18 +66,16 @@ $(document).ready(function(){
 			$('#answer').focus();
 			return;
 		}
+		var data = {id: sid, answer: sanswer, qno: sqno};
 		
 		$.ajax({
 			url: '/clc/member/findpwpageproc.clc',
 			type: 'POST',
-			dataType: 'json',
-			data: {
-				id: sid,
-				answer: sanswer,
-				qno: sqno
-			},
+			dataType: 'text',
+			data: JSON.stringify(data),
+			contentType: 'application/json',
 			success:function(data){
-				if(data.result == 'OK'){
+				if(data == 'OK'){
 					$('#pw').val('');
 					$('#pwconf').val('');
 					$('#pw').css('background-color', '');
@@ -144,18 +142,16 @@ $(document).ready(function(){
 			alert('비밀번호 확인이 일치하지 않습니다.');
 			return;
 		}
-		
+		var data = {id: sid, pw: spw}
 		// 비밀번호 변경 요청
 		$.ajax({
 			url: '/clc/member/editpwproc.clc',
 			type: 'POST',
-			dataType: 'json',
-			data: {
-				id: sid,
-				pw: spw
-			},
-			success:function(data){
-				if(data.result == 'OK'){
+			dataType: 'text',
+			data: JSON.stringify(data),
+			contentType: 'application/json',
+			success:function(obj){
+				if(obj == 'OK'){
 					alert('비밀번호가 변경되었습니다. 로그인해주시길 바랍니다.');
 					$('#pwModal').css('display', 'none');
 					$(location).attr('href', '/clc/member/login.clc');

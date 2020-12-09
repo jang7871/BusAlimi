@@ -3,8 +3,53 @@
 		PUBLIC  "-//mybatis.org//DTD Mapper 3.0//EN"
 		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 		
-	<mapper namespace="fSQL">
-		<!-- 요안에다가  작업-->
+<mapper namespace="fSQL">
+	<!-- 요안에다가  작업-->
+	<select id="idCount" resultType="int" parameterType="string">
+		SELECT 
+			COUNT(*) cnt 
+		FROM 
+			member 
+		WHERE 
+			mail = #{mail}
+			AND isshow = 'Y'
+	</select>
+
+	<select id="findId" resultType="string" parameterType="string">
+		SELECT
+			id
+		FROM
+			member
+		WHERE
+			mail = #{mail}
+			AND isshow = 'Y'
+	</select>
 	
+	<select id="questList" resultType="fVO">
+		SELECT 
+		    qno, quest 
+		FROM 
+		    quest 
+	</select>
 	
-	</mapper>
+	<select id="findPw" resultType="int" parameterType="fVO">
+		SELECT 
+		    COUNT(*) cnt 
+		FROM 
+		    find f, member m 
+		WHERE 
+		    f.mno = m.mno 
+		    AND id = #{id}
+		    AND qno = #{qno}
+		    AND answer = #{answer}
+	</select>
+	
+	<update id="editPw" parameterType="fVO">
+		UPDATE 
+		    member 
+		SET 
+		    pw = #{pw}
+		WHERE 
+		    id = #{id}
+	</update>
+</mapper>
