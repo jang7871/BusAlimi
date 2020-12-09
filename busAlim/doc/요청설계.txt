@@ -127,18 +127,24 @@
 컨트롤러 : com.luxurycity.clc.controller.member.EditProc
 뷰	  : ajax ]
 ------------------------------------------------------------
-# 회원가입 폼 보기 요청
+# 회원가입 폼 보기 요청 - 지우
 요청내용 : /clc/member/join.clc
 파라미터 : 무
 컨트롤러 : com.luxurycity.clc.controller.member.Join
 뷰	  : /WEB-INF/views/com/luxurycity/clc/member/Join.jsp
 ------------------------------------------------------------
-# 회원가입 처리 요청
+# 회원가입 처리 요청 - 지우
 요청내용 : /clc/member/joinproc.clc
 파라미터 : 무
 컨트롤러 : com.luxurycity.clc.controller.member.JoinProc
 뷰	  : redirect] /clc/main.clc
 				/clc/join.clc
+------------------------------------------------------------
+# 회원가입시 아이디 체크 요청 - 지우
+요청내용 : /clc/member/idCheck.clc
+파라미터 : 무
+컨트롤러 : com.luxurycity.clc.controller.member.idCheck
+뷰	  : 비동기]
 ------------------------------------------------------------
 
 ##############################################################
