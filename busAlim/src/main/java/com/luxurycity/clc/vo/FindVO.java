@@ -46,5 +46,4 @@ public class FindVO {
 	public void setPw(String pw) {
 		this.pw = pw;
 	}
-	
 }

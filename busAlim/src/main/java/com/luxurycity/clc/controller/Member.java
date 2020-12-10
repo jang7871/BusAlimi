@@ -64,6 +64,50 @@ public class Member {
 		mv.setViewName("redirect:/main.clc");
 		return mv;
 	}
+	@RequestMapping("/idCheck.clc")
+	@ResponseBody
+	public String idCheck(ModelAndView mv, String id) {
+		String result = "OK";
+		int cnt = 0 ; 
+		try {
+			cnt = mDao.idCheck(id);
+		}catch(Exception e) {}
+		System.out.println("나오나요?" + cnt);
+		if(cnt != 0) {
+			//이경우 이용중인 id가 이미 있는거임
+			result  = "NO";
+		}
+		return result;
+	}
+	@RequestMapping("/join.clc")
+	public ModelAndView join(ModelAndView mv ) {
+		//아바타랑 질문 리스트 넘기기
+		mv.addObject("LIST", mDao.getAvtList());
+		mv.addObject("QUE", mDao.getQuest());
+		
+		// 뷰 설정하고
+		mv.setViewName("member/Join");
+		return mv;
+	}
+	@RequestMapping("/joinProc.clc")
+	public ModelAndView joinProc(ModelAndView mv, HttpSession session, FindVO fVO, MemberVO mVO) {
+		int cnt = 0;
+		//멤버 테이블 및 파인드 테이블에 인서트하기
+		try {
+			cnt = mDao.addMemb(mVO, fVO);
+		}catch(Exception e) {}
+		
+		if(cnt == 2) {
+			//이경우 정상적으로 두 테이블에 다들어감
+			session.setAttribute("SID", mVO.getId());
+			mv.setViewName("redirect:/main.clc");
+		}else {
+			System.out.println("인서트 잘못됨..");
+			mv.setViewName("member/Join");
+		}
+		// 뷰 설정하고
+		return mv;
+	}
 	
 	@RequestMapping("/findpage.clc")
 	public ModelAndView findPage(ModelAndView mv, String findType) {

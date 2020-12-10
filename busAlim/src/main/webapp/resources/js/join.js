@@ -9,12 +9,12 @@ $(document).ready(function(){
 		$.ajax({
 			url:'/clc/member/idCheck.clc',
 			type:'post',
-			dataType:'json',
+			dataType:'text',
 			data:{
 				id:sid
 			},
 			success:function(data){
-				if(data.result == 'OK'){
+				if(data == 'OK'){
 					$('#id').removeClass('w3-pale-red');
 					$('#id').addClass('w3-teal');
 				} else {
