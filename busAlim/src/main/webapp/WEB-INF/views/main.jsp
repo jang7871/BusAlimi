@@ -35,7 +35,7 @@ function busdetail(e) {
 	
 	$('#blist').css('display', 'none');
 	
-	$('#routefrm').attr('action', '/clc/search/routeproc.clc');;
+//	$('#routefrm').attr('action', '/clc/search/routeproc.clc');;
 }
 
 // 정류소 상세페이지 이동 폼
@@ -59,7 +59,7 @@ function stationdetail(ee) {
 	
 	$('#bslist').css('display', 'none');
 	
-	$('#stationfrm').attr('action', '/clc/search/stationproc.clc');
+//	$('#stationfrm').attr('action', '/clc/search/stationproc.clc');
 }
 </script>
 <style>
@@ -180,20 +180,20 @@ a:visited {
 	
 	<!-- 버스 데이터 전송 담당 태그 -->
 	<form  method="post" id="routefrm">
-		<input type="hidden" name="routeid" id="routeid">
-		<input type="hidden" name="routenm" id="routenm">
-		<input type="hidden" name="routetype" id="routetype">
-		<input type="hidden" name="routestnm" id="routestnm">
-		<input type="hidden" name="routeednm" id="routeednm">
+		<input type="hidden" name="route_id" id="routeid">
+		<input type="hidden" name="route_nm" id="routenm">
+		<input type="hidden" name="route_tp" id="routetype">
+		<input type="hidden" name="st_sta_nm" id="routestnm">
+		<input type="hidden" name="ed_sta_nm" id="routeednm">
 	</form>
 	
 	<!-- 정류소 데이터 전송 담당 태그 -->
 	<form method="post" id="stationfrm">
-		<input type="hidden" name="stationid" id="stationid">
-		<input type="hidden" name="stationnm" id="stationnm">
-		<input type="hidden" name="x" id="x">
-		<input type="hidden" name="y" id="y">
-		<input type="hidden" name="mobile" id="mobile">
+		<input type="hidden" name="station_id" id="stationid">
+		<input type="hidden" name="station_nm" id="stationnm">
+		<input type="hidden" name="loc_x" id="x">
+		<input type="hidden" name="loc_y" id="y">
+		<input type="hidden" name="mobile_no" id="mobile">
 		<input type="hidden" name="region" id="region">
 	</form>
 
