@@ -26,7 +26,7 @@ public class PageUtil {
 		nowPage = 1;
 	}
 
-	/*
+	
 	public PageUtil(int nowPage, int totalCount) {
 		this(nowPage, totalCount, 3, 3);
 	}
@@ -42,7 +42,7 @@ public class PageUtil {
 		calcEnd();
 		calcCont();
 	}
-	*/
+	
 	public void setPage() {
 		setPage(nowPage, totalCount, 3, 3);
 	}
