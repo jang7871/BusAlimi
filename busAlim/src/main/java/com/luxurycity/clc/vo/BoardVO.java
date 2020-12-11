@@ -44,8 +44,8 @@ public class BoardVO {
 	}
 	public void setSwdate() {
 		SimpleDateFormat form1 = new SimpleDateFormat("yyyy/MM/dd");
-		SimpleDateFormat form2 = new SimpleDateFormat("HH:mm:ss");
-		swdate = form1.format(wdate)+ " " + form2.format(wtime);
+//		SimpleDateFormat form2 = new SimpleDateFormat("HH:mm:ss");
+		swdate = form1.format(wdate);
 	}
 	public String getAfile() {
 		return afile;
@@ -58,6 +58,7 @@ public class BoardVO {
 	}
 	public void setWdate(Date wdate) {
 		this.wdate = wdate;
+		setSwdate();
 	}
 	public Time getWtime() {
 		return wtime;

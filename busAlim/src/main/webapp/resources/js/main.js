@@ -113,17 +113,22 @@ $(document).ready(function(){
 	
 	// 검색 이동
 	$('#srcroute').click(function() {
+		// 검색한 내용이 없으면 리턴
+		var routeid = $('#routeid').val();
+		
+		if(!routeid){
+			alert('검색할 내용을 입력하세요.');
+			return;
+		}
+		// 정류소 검색 버튼을 누르면 정류소 상세 페이지로 이동
+		$('#routefrm').attr('action', '/clc/search/busdetail.clc');
 		$('#routefrm').submit();
 	});
 	
 	$('#srcstation').click(function() {
 		// 검색한 내용이 없으면 리턴
 		var stationid = $('#stationid').val();
-		var stationnm = $('#stationnm').val();
-		var x = $('#x').val();
-		var y = $('#y').val();
-		var mobile = $('#mobile').val();
-		var retion = $('#region').val();
+		
 		if(!stationid){
 			alert('검색할 내용을 입력하세요.');
 			return;
