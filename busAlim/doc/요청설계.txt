@@ -5,7 +5,7 @@
 컨트롤러 : com.luxurycity.clc.controller.Main
 뷰	  : /WEB-INF/views/main.jsp
 ------------------------------------------------------------
-* 즐겨찾기 폼보기 요청 (권영선)
+# 마이페이지 폼보기 요청 (권영선)
 요청내용 : /clc/member/mypage.clc
 파라미터 : SID, list<BookmarkVO>
 컨트롤러 : com.luxurycity.clc.controller.Member.myPage()
@@ -23,13 +23,13 @@
 컨트롤러 : com.luxurycity.clc.controller.member.MyPage
 뷰	  : /WEB-INF/views/com/luxurycity/clc/member/MyPage.jsp
 ------------------------------------------------------------
-# 회원정보 페이지 폼 보기 요청
+# 회원정보 페이지 폼 보기 요청 (장성환)
 요청내용 : /clc/member/myinfo.clc
 파라미터 : SID, memberVO
 컨트롤러 : com.luxurycity.clc.controller.member.MyInfo
 뷰	  : /WEB-INF/views/com/luxurycity/clc/member/MyInfo.jsp
 ------------------------------------------------------------
-# 마이페이지 개인정보 수정 요청
+# 마이페이지 개인정보 수정 요청 (장성환)
 요청내용 : /clc/member/myinfoedit.clc
 파라미터 : mail, ano
 컨트롤러 : com.luxurycity.clc.controller.member.MyInfoEdit
@@ -142,7 +142,6 @@
 뷰	  : ajax ]
 ------------------------------------------------------------
 # 회원가입 폼 보기 요청 - 지우
->>>>>>> bus_alimi
 요청내용 : /clc/member/join.clc
 파라미터 : 무
 컨트롤러 : com.luxurycity.clc.controller.member.Join
@@ -150,7 +149,7 @@
 ------------------------------------------------------------
 
 # 회원가입 처리 요청 - 지우
->>>>>>> bus_alimi
+
 요청내용 : /clc/member/joinproc.clc
 파라미터 : 무
 컨트롤러 : com.luxurycity.clc.controller.member.JoinProc
