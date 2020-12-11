@@ -1,3 +1,4 @@
+
 ------------------------------------------------------------
 * 메인 페이지 폼보기 요청
 요청내용 : /clc/main.clc
@@ -5,7 +6,7 @@
 컨트롤러 : com.luxurycity.clc.controller.Main
 뷰	  : /WEB-INF/views/main.jsp
 ------------------------------------------------------------
-# 마이페이지 폼보기 요청 (권영선)
+* 즐겨찾기 폼보기 요청 (권영선)
 요청내용 : /clc/member/mypage.clc
 파라미터 : SID, list<BookmarkVO>
 컨트롤러 : com.luxurycity.clc.controller.Member.myPage()
@@ -23,13 +24,13 @@
 컨트롤러 : com.luxurycity.clc.controller.member.MyPage
 뷰	  : /WEB-INF/views/com/luxurycity/clc/member/MyPage.jsp
 ------------------------------------------------------------
-# 회원정보 페이지 폼 보기 요청 (장성환)
+# 회원정보 페이지 폼 보기 요청
 요청내용 : /clc/member/myinfo.clc
 파라미터 : SID, memberVO
 컨트롤러 : com.luxurycity.clc.controller.member.MyInfo
 뷰	  : /WEB-INF/views/com/luxurycity/clc/member/MyInfo.jsp
 ------------------------------------------------------------
-# 마이페이지 개인정보 수정 요청 (장성환)
+# 마이페이지 개인정보 수정 요청
 요청내용 : /clc/member/myinfoedit.clc
 파라미터 : mail, ano
 컨트롤러 : com.luxurycity.clc.controller.member.MyInfoEdit
@@ -84,16 +85,28 @@
 컨트롤러 : com.luxurycity.clc.controller.board.DelProc
 뷰	  : redirect] /clc/board/board.clc
 ------------------------------------------------------------
-# 관련검색어 띄우기 요청(버스) (비동기)
+* 관련검색어 띄우기 요청(버스) (비동기) [이지우, 장성환, 권영선]
 요청내용 : /clc/search/relationlist.clc
 파라미터 : keyword
-컨트롤러 : com.luxurycity.clc.controller.search.RelationList
+컨트롤러 : com.luxurycity.clc.controller.Search.relationList()
 뷰	  : ajax ]
 ------------------------------------------------------------
-# 관련검색어 띄우기 요청(정류소) (비동기)
+# 관련검색어 띄우기 요청(정류소) (비동기)  [이지우, 장성환, 권영선]
 요청내용 : /clc/search/starelationlist.clc
 파라미터 : keyword
-컨트롤러 : com.luxurycity.clc.controller.search.StaRelationList
+컨트롤러 : com.luxurycity.clc.controller.Search.staRelationList()
+뷰	  : ajax ]
+------------------------------------------------------------
+* 관련검색어 모달창 띄우기 요청(버스) [권영선]
+요청내용 : /clc/search/busModal.clc
+파라미터 : keyword
+컨트롤러 : com.luxurycity.clc.controller.Search.busModal()
+뷰	  : ajax ]
+------------------------------------------------------------
+# 관련검색어 모달창 띄우기 요청(정류소)  [권영선]
+요청내용 : /clc/search/staModal.clc
+파라미터 : keyword
+컨트롤러 : com.luxurycity.clc.controller.Search.staModal()
 뷰	  : ajax ]
 ------------------------------------------------------------
 
@@ -142,6 +155,7 @@
 뷰	  : ajax ]
 ------------------------------------------------------------
 # 회원가입 폼 보기 요청 - 지우
+
 요청내용 : /clc/member/join.clc
 파라미터 : 무
 컨트롤러 : com.luxurycity.clc.controller.member.Join
@@ -186,4 +200,4 @@ DB 데이터 집어넣기 처리
 파라미터 : 무
 컨트롤러 : com.luxurycity.clc.controller.dbinit.RouteStationInputProc
 뷰	  : redirect ] /clc/main.clc
-------------------------------------------------------------
+=======

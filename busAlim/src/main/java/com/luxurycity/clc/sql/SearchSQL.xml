@@ -3,8 +3,172 @@
 		PUBLIC  "-//mybatis.org//DTD Mapper 3.0//EN"
 		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 		
-	<mapper namespace="sSQL">
-		<!-- 요안에다가  작업-->
+
+<mapper namespace="sSQL">
+	<select id="busRelTotal" resultType="int" parameterType="string">
+       SELECT 
+           COUNT(*) total 
+       FROM 
+           (
+               SELECT
+                   DISTINCT(route_id), route_nm, r.route_cd, route_tp, st_sta_nm, ed_sta_nm, region
+               FROM
+                   route r, district d ,routetype t,( 
+                                       select 
+                                           st_sta_id , station_nm st_sta_nm 
+                                      from  
+                                            station, route 
+                                       where 
+                                          station_id  = st_sta_id  
+                                        ) st,( 
+                                               select 
+                                                ed_sta_id , station_nm ed_sta_nm 
+                                                 from  
+                                                      station, route 
+                                              where 
+                                                station_id  = ed_sta_id  
+                                                 )ed
+               WHERE
+                   r.ed_sta_id = ed.ed_sta_id 
+                    and 
+                    d.district_cd = r.district_cd
+                    AND
+                   r.st_sta_id = st.st_sta_id 
+                   and 
+                   r.route_cd = t.route_cd 
+                   and route_nm like #{keyword} || '%'
+                ORDER BY route_nm
+           )
+	</select>
+	
+	<select id="staRelTotal" resultType="int" parameterType="string">
+		SELECT
+		    COUNT(*) total
+		FROM
+		    (
+		        SELECT 
+		            station_id, station_nm, mobile_no, region 
+		        FROM
+		            station s, district d 
+		        WHERE 
+		            station_nm like #{keyword} || '%'
+		            AND s.district_cd = d.district_cd 
+		        ORDER BY station_nm
+		    )
+	</select>
+	
+	<select id="busRelList" resultType="rVO" parameterType="rVO">
+		SELECT
+		    *
+		FROM
+		    (
+		        SELECT
+		            ROWNUM rno, route.*
+		        FROM
+		            (
+		                SELECT
+		                    DISTINCT(route_id), route_nm, r.route_cd route_cd, route_tp, st_sta_nm, ed_sta_nm, region
+		                FROM
+		                    route r, district d ,routetype t,( 
+		                                        select 
+		                                            st_sta_id , station_nm st_sta_nm 
+		                                       from  
+		                                             station, route 
+		                                        where 
+		                                           station_id  = st_sta_id  
+		                                         ) st,( 
+		                                                select 
+		                                                 ed_sta_id , station_nm ed_sta_nm 
+		                                                  from  
+		                                                       station, route 
+		                                               where 
+		                                                 station_id  = ed_sta_id  
+		                                                  )ed
+		                WHERE
+		                    r.ed_sta_id = ed.ed_sta_id 
+		                     and 
+		                     d.district_cd = r.district_cd
+		                     AND
+		                    r.st_sta_id = st.st_sta_id 
+		                    and 
+		                    r.route_cd = t.route_cd 
+		                    and route_nm like #{keyword} || '%'
+		                 ORDER BY route_nm
+		             ) route
+		    )
+		WHERE
+		    rno BETWEEN #{page.startCont} AND #{page.endCont}
+	</select>
+	
+	<select id="staRelList" resultType="sVO" parameterType="sVO">
+		SELECT
+		    rno, station_id, station_nm, mobile_no, region 
+		FROM
+		    (
+		    SELECT
+		        ROWNUM rno, station_id, station_nm, REPLACE(mobile_no, ' ', '고유번호없음') mobile_no, region 
+		    FROM
+		        (
+		        SELECT 
+		            station_id, station_nm, mobile_no, region 
+		        FROM
+		            station s, district d 
+		        WHERE 
+		            station_nm like #{keyword} || '%'
+		            AND s.district_cd = d.district_cd 
+		        ORDER BY station_nm
+		        )
+		    )
+		WHERE
+		    rno BETWEEN #{page.startCont} AND #{page.endCont}
+	</select>
+	
+	<select id="busKeyList" resultType="rVO" parameterType="string">
+		SELECT
+		    route_nm
+		FROM
+		    (
+		    SELECT
+		        ROWNUM rno, route_nm
+		    FROM
+		        (
+		        SELECT
+		            DISTINCT route_nm
+		        FROM
+		            route
+		        WHERE
+		            route_nm LIKE #{keyword} || '%'
+		        ORDER BY
+		            route_nm
+		        )
+		    )
+		WHERE
+		    rno BETWEEN 1 AND 5
+	</select>
+	
+	<select id="staKeyList" resultType="sVO" parameterType="string">
+		SELECT
+		    station_nm
+		FROM
+		    (
+		        SELECT
+		            ROWNUM rno, station_nm
+		        FROM
+		            (
+		                SELECT
+		                    DISTINCT station_nm
+		                FROM
+		                    station
+		                WHERE
+		                    station_nm LIKE #{keyword} || '%'
+		                ORDER BY
+		                    station_nm
+		            )
+		    )
+		WHERE
+		    rno BETWEEN 1 AND 5
+	</select>
+
 		<select id="stationDetail" resultType="sVO" parameterType="int">
 			SELECT 
 			    e.*, st.station_nm AS ed_station_nm 
@@ -24,6 +188,7 @@
 			WHERE 
 			    ed_sta_id = station_id 
 		</select>
+
 		<select id="busDetail" resultType="rVO" parameterType="int">
 			SELECT
 				rs.direction direction, d.region region, s.station_nm station_nm,
@@ -41,3 +206,4 @@
 
 		
 	</mapper>
+
