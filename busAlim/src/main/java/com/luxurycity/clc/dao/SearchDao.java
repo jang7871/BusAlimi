@@ -1,9 +1,11 @@
 package com.luxurycity.clc.dao;
 
+
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import java.util.*;
 import com.luxurycity.clc.vo.*;
+import org.springframework.transaction.annotation.Transactional;
 
 public class SearchDao {
 	@Autowired
@@ -32,4 +34,13 @@ public class SearchDao {
 	public List<StationVO> getStakeyList(String keyword){
 		return sqlSession.selectList("sSQL.staKeyList", keyword);
 	}
+	//정류소 상세페이지 데이터 꺼내오기
+	public List<StationVO> stationDetail(int station_id) {
+		return sqlSession.selectList("sSQL.stationDetail", station_id);
+	}
+	//버스 상세페이지 데이터 꺼내오기
+	public List<RouteVO> busDetail(int route_id) {
+		return sqlSession.selectList("sSQL.busDetail", route_id);
+	}
+
 }

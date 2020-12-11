@@ -3,6 +3,7 @@
 		PUBLIC  "-//mybatis.org//DTD Mapper 3.0//EN"
 		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 		
+
 <mapper namespace="sSQL">
 	<select id="busRelTotal" resultType="int" parameterType="string">
        SELECT 
@@ -167,4 +168,42 @@
 		WHERE
 		    rno BETWEEN 1 AND 5
 	</select>
-</mapper>
+
+		<select id="stationDetail" resultType="sVO" parameterType="int">
+			SELECT 
+			    e.*, st.station_nm AS ed_station_nm 
+			FROM 
+			    ( 
+			        SELECT 
+			            r.route_nm AS route_nm, r.route_id route_id, region, ed_sta_id, route_tp 
+			        FROM 
+			            station s, routestation rs, route r, district d, routetype rt 
+			        WHERE 
+			            s.station_id = rs.station_id 
+			            AND r.route_cd = rt.route_cd 
+			            AND rs.route_id = r.route_id 
+			            AND d.district_cd = r.district_cd 
+			            AND s.station_id = #{station_id}
+			    )e, station st 
+			WHERE 
+			    ed_sta_id = station_id 
+		</select>
+
+		<select id="busDetail" resultType="rVO" parameterType="int">
+			SELECT
+				rs.direction direction, d.region region, s.station_nm station_nm,
+				s.mobile_no mobile_no, rs.str_order str_order, r.peek_alloc peek, r.npeek_alloc npeek
+			FROM
+				routestation rs, station s, district d, route r
+			WHERE
+				rs.route_id = #{route_id}
+				AND rs.station_id = s.station_id
+				AND s.district_cd = d.district_cd
+				AND rs.route_id = r.route_id
+			ORDER BY
+				str_order		
+		</select>
+
+		
+	</mapper>
+

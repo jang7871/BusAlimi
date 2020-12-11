@@ -139,8 +139,8 @@ a:visited {
 		<div class="mw800">
 			<div class="w3-col m10">
 				<div class="w3-co1 m1 w3-left w3-margin-right"><h5>버스번호 : </h5></div>
-				<div class="w3-col m3 w3-left" id="${ROUTE_ID}"><h5>&nbsp;${ROUTE_NM}</h5></div>
-				<div class="w3-col m7 w3-left"><h5>[${ST_STA_NM}, ${ED_STA_NM}]방향</h5></div>
+				<div class="w3-col m3 w3-left" id="${INFO.route_id}"><h5>&nbsp;${INFO.route_nm}</h5></div>
+				<div class="w3-col m7 w3-left"><h5>[${INFO.st_sta_nm}, ${INFO.ed_sta_nm}]방향</h5></div>
 			</div>
 			<div class="w3-rest w3-left w3-btn btnword" id="add">추가</div>
 			<div class="w3-col">

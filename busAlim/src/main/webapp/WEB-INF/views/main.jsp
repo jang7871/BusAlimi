@@ -13,6 +13,7 @@
 <link rel="stylesheet" type="text/css" href="/clc/css/cls.css">
 <script type="text/javascript" src="/clc/js/jquery-3.5.1.min.js"></script>
 <script type="text/javascript" src="/clc/js/main.js"></script>
+
 <style>
 html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
 a:link {
@@ -177,6 +178,26 @@ a:visited {
 		</div>
 	</div>
 	
+
+	<!-- 버스 데이터 전송 담당 태그 -->
+	<form  method="post" id="routefrm">
+		<input type="hidden" name="route_id" id="routeid">
+		<input type="hidden" name="route_nm" id="routenm">
+		<input type="hidden" name="route_tp" id="routetype">
+		<input type="hidden" name="st_sta_nm" id="routestnm">
+		<input type="hidden" name="ed_sta_nm" id="routeednm">
+	</form>
+	
+	<!-- 정류소 데이터 전송 담당 태그 -->
+	<form method="post" id="stationfrm">
+		<input type="hidden" name="station_id" id="stationid">
+		<input type="hidden" name="station_nm" id="stationnm">
+		<input type="hidden" name="loc_x" id="x">
+		<input type="hidden" name="loc_y" id="y">
+		<input type="hidden" name="mobile_no" id="mobile">
+		<input type="hidden" name="region" id="region">
+	</form>
+
 
 
 

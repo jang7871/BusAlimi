@@ -15,7 +15,14 @@
 		    AND pw = #{pw} 
 		    AND isshow = 'Y' 
 	</select>
-	
+	<select id="getMembInfo" resultType="mVO" parameterType="string">
+		SELECT
+			*
+		FROM
+			member
+		WHERE
+			id = #{id}
+	</select>
 	<select id="getMembAvt" resultType="aVO" parameterType="string">
 		SELECT 
 		    afile, dir, m.ano
@@ -70,4 +77,16 @@
 		    ), 
 		    #{mno}, #{qno}, #{answer}) 
 	</insert>
+
+	<update id="editMemb" parameterType="mVO">
+		UPDATE
+			member
+		<set>
+			<if test="mail != ''">mail = #{mail},</if>
+			<if test="ano != 0">ano = #{ano}</if>
+		</set>
+		WHERE
+			id = #{id}
+	</update>
+
 </mapper>

@@ -433,6 +433,7 @@ $(document).ready(function(){
 		});
 	});
 	
+
 	// 버스검색 버튼을 클릭하면 나타나는 이벤트
 	$("#srcroute").click(function(){
 		$('#blist').html('');
@@ -442,6 +443,33 @@ $(document).ready(function(){
 	$('#srcstation').click(function(){
 		$('#stalist').html('');
 		staClick();	
+
+	// 검색 이동
+	$('#srcroute').click(function() {
+		// 검색한 내용이 없으면 리턴
+		var routeid = $('#routeid').val();
+		
+		if(!routeid){
+			alert('검색할 내용을 입력하세요.');
+			return;
+		}
+		// 정류소 검색 버튼을 누르면 정류소 상세 페이지로 이동
+		$('#routefrm').attr('action', '/clc/search/busdetail.clc');
+		$('#routefrm').submit();
+	});
+	
+	$('#srcstation').click(function() {
+		// 검색한 내용이 없으면 리턴
+		var stationid = $('#stationid').val();
+		
+		if(!stationid){
+			alert('검색할 내용을 입력하세요.');
+			return;
+		}
+		// 정류소 검색 버튼을 누르면 정류소 상세 페이지로 이동
+		$('#stationfrm').attr('action', '/clc/search/stationdetail.clc');
+		$('#stationfrm').submit();
+
 	});
 	
 	$('#login').click(function(){

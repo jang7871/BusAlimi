@@ -1,3 +1,4 @@
+
 ------------------------------------------------------------
 * 메인 페이지 폼보기 요청
 요청내용 : /clc/main.clc
@@ -154,7 +155,7 @@
 뷰	  : ajax ]
 ------------------------------------------------------------
 # 회원가입 폼 보기 요청 - 지우
->>>>>>> bus_alimi
+
 요청내용 : /clc/member/join.clc
 파라미터 : 무
 컨트롤러 : com.luxurycity.clc.controller.member.Join
@@ -162,7 +163,7 @@
 ------------------------------------------------------------
 
 # 회원가입 처리 요청 - 지우
->>>>>>> bus_alimi
+
 요청내용 : /clc/member/joinproc.clc
 파라미터 : 무
 컨트롤러 : com.luxurycity.clc.controller.member.JoinProc
@@ -199,4 +200,4 @@ DB 데이터 집어넣기 처리
 파라미터 : 무
 컨트롤러 : com.luxurycity.clc.controller.dbinit.RouteStationInputProc
 뷰	  : redirect ] /clc/main.clc
-------------------------------------------------------------
+=======
