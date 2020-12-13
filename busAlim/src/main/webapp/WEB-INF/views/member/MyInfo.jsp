@@ -144,23 +144,51 @@ a:visited {
                                 <span>${DATA.mail}</span>
                             </p>
                             <p class="contxt_webctrl ">
-                                <input type="text" name="email" id="email" value="" placeholder="변경할 이메일 입력" style="width:254px">
-                         	     <a class="btn_model" style="cursor: hand"><b id="editbtn2" class="btn2 btn_disable">이메일 변경</b></a>
+                                <input type="text" name="mail" id="email" value="" placeholder="변경할 이메일 입력" style="width:254px">
+<%--                                 <input type="hidden" name="ano" value="${AVT.ano}"> --%>
+<!--                          	     <a class="btn_model" style="cursor: hand"><b id="editbtn2" class="btn2 btn_disable">이메일 변경</b></a> -->
                             </p>
                         </div>
                     </td>
                 </tr>
+                
+                <tr>
+                    <th scope="row">
+                    	<div style="height: 200px">
+	                        <img id="avt" src="/clc/${AVT.dir}${AVT.afile}" height="90%">                	
+                    	</div>
+                    </th>
+                    <td>
+                        <div class="tdcell">
+                            <p class="contxt_webctrl w3-border"  style="width:254px">
+                                <span>아바타 번호를 선택하세요.</span>
+                            </p>
+                            <p>
+                                <label><input type="radio" name="ano" value="11">11</label>
+                                <label><input type="radio" name="ano" value="12">12</label>
+                                <label><input type="radio" name="ano" value="13">13</label>
+                                <label><input type="radio" name="ano" value="14">14</label>
+                                <label><input type="radio" name="ano" value="15">15</label>
+                                <label><input type="radio" name="ano" value="16">16</label>    
+                            </p>
+                        </div>
+                    </td>
+                </tr>
+ 
                 </tbody>
 
             </table>
+            <div class="w3-col m1 w3-center w3-content w3-margin-top" style="clear: left;">
+            	 <a class="btn_model" style="cursor: hand"><b id="editbtn2" class="btn2 btn_disable">정보변경</b></a>
+            </div>
 </form>
 
-  <div class="w3-container w3-padding-32">
-  	    <h5><b><i class="fa fa-user"></i>  회원 정보</b></h5>
-  	    <div class="w3-content w3-padding w3-card-2 w3-white">
+<!--   <div class="w3-container w3-padding-32"> -->
+<!--   	    <h5><b><i class="fa fa-user"></i>  회원 정보</b></h5> -->
+<!--   	    <div class="w3-content w3-padding w3-card-2 w3-white"> -->
   	    	
-  	    </div>
-  </div>
+<!--   	    </div> -->
+<!--   </div> -->
 
 	<hr>
   <div class="w3-container w3-dark-grey w3-padding-32">

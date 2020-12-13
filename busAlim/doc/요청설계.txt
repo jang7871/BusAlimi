@@ -1,3 +1,4 @@
+
 ------------------------------------------------------------
 * 메인 페이지 폼보기 요청
 요청내용 : /clc/main.clc
@@ -84,16 +85,28 @@
 컨트롤러 : com.luxurycity.clc.controller.board.DelProc
 뷰	  : redirect] /clc/board/board.clc
 ------------------------------------------------------------
-# 관련검색어 띄우기 요청(버스) (비동기)
+* 관련검색어 띄우기 요청(버스) (비동기) [이지우, 장성환, 권영선]
 요청내용 : /clc/search/relationlist.clc
 파라미터 : keyword
-컨트롤러 : com.luxurycity.clc.controller.search.RelationList
+컨트롤러 : com.luxurycity.clc.controller.Search.relationList()
 뷰	  : ajax ]
 ------------------------------------------------------------
-# 관련검색어 띄우기 요청(정류소) (비동기)
+# 관련검색어 띄우기 요청(정류소) (비동기)  [이지우, 장성환, 권영선]
 요청내용 : /clc/search/starelationlist.clc
 파라미터 : keyword
-컨트롤러 : com.luxurycity.clc.controller.search.StaRelationList
+컨트롤러 : com.luxurycity.clc.controller.Search.staRelationList()
+뷰	  : ajax ]
+------------------------------------------------------------
+* 관련검색어 모달창 띄우기 요청(버스) [권영선]
+요청내용 : /clc/search/busModal.clc
+파라미터 : keyword
+컨트롤러 : com.luxurycity.clc.controller.Search.busModal()
+뷰	  : ajax ]
+------------------------------------------------------------
+# 관련검색어 모달창 띄우기 요청(정류소)  [권영선]
+요청내용 : /clc/search/staModal.clc
+파라미터 : keyword
+컨트롤러 : com.luxurycity.clc.controller.Search.staModal()
 뷰	  : ajax ]
 ------------------------------------------------------------
 
@@ -142,7 +155,7 @@
 뷰	  : ajax ]
 ------------------------------------------------------------
 # 회원가입 폼 보기 요청 - 지우
->>>>>>> bus_alimi
+
 요청내용 : /clc/member/join.clc
 파라미터 : 무
 컨트롤러 : com.luxurycity.clc.controller.member.Join
@@ -150,7 +163,7 @@
 ------------------------------------------------------------
 
 # 회원가입 처리 요청 - 지우
->>>>>>> bus_alimi
+
 요청내용 : /clc/member/joinproc.clc
 파라미터 : 무
 컨트롤러 : com.luxurycity.clc.controller.member.JoinProc
@@ -187,4 +200,4 @@ DB 데이터 집어넣기 처리
 파라미터 : 무
 컨트롤러 : com.luxurycity.clc.controller.dbinit.RouteStationInputProc
 뷰	  : redirect ] /clc/main.clc
-------------------------------------------------------------
+=======

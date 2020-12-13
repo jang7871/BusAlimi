@@ -47,4 +47,21 @@ public class MemberDao {
 	public int addFind(FindVO fVO) {
 		return sqlSession.insert("mSQL.addFind", fVO);
 	}
+	
+	// 회원정보 페이지 폼 요청 아바타부분(성환)
+	public AvatarVO myInfo1(String id) {
+		return sqlSession.selectOne("mSQL.getMembAvt", id);
+	}
+	
+	// 회원정보 페이지 폼 요청 회원부분(성환)
+	public MemberVO myInfo2(String id) {
+		return sqlSession.selectOne("mSQL.getMembInfo", id);
+	}
+	
+	 
+	// 회원정보 변겅 전담 처리함수(성환)
+	public int myInfoEdit(MemberVO mVO) {
+		return sqlSession.update("mSQL.editMemb", mVO);
+	}
+	 
 }

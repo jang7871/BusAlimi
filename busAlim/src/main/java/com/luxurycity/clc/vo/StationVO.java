@@ -1,14 +1,43 @@
 package com.luxurycity.clc.vo;
 
+import com.luxurycity.clc.util.*;
+
 public class StationVO {
 	private int station_id, district_cd, route_id, route_cd;
 	private double loc_x, loc_y;
-	private String region, station_nn, mobile_no, route_nm;
+	private String region, station_nm, mobile_no, route_nm, keyword, route_tp, ed_sta_nm;
+	private PageUtil page;
+	
+	public String getKeyword() {
+		return keyword;
+	}
+	public void setKeyword(String keyword) {
+		this.keyword = keyword;
+	}
+	public PageUtil getPage() {
+		return page;
+	}
+	public void setPage(PageUtil page) {
+		this.page = page;
+	}
 	public int getStation_id() {
 		return station_id;
 	}
 	public void setStation_id(int station_id) {
 		this.station_id = station_id;
+	}
+	
+	public String getRoute_tp() {
+		return route_tp;
+	}
+	public void setRoute_tp(String route_tp) {
+		this.route_tp = route_tp;
+	}
+	public String getEd_sta_nm() {
+		return ed_sta_nm;
+	}
+	public void setEd_sta_nm(String ed_sta_nm) {
+		this.ed_sta_nm = ed_sta_nm;
 	}
 	public int getDistrict_cd() {
 		return district_cd;
@@ -46,11 +75,11 @@ public class StationVO {
 	public void setRegion(String region) {
 		this.region = region;
 	}
-	public String getStation_nn() {
-		return station_nn;
+	public String getStation_nm() {
+		return station_nm;
 	}
-	public void setStation_nn(String station_nn) {
-		this.station_nn = station_nn;
+	public void setStation_nm(String station_nm) {
+		this.station_nm = station_nm;
 	}
 	public String getMobile_no() {
 		return mobile_no;

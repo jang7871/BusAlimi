@@ -162,7 +162,7 @@ a:visited {
 					<div class="w3-col m2 text w3-margin-top" style="padding-left: 12px;">
 						<b>${route.region}</b>
 					</div> 
-					<div class="w3-col m4 text w3-margin-top"><b>${route.station_nn}</b></div>
+					<div class="w3-col m4 text w3-margin-top"><b>${route.station_nm}</b></div>
 					<div class="w3-col m2 text w3-margin-top">${route.mobile_no}</div>
 					<div class="w3-col m2 text w3-margin-top">${route.str_order}</div>
 				</div>
@@ -177,7 +177,7 @@ a:visited {
 					<div class="w3-col m2 text w3-margin-top" style="padding-left: 12px;">
 						<b>${route.region}</b>
 					</div> 
-					<div class="w3-col m4 text w3-margin-top"><b>${route.station_nn}</b></div>
+					<div class="w3-col m4 text w3-margin-top"><b>${route.station_nm}</b></div>
 					<div class="w3-col m2 text w3-margin-top">${route.mobile_no}</div>
 					<div class="w3-col m2 text w3-margin-top">${route.str_order}</div>
 				</div>
