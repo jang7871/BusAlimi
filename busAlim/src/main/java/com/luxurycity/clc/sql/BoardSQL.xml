@@ -13,7 +13,7 @@
 			WHERE 
 				isshow = 'Y' 
 		</select>
-		<select id="boardList" resultType="bVO" parameterType="int">
+		<select id="boardList" resultType="bVO" parameterType="page">
 			SELECT 
 				rno, afile, sid, wdate, body, bno
 			FROM

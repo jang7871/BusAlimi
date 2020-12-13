@@ -145,5 +145,16 @@ public class RouteVO {
 	public void setRoute_tp(String route_tp) {
 		this.route_tp = route_tp;
 	}
+	@Override
+	public String toString() {
+		return "RouteVO [route_id=" + route_id + ", route_cd=" + route_cd + ", st_sta_id=" + st_sta_id + ", ed_sta_id="
+				+ ed_sta_id + ", peek_alloc=" + peek_alloc + ", npeek_alloc=" + npeek_alloc + ", district_cd="
+				+ district_cd + ", station_id=" + station_id + ", str_order=" + str_order + ", route_nm=" + route_nm
+				+ ", up_first_time=" + up_first_time + ", up_last_time=" + up_last_time + ", down_first_time="
+				+ down_first_time + ", down_last_time=" + down_last_time + ", region=" + region + ", station_nm="
+				+ station_nm + ", mobile_no=" + mobile_no + ", direction=" + direction + ", route_tp=" + route_tp
+				+ ", st_sta_nm=" + st_sta_nm + ", ed_sta_nm=" + ed_sta_nm + ", keyword=" + keyword + ", page=" + page
+				+ "]";
+	}
 	
 }

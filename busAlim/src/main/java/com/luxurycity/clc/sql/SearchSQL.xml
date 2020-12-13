@@ -171,7 +171,7 @@
 
 		<select id="stationDetail" resultType="sVO" parameterType="int">
 			SELECT 
-			    e.*, st.station_nm AS ed_station_nm 
+			    e.*, st.station_nm AS ed_sta_nm 
 			FROM 
 			    ( 
 			        SELECT 

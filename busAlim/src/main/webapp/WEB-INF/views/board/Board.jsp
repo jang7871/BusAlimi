@@ -259,7 +259,6 @@ a:visited {
 		<!-- 게시글 내용 전송하기 -->
 		<form method="post" id="frm" name="frm">
 			<input type="hidden" id="body" name="body">
-<!-- 			<input type="hidden" id="bno" name="bno"> -->
 		</form>
 		
 		<!-- 페이징 처리 -->

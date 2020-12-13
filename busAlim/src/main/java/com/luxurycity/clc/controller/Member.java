@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import com.luxurycity.clc.dao.*;
-import com.luxurycity.clc.service.MemberService;
+import com.luxurycity.clc.service.*;
 import com.luxurycity.clc.vo.*;
 import java.util.*;
 import com.luxurycity.clc.util.*;

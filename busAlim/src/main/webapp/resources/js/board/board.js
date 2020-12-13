@@ -1,3 +1,22 @@
+// delete 버튼
+	/*맨 마지막 리스트를 삭제할 경우 document.ready안에 함수를 만들게 되면 처리가 되지 않았다
+	그래서 동적요소 이벤트 처리로 해결했다 */
+	$(document).on("click", '#dbtn' ,function() {
+		var bool = confirm('Are you sure you hope to delete?');
+		
+		if(bool) {
+			var bno = $(this).prev().attr('id');
+			$('#body').attr('id', 'bno');
+			$('#bno').attr('name', 'bno')
+			$('#bno').val(bno);
+			$('#frm').attr('action', '/clc/board/delproc.clc');
+			$('#frm').submit();
+		} else {
+			alert('not delete');
+			return;
+		}
+	});
+	
 $(document).ready(function() {
 	// reset버튼
 	$('.rbtn').click(function() {
@@ -21,24 +40,7 @@ $(document).ready(function() {
 		$('#frm').submit();
 	});
 	
-	// delete 버튼
-	$('#dbtn').click(function() {
-				
-		var bool = confirm('Are you sure you hope to delete?');
-		
-		if(bool) {
-			var bno = $(this).prev().attr('id');
-			$('#body').attr('id', 'bno');
-			$('#bno').attr('name', 'bno')
-			$('#bno').val(bno);
-			$('#frm').attr('action', '/clc/board/delproc.clc');
-			$('#frm').submit();
-		} else {
-			alert('not delete');
-			return;
-		}
-		//맨 마지막 행 게시글은 삭제버튼이 안눌려 이유를 알아보자
-	});
+	
 
 	// edit 버튼
 	$('#ebtn').click(function() {

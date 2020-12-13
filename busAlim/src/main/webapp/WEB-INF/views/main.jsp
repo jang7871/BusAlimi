@@ -23,55 +23,9 @@ a:visited {
   text-decoration: none;
 }
 </style>
-<script type="text/javascript">
-	/* 검색된 결과(모달창) 클릭에 대한 이벤트 처리 */
-	
-	// 버스 데이터 클릭 시
-	$(document).on("click",".busdatalist",function(){
-//		alert($(this).attr('id'));
-		// 1. 모달창에서 클릭한 버튼의 노선아이디 값을 가져온다.
-		var route_id = $(this).attr('id');
-		// 2. routefrm의 routeid의 value 값을 지정하고
-		$('#routeid').val(route_id);
-		// 3. 버스 상세 페이지로 이동한다.
-		$('#routefrm').attr('action', '/clc/search/busdetail.clc');
-		$('#routefrm').submit();
-	});
-	
-	// 정류소 데이터 클릭 시
-	$(document).on("click",".stadatalist",function(){
-//		alert($(this).attr('id'));
-		// 1. 모달창에서 클릭한 버튼의 정류소 아이디 값을 가져온다.
-		var station_id = $(this).attr('id');
-		// 2. stationfrm의 stationid의 value값을 지정하고
-		$('#stationid').val(station_id);
-		// 3. 정류소 상세 페이지로 이동한다.
-		$('#stationfrm').attr('action', '/clc/search/stationdetail.clc');
-		$('#stationfrm').submit();
-	});
-</script>
+
 <body class="w3-light-grey">
-	<!-- 버스 데이터 전송 담당 태그 -->
-	<form  method="post" id="routefrm">
-		<input type="hidden" name="routeid" id="routeid">
-<!-- 	<input type="hidden" name="routenm" id="routenm">
-		<input type="hidden" name="routetype" id="routetype">
-		<input type="hidden" name="routestnm" id="routestnm">
-		<input type="hidden" name="routeednm" id="routeednm">  -->
-	</form>
-	
-	<!-- 정류소 데이터 전송 담당 태그 -->
-	<form method="post" id="stationfrm">
-		<input type="hidden" name="stationid" id="stationid">
-<!-- 
-		<input type="hidden" name="stationnm" id="stationnm">
-		<input type="hidden" name="x" id="x">
-		<input type="hidden" name="y" id="y">
-		<input type="hidden" name="mobile" id="mobile">
-		<input type="hidden" name="region" id="region">
- -->
-	</form>
-	
+
 <!-- Top container -->
 <div class="w3-bar w3-top w3-black w3-large" style="z-index:4">
   <button class="w3-bar-item w3-button w3-hide-large w3-hover-none w3-hover-text-light-grey" onclick="w3_open();"><i class="fa fa-bars"></i>  Menu</button>
@@ -182,20 +136,20 @@ a:visited {
 	<!-- 버스 데이터 전송 담당 태그 -->
 	<form  method="post" id="routefrm">
 		<input type="hidden" name="route_id" id="routeid">
-		<input type="hidden" name="route_nm" id="routenm">
-		<input type="hidden" name="route_tp" id="routetype">
-		<input type="hidden" name="st_sta_nm" id="routestnm">
-		<input type="hidden" name="ed_sta_nm" id="routeednm">
+<!-- 		<input type="hidden" name="route_nm" id="routenm"> -->
+<!-- 		<input type="hidden" name="route_tp" id="routetype"> -->
+<!-- 		<input type="hidden" name="st_sta_nm" id="routestnm"> -->
+<!-- 		<input type="hidden" name="ed_sta_nm" id="routeednm"> -->
 	</form>
 	
 	<!-- 정류소 데이터 전송 담당 태그 -->
 	<form method="post" id="stationfrm">
 		<input type="hidden" name="station_id" id="stationid">
-		<input type="hidden" name="station_nm" id="stationnm">
-		<input type="hidden" name="loc_x" id="x">
-		<input type="hidden" name="loc_y" id="y">
-		<input type="hidden" name="mobile_no" id="mobile">
-		<input type="hidden" name="region" id="region">
+<!-- 		<input type="hidden" name="station_nm" id="stationnm"> -->
+<!-- 		<input type="hidden" name="loc_x" id="x"> -->
+<!-- 		<input type="hidden" name="loc_y" id="y"> -->
+<!-- 		<input type="hidden" name="mobile_no" id="mobile"> -->
+<!-- 		<input type="hidden" name="region" id="region"> -->
 	</form>
 
 

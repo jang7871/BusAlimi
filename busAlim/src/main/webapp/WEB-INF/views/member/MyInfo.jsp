@@ -183,12 +183,12 @@ a:visited {
             </div>
 </form>
 
-  <div class="w3-container w3-padding-32">
-  	    <h5><b><i class="fa fa-user"></i>  회원 정보</b></h5>
-  	    <div class="w3-content w3-padding w3-card-2 w3-white">
+<!--   <div class="w3-container w3-padding-32"> -->
+<!--   	    <h5><b><i class="fa fa-user"></i>  회원 정보</b></h5> -->
+<!--   	    <div class="w3-content w3-padding w3-card-2 w3-white"> -->
   	    	
-  	    </div>
-  </div>
+<!--   	    </div> -->
+<!--   </div> -->
 
 	<hr>
   <div class="w3-container w3-dark-grey w3-padding-32">

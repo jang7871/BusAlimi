@@ -3,6 +3,7 @@ package com.luxurycity.clc.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.*;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -71,5 +72,42 @@ public class Search {
 		// 키워드 보내고 결과 받고
 		List<StationVO> list = sDao.getStakeyList(map.get("keyword"));
 		return list;
+	}
+	@RequestMapping("/stationdetail.clc")
+	public ModelAndView stationDetail(ModelAndView mv, StationVO sVO) {
+		int station_id = sVO.getStation_id();
+		List<StationVO> slist = sDao.stationDetail(station_id);
+		//리스트 길이가 0이면 잘못된거니까 다시 메인으로 이동시킨다
+		if(slist.size() == 0) {
+			mv.setViewName("redirect:/main.clc");
+		}else {
+			mv.setViewName("search/StationDetail");
+		}
+		mv.addObject("SDATA", sVO);
+		mv.addObject("ROUTELIST", slist);
+		return mv;
+	}
+	
+	@RequestMapping("/busdetail.clc")
+	public ModelAndView busDetail(ModelAndView mv, @ModelAttribute RouteVO rVO) {
+		System.out.println(rVO.toString());
+		int route_id = rVO.getRoute_id();
+		List<RouteVO> rlist = sDao.busDetail(route_id);
+		//리스트 길이가 0이면 잘못된거니까 다시 메인으로 이동시킨다
+		int peek = 0, npeek = 0;
+		if(rlist.size() == 0) {
+			mv.setViewName("redirect:/main.clc");
+		}else {
+			mv.setViewName("search/BusDetail");
+			//이떄 peek 정보를 꺼내서 써야 편하다
+			peek = rlist.get(0).getPeek_alloc();
+			npeek = rlist.get(0).getNpeek_alloc();
+		}
+		
+		mv.addObject("PEEK", peek);
+		mv.addObject("NPEEK", npeek);
+		mv.addObject("INFO", rVO);
+		mv.addObject("ROUTE", rlist);
+		return mv;
 	}
 }

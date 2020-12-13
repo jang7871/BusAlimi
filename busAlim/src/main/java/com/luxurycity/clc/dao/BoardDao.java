@@ -12,14 +12,14 @@ import com.luxurycity.clc.util.*;
 public class BoardDao {
 	@Autowired
 	SqlSessionTemplate sqlSession;
-	//보드 카운트 페이지 토탈 뽑기 - 지우
+	//보드 카운트 페이지 토탈 뽑기 
 	public int boardCnt() {
 		return sqlSession.selectOne("bSQL.boardCnt");
 	}
 	
-	//보드 리스트 뽑기 - 지우
-	public List<BoardVO> boardList(int startpage) {
-		return sqlSession.selectList("bSQL.boardList", startpage);
+	//보드 리스트 뽑기 
+	public List<BoardVO> boardList(PageUtil page) {
+		return sqlSession.selectList("bSQL.boardList", page);
 	}
 	//보드 추가하기 - 지우
 	public int addBoard(BoardVO bVO) {
