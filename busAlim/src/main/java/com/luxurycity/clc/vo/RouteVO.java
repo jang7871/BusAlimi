@@ -1,8 +1,23 @@
 package com.luxurycity.clc.vo;
+import com.luxurycity.clc.util.*;
 
 public class RouteVO {
 	private int route_id, route_cd, st_sta_id, ed_sta_id, peek_alloc, npeek_alloc, district_cd, station_id, str_order;
-	private String route_nm, up_first_time, up_last_time, down_first_time, down_last_time, region, station_nn, mobile_no, direction, route_tp, st_sta_nm, ed_sta_nm;
+	private String route_nm, up_first_time, up_last_time, down_first_time, down_last_time, region, station_nm, mobile_no, direction, route_tp, st_sta_nm, ed_sta_nm, keyword;
+	private PageUtil page;
+	
+	public String getKeyword() {
+		return keyword;
+	}
+	public void setKeyword(String keyword) {
+		this.keyword = keyword;
+	}
+	public PageUtil getPage() {
+		return page;
+	}
+	public void setPage(PageUtil page) {
+		this.page = page;
+	}
 	public int getRoute_id() {
 		return route_id;
 	}
@@ -106,11 +121,11 @@ public class RouteVO {
 	public void setRegion(String region) {
 		this.region = region;
 	}
-	public String getStation_nn() {
-		return station_nn;
+	public String getStation_nm() {
+		return station_nm;
 	}
-	public void setStation_nn(String station_nn) {
-		this.station_nn = station_nn;
+	public void setStation_nm(String station_nm) {
+		this.station_nm = station_nm;
 	}
 	public String getMobile_no() {
 		return mobile_no;
@@ -129,6 +144,17 @@ public class RouteVO {
 	}
 	public void setRoute_tp(String route_tp) {
 		this.route_tp = route_tp;
+	}
+	@Override
+	public String toString() {
+		return "RouteVO [route_id=" + route_id + ", route_cd=" + route_cd + ", st_sta_id=" + st_sta_id + ", ed_sta_id="
+				+ ed_sta_id + ", peek_alloc=" + peek_alloc + ", npeek_alloc=" + npeek_alloc + ", district_cd="
+				+ district_cd + ", station_id=" + station_id + ", str_order=" + str_order + ", route_nm=" + route_nm
+				+ ", up_first_time=" + up_first_time + ", up_last_time=" + up_last_time + ", down_first_time="
+				+ down_first_time + ", down_last_time=" + down_last_time + ", region=" + region + ", station_nm="
+				+ station_nm + ", mobile_no=" + mobile_no + ", direction=" + direction + ", route_tp=" + route_tp
+				+ ", st_sta_nm=" + st_sta_nm + ", ed_sta_nm=" + ed_sta_nm + ", keyword=" + keyword + ", page=" + page
+				+ "]";
 	}
 	
 }

@@ -183,7 +183,7 @@ a:visited {
 
 <c:if test="${not empty SID}">
 			<div class="w3-col w3-padding-large w3-card-2 w3-white w3-margin-bottom">
-				<div class="w3-col m2"><img src="/clc/img/avatar/img_avatar1.png" class="w3-round" width="110px;" height="auto"></div>
+				<div class="w3-col m2"><img src="/clc${AVT.dir}${AVT.afile}" class="w3-round" width="110px;" height="auto"></div>
 				<textarea rows="4" cols="auto" placeholder="내용을 입력하세요!" class="w3-col m8 w3-input w3-border w3-round" style="resize: none;"></textarea>
 				<div class="w3-cell w3-col m2" style="padding-left: 20px; padding-top: 8px;">
 					<div class="w3-col w3-button w3-dark-gray w3-margin-bottom w3-round rbtn">reset</div>
@@ -199,7 +199,7 @@ a:visited {
 			<!-- 게시글 삭제 버튼 -->
 				<div class="w3-display-topright w3-button w3-small w3-text-red"><i class="fa fa-times" aria-hidden="true"></i></div>
 				
-				<div class="w3-col m2"><img src="/clc/img/avatar/img_avatar1.png" class="w3-round" width="110px;" height="auto"></div>
+				<div class="w3-col m2"><img src="/clc/img/avatar/${LIST.afile}" class="w3-round" width="110px;" height="auto"></div>
 				<div class="w3-col m10">
 					<div class="w3-col w3-border-bottom w3-left w3-text-grey" style="padding-left: 16px; padding-bottom: 3px;">
 						<div class="w3-cell w3-left">${LIST.sid}</div>
@@ -208,11 +208,11 @@ a:visited {
 			<!-- 아이디 수정하세요! -->		
 					<div class="w3-col w3-padding w3-left-align" id="${LIST.bno}">${LIST.body}</div>
 			<!-- 삭제 & 수정 버튼은 해당 아이디 소유자만 보여야 한다. -->
-<%-- 			<c:if test="${SID eq LIST.sid}">		 --%>
+			<c:if test="${SID eq LIST.sid}">		
 					<div class="w3-button w3-right w3-round" id="dbtn"><i class="fa fa-pencil-square-o" aria-hidden="true"></i>&nbsp;delete</div>
 			<!-- 게시글 수정 버튼 -->
 					<div class="w3-button w3-right w3-round" onclick="document.getElementById('id01').style.display='block'" ><i class="fa fa-pencil-square-o" aria-hidden="true"></i>&nbsp;edit</div>
-<%-- 			</c:if>		 --%>
+			</c:if>		
 				</div>
 			</div>
 		</c:forEach>
@@ -257,16 +257,15 @@ a:visited {
 		</div>
 		
 		<!-- 게시글 내용 전송하기 -->
-		<form method="post" id="frm">
+		<form method="post" id="frm" name="frm">
 			<input type="hidden" id="body" name="body">
-			<input type="hidden" id="bno" name="bno">
 		</form>
 		
 		<!-- 페이징 처리 -->
 		<div class="w3-bar w3-center">
 			<form method="post" name="pfrm" id="pfrm">
 				<input type="hidden" name="nowPage" id="nowPage">
-			 </form>
+			</form>
 				
 		<!-- 이전버튼 -->
 	<c:if test="${PAGE.startPage != 1}">

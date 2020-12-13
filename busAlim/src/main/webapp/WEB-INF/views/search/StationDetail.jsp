@@ -144,7 +144,7 @@ h6{
 		<div class="w3-content w3-center w3-padding" style="max-width: 600px;">
 			<div class="w3-col">
 				<div class="w3-col">${SDATA.mobile_no}</div>
-				<div class="w3-col" id="stationiNm"><h3>${SDATA.station_nn}</h3></div>
+				<div class="w3-col" id="stationiNm"><h3>${SDATA.station_nm}</h3></div>
 				<!-- <div class="w3-col">처인구정후문 방면</div>  -->
 			<div class="w3-right w3-button w3-round w3-blue w3-margin-bottom stBkAdd" id="${SDATA.station_id}">즐겨찾기 추가</div>
 			</div>
@@ -172,7 +172,7 @@ h6{
 			<c:forEach var="rlist" items="${ROUTELIST}">		
 					<div class="w3-col w3-white w3-border-bottom" id="${rlist.route_id}">
 						<div class="w3-col w3-padding">
-							<div class="w3-col w3-border-bottom w3-border-blue w3-text-gray">${rlist.route_tp}</div>
+							<div class="w3-col w3-border-bottom w3-border-blue w3-text-gray">${rlist.route_cd}</div>
 							<div class="w3-col m10" style="padding-top: 5px;">
 								<div class="w3-col m4 w3-border-right w3-border-blue">
 									<div class="w3-col"><span style="font-size: 32px;">${rlist.route_nm}</span> ( ${rlist.region} )</div>

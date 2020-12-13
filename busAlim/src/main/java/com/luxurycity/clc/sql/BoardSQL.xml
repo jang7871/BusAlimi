@@ -5,6 +5,57 @@
 		
 	<mapper namespace="bSQL">
 		<!-- 요안에다가  작업-->
-	
+		<select id="boardCnt" resultType="int">
+			SELECT 
+				COUNT(*) cnt 
+			FROM 
+				board 
+			WHERE 
+				isshow = 'Y' 
+		</select>
+		<select id="boardList" resultType="bVO" parameterType="page">
+			SELECT 
+				rno, afile, sid, wdate, body, bno
+			FROM
+				(
+				SELECT
+					rownum rno, afile, sid, wdate, body, bno
+				FROM 
+					(SELECT 
+						afile, id sid, wdate, body, bno
+					FROM 
+						avatar a, member m, board b 
+					WHERE 
+						a.ano = m.ano 
+						AND m.mno = b.mno 
+						AND b.isshow = 'Y' 
+					ORDER BY 
+						bno DESC)
+				)
+			WHERE 
+				rno BETWEEN #{startCont} AND #{endCont}
+		</select>
+		<insert id="addBoard" parameterType="bVO">
+			<selectKey keyProperty="mno" resultType="int" order="BEFORE">
+				SELECT
+					mno
+				From 
+					member WHERE id = #{sid} AND isshow = 'Y'
+			</selectKey>
+			INSERT INTO
+				board(bno, mno, body)
+			VALUES(
+				(SELECT NVL(MAX(bno), 10000)+1 FROM board),
+				#{mno}, #{body}
+			)
+		</insert>
+		<update id="delBoard" parameterType="int">
+			UPDATE
+				board
+			SET
+				isshow = 'N'
+			WHERE
+				bno = #{bno}
+		</update>
 	
 	</mapper>

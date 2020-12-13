@@ -24,6 +24,14 @@ $(document).ready(function(){
 	
 	// 수정
 	$('#editbtn2').click(function() {
+		var oMail = $('#email').parent().prev().children().html();
+		var nMail = $('#email').val();
+		
+		if(oMail == nMail) {
+			alert('동일한 이메일은 변경할 수 없습니다.');
+			$('#email').next().val('');
+			return;			
+		}
 		$('#frm').submit();
 	});
 	

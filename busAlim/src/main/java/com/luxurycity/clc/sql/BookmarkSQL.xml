@@ -3,8 +3,133 @@
 		PUBLIC  "-//mybatis.org//DTD Mapper 3.0//EN"
 		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 		
-	<mapper namespace="bmSQL">
-		<!-- 요안에다가  작업-->
+<mapper namespace="bmSQL">
+	<select id="stationList" resultType="bmVO" parameterType="bmVO">
+		SELECT
+		    *
+		FROM
+		    (
+		        SELECT
+		            rownum rno, list.*
+		        FROM
+		                (
+		                    SELECT 
+		                        bmno, NVL(b.route_id, 0) route_id, NVL(b.station_id, 0) station_id, NVL(r.route_nm, 0) route_nm, NVL(s.station_nm, 0) station_nm, NVL(s.mobile_no, 0) mobile_no, NVL(region, 0) region 
+		                    FROM 
+		                        bookmark b, route r, station s, district d 
+		                    WHERE 
+		                        b.route_id = r.route_id(+) 
+		                        AND s.district_cd = d.district_cd(+) 
+		                        AND b.station_id = s.station_id(+) 
+		                        AND mno = ( 
+		                                       SELECT 
+		                                           mno 
+		                                       FROM 
+		                                           member 
+		                                       WHERE 
+		                                           id = #{id}
+		                                   ) 
+		                        AND b.route_id IS NULL 
+		                        AND isshow = 'Y' 
+		                ) list
+		    )
+		WHERE
+		    rno BETWEEN #{page.startCont} AND #{page.endCont}
+	</select>
 	
+	<select id="busList" resultType="bmVO" parameterType="bmVO">
+		SELECT
+		    *
+		FROM
+		    (
+		        SELECT
+		            ROWNUM rno, list.*
+		        FROM
+		            (
+		                SELECT 
+		                    s.*, station.station_nm AS ed_station_nm 
+		                FROM 
+		                        ( 
+		                            SELECT 
+		                                bmno, NVL(b.route_id, 0) route_id, NVL(b.station_id, 0) station_id, NVL(r.route_nm, 0) route_nm, NVL(s.station_nm, 0) station_nm, NVL(s.mobile_no, 0) mobile_no, route_tp 
+		                            FROM 
+		                                bookmark b, route r, station s, routetype t 
+		                            WHERE 
+		                                r.route_cd = t.route_cd 
+		                                AND b.route_id = r.route_id(+) 
+		                                AND b.station_id = s.station_id(+) 
+		                                AND mno = ( 
+		                                               SELECT 
+		                                                   mno 
+		                                               FROM 
+		                                                   member 
+		                                               WHERE 
+		                                                   id = #{id}
+		                                          ) 
+		                                AND isshow = 'Y' 
+		                        ) s, route, station 
+		                WHERE 
+		                    s.route_id = route.route_id 
+		                    AND ed_sta_id = station.station_id
+		            ) list
+		    )
+		WHERE
+		    rno BETWEEN #{page.startCont} AND #{page.endCont}
+	</select>
 	
-	</mapper>
+	<select id="totalCnt" resultType="int" parameterType="string">
+		SELECT
+		    CASE WHEN bus > station THEN bus
+		              WHEN station > bus THEN station
+		              ELSE bus
+		    END AS total
+		FROM
+		    (
+		        SELECT
+		            total-cnt bus, cnt station
+		        FROM
+		            (
+		                SELECT
+		                    COUNT(*) total
+		                FROM
+		                    bookmark
+		                WHERE
+		                    isshow = 'Y'
+		                    AND mno = (
+		                        SELECT
+		                            mno
+		                        FROM
+		                            member
+		                        WHERE
+		                            id = #{id}
+		                    )
+		            ),
+		            ( 
+		                SELECT
+		                    COUNT(*) cnt
+		                FROM
+		                    bookmark
+		                WHERE
+		                    route_id IS NULL
+		                    AND isshow = 'Y'
+		                    AND mno =  (
+		                        SELECT
+		                            mno
+		                        FROM
+		                            member
+		                        WHERE
+		                            id = #{id}
+		                    )
+		            )
+		    )
+	</select>
+	
+	<update id="delBookmark" parameterType="int">
+		UPDATE
+		    bookmark
+		SET
+		    isshow = 'N'
+		WHERE
+		    bmno = #{bmno}
+	</update>
+</mapper>

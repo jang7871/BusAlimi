@@ -1,3 +1,22 @@
+// delete 버튼
+	/*맨 마지막 리스트를 삭제할 경우 document.ready안에 함수를 만들게 되면 처리가 되지 않았다
+	그래서 동적요소 이벤트 처리로 해결했다 */
+	$(document).on("click", '#dbtn' ,function() {
+		var bool = confirm('Are you sure you hope to delete?');
+		
+		if(bool) {
+			var bno = $(this).prev().attr('id');
+			$('#body').attr('id', 'bno');
+			$('#bno').attr('name', 'bno')
+			$('#bno').val(bno);
+			$('#frm').attr('action', '/clc/board/delproc.clc');
+			$('#frm').submit();
+		} else {
+			alert('not delete');
+			return;
+		}
+	});
+	
 $(document).ready(function() {
 	// reset버튼
 	$('.rbtn').click(function() {
@@ -11,35 +30,17 @@ $(document).ready(function() {
 		var body = $(this).parent().siblings().eq(1).val();
 		
 		// 내용이 없을 경우 이 함수를 끝낸다.
-		if(body == '') {
+		if(body == '' || body == '내용을 입력하세요!') {
 			alert('Please write your content.');
 			return;
 		}
-	
 
 		$('#body').val(body);
 		$('#frm').attr('action', '/clc/board/writeproc.clc');
 		$('#frm').submit();
 	});
 	
-	// delete 버튼
-	$('#dbtn').click(function() {
-				
-		var bool = confirm('Are you sure you hope to delete?');
-		
-		if(bool) {
-			alert('Delete!');
-			
-			var bno = $(this).prev().attr('id');
-
-		$('#bno').val(bno);
-		$('#frm').attr('action', '/clc/board/delproc.clc');
-		$('#frm').submit();
-		} else {
-			alert('not delete');
-			return;
-		}
-	});
+	
 
 	// edit 버튼
 	$('#ebtn').click(function() {
