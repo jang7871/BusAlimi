@@ -47,6 +47,18 @@ public class MemberService {
 			mv.setViewName("redirect:/member/mypage.clc");
 		}
 		
+		// 회원정보 삭제하는 함수
+		public void setMyInfoDel(ModelAndView mv, MemberVO mVO, HttpSession session) {
+			mVO.setId((String) session.getAttribute("SID"));
+			int cnt = mDao.myInfoDel(mVO);
+			if (cnt != 1) {
+				mv.setViewName("redirect:/member/myinfo.clc");
+				return;
+			}
+			
+			mv.setViewName("redirect:/main.clc");
+			return;
+		}
 		
 		public HashMap<String, String> setBookAdd(HashMap<String, Object> map, HttpSession session, BookmarkVO bmVO) {
 			HashMap<String, String> map2 = new HashMap<String, String>();

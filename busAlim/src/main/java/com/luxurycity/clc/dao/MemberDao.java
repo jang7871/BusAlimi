@@ -58,10 +58,14 @@ public class MemberDao {
 		return sqlSession.selectOne("mSQL.getMembInfo", id);
 	}
 	
-	 
 	// 회원정보 변겅 전담 처리함수(성환)
 	public int myInfoEdit(MemberVO mVO) {
 		return sqlSession.update("mSQL.editMemb", mVO);
+	}
+	
+	// 회원정보 삭제 전담 처리함수(성환)
+	public int myInfoDel(MemberVO mVO) {
+		return sqlSession.update("mSQL.delMemb", mVO);
 	}
 	 
 }
