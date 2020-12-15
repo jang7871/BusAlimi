@@ -42,22 +42,6 @@ $(document).ready(function(){
 		$(this).addClass('w3-hide');
 	});
 	
-	$('#srcstation').click(function() {
-		// 검색한 내용이 없으면 리턴
-		var stationid = $('#stationid').val();
-		var stationnm = $('#stationnm').val();
-		var x = $('#x').val();
-		var y = $('#y').val();
-		var mobile = $('#mobile').val();
-		var retion = $('#region').val();
-		if(!stationid){
-			alert('검색할 내용을 입력하세요.');
-			return;
-		}
-		// 정류소 검색 버튼을 누르면 정류소 상세 페이지로 이동
-		$('#stationfrm').attr('action', '/clc/search/stationdetail.clc');
-		$('#stationfrm').submit();
-	});
 	
 	// 최종 삭제 버튼
 	$('#deletebtn').click(function(){
@@ -74,5 +58,50 @@ $(document).ready(function(){
 	// 모두 선택 버튼
 	$('#selectAll').click(function(){
 		$('.ckbox').prop('checked', true);
+	});
+	
+	// 정류소 버튼 클릭 시 정류소 상세검색 페이지로 이동
+	$('.sBtn').click(function(){
+		var station_id = $(this).children().first().attr('id');
+		let sfrm = $(document.createElement('form'));
+		$(sfrm).attr('method', 'POST');
+		$(sfrm).attr('action', '/clc/search/stationdetail.clc');
+		
+		let sinput = $(document.createElement('input'));
+		$(sinput).attr('type', 'hidden');
+		$(sinput).attr('name', 'station_id');
+		$(sinput).val(station_id);
+		
+		$(sfrm).append(sinput);
+		$('body').prepend(sfrm);
+		
+		$(sfrm).submit();
+	});
+	
+	// 버스 버튼 클릭 시 버스 상세검색 페이지로 이동
+	$('.rBtn').click(function(){
+		var route_id = $(this).children().first().attr('id');
+		let rfrm = $(document.createElement('form'));
+		$(rfrm).attr('method', 'GET');
+		$(rfrm).attr('action', '/clc/search/busdetail.clc');
+		
+		let rinput = $(document.createElement('input'));
+		$(rinput).attr('type', 'hidden');
+		$(rinput).attr('name', 'route_id');
+		$(rinput).val(route_id);
+		
+		var station_id = $(this).children().children().first().attr('id');
+		if(station_id != 0) {
+			let sinput = $(document.createElement('input'));
+			$(sinput).attr('type', 'hidden');
+			$(sinput).attr('name', 'station_id');
+			$(sinput).val(station_id);
+			$(rfrm).append(sinput);
+		}
+		
+		$(rfrm).append(rinput);
+		$('body').prepend(rfrm);
+		
+		$(rfrm).submit();
 	});
 });

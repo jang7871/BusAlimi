@@ -138,6 +138,7 @@ a:visited {
 <!-- 데이터가 넘어가는 영역 -->
 <form method="post" id="frm">
 	<input type="hidden" name="routeid" id="routeid" value ="${param.route_id}">
+	<input type="hidden" name="stationid" id="stationid" value ="${param.station_id}">
 	<input type="hidden" name="id" id="id" value ="${SID}">
 <!-- 
 	<input type="hidden" name="routenm" id="routenm">

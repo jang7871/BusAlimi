@@ -37,9 +37,22 @@ var findBookmark = function(){
 }
 
 $(document).ready(function(){
+	$(window).scrollTop(0);
 	
 	if($('#id').val() != '') {
 		findBookmark();
+	}
+	
+	// 마이페이지 즐겨찾기에서, 정류소 + 노선 버튼을 클릭할 경우 실행되는 이벤트
+	var station_id = $('#stationid').val();
+	if(station_id != undefined && station_id != 0 && station_id != '') {
+		var tag = $('#' + station_id).parent().parent();
+		$(tag).addClass('w3-pale-blue');
+		var pos = tag.offset();
+		
+		$('html').stop().animate({scrollTop: pos.top - 100}, 500);
+		$('#stationid').removeAttr('value');
+		history.replaceState({}, null, '/clc/search/busdetail.clc?route_id=' + $('#routeid').val());
 	}
 });
 
