@@ -132,4 +132,21 @@
 		WHERE
 		    bmno = #{bmno}
 	</update>
+		
+	<insert id="bookAdd" parameterType="map">
+		<selectKey keyProperty="bmno" resultType="int" order="BEFORE">
+			select NVL(MAX(bmno)+1,1001) from bookmark
+		</selectKey>
+			INSERT into 
+				<if test="route_id == 0">bookmark(bmno, mno, station_id, isshow)</if>
+				<if test="station_id == 0">bookmark(bmno, mno, route_id, isshow)</if>
+				<if test="route_id != 0 and station_id != 0">bookmark</if>			
+			values( 
+					#{bmno}, 
+					(select mno from member where id = #{id}),
+				<if test="route_id != 0">#{route_id},</if>
+				<if test="station_id != 0">#{station_id},</if>
+					'Y'
+			) 
+	</insert>
 </mapper>

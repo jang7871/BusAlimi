@@ -42,5 +42,16 @@ public class SearchDao {
 	public List<RouteVO> busDetail(int route_id) {
 		return sqlSession.selectList("sSQL.busDetail", route_id);
 	}
-
+	// 버스 해당 즐겨찾기 찾는 전담 처리 함수
+	public List<BookmarkVO> getBusBookmark(BookmarkVO bmVO) {
+		return sqlSession.selectList("sSQL.busBookmark", bmVO);
+	}
+	// 정류소 해당 즐겨찾기 찾는 전담 처리 함수
+	public List<BookmarkVO> getStaBookmark(BookmarkVO bmVO) {
+		return sqlSession.selectList("sSQL.staBookmark", bmVO);
+	}
+	// 버스 + 정류소 해당 즐겨찾기 찾는 전담 처리 함수
+	public List<BookmarkVO> getBusStaBookmark(BookmarkVO bmVO) {
+		return sqlSession.selectList("sSQL.busStaBookmark", bmVO);
+	}
 }

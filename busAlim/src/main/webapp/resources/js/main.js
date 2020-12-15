@@ -312,6 +312,26 @@ $(document).on("click", '.stadatalist', function() {
 			alert('검색할 내용을 입력되지 않았습니다.');
 			return;
 		}
+//		$.ajax({
+//			url:'/clc/search/stationArrInfo.clc',
+//			type:'post',
+//			dataType:'text',
+//			data:{
+//				staid:stationid
+//			},
+//			success:function(data){
+//				if(data == 'OK'){
+//					$('#id').removeClass('w3-pale-red');
+//					$('#id').addClass('w3-teal');
+//				} else {
+//					$('#id').removeClass('w3-teal');
+//					$('#id').addClass('w3-pale-red');
+//				}
+//			},
+//			error:function(){
+//				alert('##에러당');
+//			}
+//		});
 		$('#stationid').val(stationid);
 		// 버스 검색 버튼을 누르면 버스 상세 페이지로 이동
 		$('#stationfrm').attr('action', '/clc/search/stationdetail.clc');

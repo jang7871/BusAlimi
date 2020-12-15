@@ -237,5 +237,31 @@ public class Member {
 		mService.setMyInfoEdit(mv, mVO, session);
 		return mv;
 	}
-	 
+	@ResponseBody
+	@RequestMapping("bookaddproc.clc")
+	public HashMap<String, String> bookAddproc(@RequestBody HashMap<String, Object> map, HttpSession session, BookmarkVO bmVO) {
+		HashMap<String, String> map2 = mService.setBookAdd(map, session, bmVO);
+		return map2;
+	}
+	
+	@ResponseBody
+	@RequestMapping("/bookdelprocAjax.clc")
+	public HashMap<String, String> bookDelProcAjax(@RequestBody HashMap<String, Integer> map, HttpSession session) {
+		HashMap<String, String> map2 = new HashMap<String, String>();
+		
+		String id = (String) session.getAttribute("SID");
+		if(id == null) {
+			map2.put("result", "LOGIN");
+			return map2;
+		}
+		
+		int cnt = 0;
+		cnt = bmDao.delBookmark(map.get("bmno"));
+		if(cnt == 0) {
+			map2.put("result", "NO");
+		} else {
+			map2.put("result", "OK");
+		}
+		return map2;
+	}	 
 }
