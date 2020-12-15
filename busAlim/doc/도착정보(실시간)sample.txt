@@ -1,0 +1,16 @@
+<busArrivalList>
+	<flag>PASS</flag> 		-- 상태구분 (RUN:운행중 PASS:운행중 STOP:운행종료 WAIT:회차지대기)
+	<locationNo1>21</locationNo1>	-- 첫번째차량 위치정보 >> 나오는 값이 (몇번째 전) or (몇번째)
+	<locationNo2/>			-- 두번째차량 위치정보
+	<lowPlate1>1</lowPlate1>		-- 저상버스 여부 (0:일반버스,1:저상버스)
+	<lowPlate2>0</lowPlate2>
+	<plateNo1>경기70바1937</plateNo1>	-- 첫번쨰 차량번호
+	<plateNo2/>
+	<predictTime1>20</predictTime1>		-- 도착예정시간 (분)
+	<predictTime2/>
+	<remainSeatCnt1>-1</remainSeatCnt1>	--  빈자리수 (-1:정보없음)
+	<remainSeatCnt2>-1</remainSeatCnt2>
+	<routeId>200000055</routeId>		-- 노선 ID
+	<staOrder>91</staOrder>			-- 정류소 순번
+	<stationId>200000037</stationId>		-- 정류소 ID
+</busArrivalList>

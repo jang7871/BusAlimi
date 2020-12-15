@@ -169,41 +169,163 @@
 		    rno BETWEEN 1 AND 5
 	</select>
 
-		<select id="stationDetail" resultType="sVO" parameterType="int">
-			SELECT 
-			    e.*, st.station_nm AS ed_sta_nm 
-			FROM 
-			    ( 
-			        SELECT 
-			            r.route_nm AS route_nm, r.route_id route_id, region, ed_sta_id, route_tp 
-			        FROM 
-			            station s, routestation rs, route r, district d, routetype rt 
-			        WHERE 
-			            s.station_id = rs.station_id 
-			            AND r.route_cd = rt.route_cd 
-			            AND rs.route_id = r.route_id 
-			            AND d.district_cd = r.district_cd 
-			            AND s.station_id = #{station_id}
-			    )e, station st 
-			WHERE 
-			    ed_sta_id = station_id 
-		</select>
+	<select id="stationDetail" resultType="sVO" parameterType="int">
+		SELECT
+		    total.*, s1.station_nm AS st_sta_nm, s2.station_nm AS ed_sta_nm
+		FROM
+		    (
+		        SELECT
+		           a.station_nm, rid AS route_id, route_nm, sorder AS str_order, a.station_id, a.direction, a.mobile_no, a.route_tp, a.region, ed_sta_id, st_sta_id,
+		            b.station_id AS next_station_id, c.station_nm AS next_station_nm
+		        FROM
+		            (
+		                SELECT
+		                    s.station_nm AS station_nm, rs.route_id AS rid, r.route_nm AS route_nm, str_order AS sorder, rs.station_id AS station_id, 
+		                    direction, s.mobile_no AS mobile_no, route_tp, region, ed_sta_id, st_sta_id
+		                FROM
+		                    station s, routestation rs, route r, routetype rt, district d
+		                WHERE   
+		                    s.station_id = rs.station_id
+		                    AND rs.route_id = r.route_id
+		                    AND rt.route_cd = r.route_cd
+		                    AND d.district_cd = r.district_cd
+		                    AND s.station_id = #{station_id}
+		            ) a, routestation b, station c
+		        WHERE
+		            rid = route_id
+		            AND c.station_id = b.station_id
+		            AND str_order = sorder + 1
+		    ) total, station s1, station s2
+		WHERE
+		    st_sta_id = s1.station_id
+		    AND ed_sta_id = s2.station_id
+		ORDER BY
+		    route_nm
+	</select>
 
-		<select id="busDetail" resultType="rVO" parameterType="int">
-			SELECT
-				rs.direction direction, d.region region, s.station_nm station_nm,
-				s.mobile_no mobile_no, rs.str_order str_order, r.peek_alloc peek, r.npeek_alloc npeek
-			FROM
-				routestation rs, station s, district d, route r
-			WHERE
-				rs.route_id = #{route_id}
-				AND rs.station_id = s.station_id
-				AND s.district_cd = d.district_cd
-				AND rs.route_id = r.route_id
-			ORDER BY
-				str_order		
-		</select>
+	<select id="busDetail" resultType="rVO" parameterType="int">
+		SELECT
+			r.route_nm AS route_nm, route_tp, rs.direction AS direction, 
+			s.station_nm AS station_nm, s.station_id AS station_id, st_sta_nm, ed_sta_nm,
+			s.mobile_no mobile_no, rs.str_order str_order,
+			up_first_time, up_last_time, down_first_time, 
+			dowm_last_time AS down_last_time, peek_alloc, npeek_alloc
+		FROM
+			routestation rs, station s, route r, routetype rt,
+               (
+                   SELECT
+                       DISTINCT station_nm st_sta_nm 
+                   FROM  
+                       station, route 
+                   WHERE 
+                      station_id  = st_sta_id
+                      AND station_id = (
+                                           SELECT
+                                               st_sta_id
+                                           FROM
+                                               route
+                                           WHERE
+                                               route_id = #{route_id}
+                                       )
+               ),
+               (
+                   SELECT
+                       DISTINCT station_nm ed_sta_nm 
+                   FROM  
+                       station, route 
+                   WHERE 
+                      station_id  = ed_sta_id
+                      AND station_id = (
+                                            SELECT
+                                                ed_sta_id
+                                            FROM
+                                                route
+                                            WHERE
+                                                route_id = #{route_id}
+                                        )
+               )
+		WHERE
+			rs.route_id = #{route_id}
+               AND rt.route_cd = r.route_cd
+			AND rs.station_id = s.station_id 
+			AND rs.route_id = r.route_id
+		ORDER BY
+			str_order
+	</select>
 
-		
-	</mapper>
+	<select id="busBookmark" resultType="bmVO" parameterType="bmVO">
+		SELECT
+		    bmno, route_id
+		FROM
+		    bookmark
+		WHERE
+		    isshow = 'Y'
+		    AND mno = (
+                            SELECT
+                                mno
+                            FROM
+                                member
+                            WHERE
+                                id = #{id}
+                        )
+		    AND station_id IS NULL
+		    AND route_id = #{route_id}
+	</select>
+	
+	<select id="staBookmark" resultType="bmVO" parameterType="bmVO">
+		SELECT
+		    bmno, station_id
+		FROM
+		    bookmark
+		WHERE
+		    isshow = 'Y'
+		    AND mno = (
+                            SELECT
+                                mno
+                            FROM
+                                member
+                            WHERE
+                                id = #{id}
+                        )
+		    AND route_id IS NULL
+		    AND station_id = #{station_id}
+	</select>
+	
+	<select id="busStaBookmark" resultType="bmVO" parameterType="bmVO">
+		SELECT
+		   bmno, route_id, station_id
+		FROM
+		    bookmark
+	<if test="route_id != 0">
+		WHERE
+		    isshow = 'Y'
+		    AND mno = (
+		                            SELECT
+		                                mno
+		                            FROM
+		                                member
+		                            WHERE
+		                                id = #{id}
+		                        )
+		    AND route_id IS NOT NULL
+		    AND station_id IS NOT NULL
+			AND route_id = #{route_id}
+	</if>
+	<if test="station_id != 0">
+		WHERE
+		    isshow = 'Y'
+		    AND mno = (
+		                            SELECT
+		                                mno
+		                            FROM
+		                                member
+		                            WHERE
+		                                id = #{id}
+		                        )
+		    AND route_id IS NOT NULL
+		    AND station_id IS NOT NULL
+			AND station_id = #{station_id}
+	</if>
+	</select>
 
+</mapper>
