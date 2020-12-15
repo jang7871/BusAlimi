@@ -3,11 +3,30 @@ package com.luxurycity.clc.vo;
 import com.luxurycity.clc.util.*;
 
 public class StationVO {
-	private int station_id, district_cd, route_id, route_cd;
+	private int station_id, district_cd, route_id, route_cd, next_station_id;
 	private double loc_x, loc_y;
-	private String region, station_nm, mobile_no, route_nm, keyword, route_tp, ed_sta_nm;
+	private String region, station_nm, mobile_no, route_nm, keyword, route_tp, st_sta_nm,ed_sta_nm, next_station_nm, direction;
 	private PageUtil page;
 	
+	
+	public String getDirection() {
+		return direction;
+	}
+	public void setDirection(String direction) {
+		this.direction = direction;
+	}
+	public int getNext_station_id() {
+		return next_station_id;
+	}
+	public void setNext_station_id(int next_station_id) {
+		this.next_station_id = next_station_id;
+	}
+	public String getNext_station_nm() {
+		return next_station_nm;
+	}
+	public void setNext_station_nm(String next_station_nm) {
+		this.next_station_nm = next_station_nm;
+	}
 	public String getKeyword() {
 		return keyword;
 	}
@@ -32,6 +51,12 @@ public class StationVO {
 	}
 	public void setRoute_tp(String route_tp) {
 		this.route_tp = route_tp;
+	}
+	public String getSt_sta_nm() {
+		return st_sta_nm;
+	}
+	public void setSt_sta_nm(String st_sta_nm) {
+		this.st_sta_nm = st_sta_nm;
 	}
 	public String getEd_sta_nm() {
 		return ed_sta_nm;

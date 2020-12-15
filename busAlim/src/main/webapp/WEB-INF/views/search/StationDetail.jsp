@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <!DOCTYPE html>
 <html>
 
@@ -63,6 +64,15 @@ h6{
 .title{
 	display: inline-block;
 }
+#scrollTopBtn {
+	z-index: 1;
+	position: fixed;
+	bottom: 15px;
+	right: 15px;
+	width: 50px;
+	height: 50px;
+	display: none;
+}
 </style>
 <body class="w3-light-grey">
 
@@ -82,8 +92,8 @@ h6{
       <img src="/clc${AVT.dir}${AVT.afile}" class="w3-circle w3-margin-right" style="width:46px">
     </div>
     <div class="w3-col s8">
-      <span>Welcome, <strong>회원이름</strong></span><br>
-      <a href="#" class="w3-col m9 w3-tiny w3-round w3-button w3-orange w3-text-white" style="margin-top: 5px;">Logout</a>
+      <span>Welcome, <strong>${SID}</strong></span><br>
+      <a href="/clc/member/logout.clc" class="w3-col m9 w3-tiny w3-round w3-button w3-orange w3-text-white" style="margin-top: 5px;">Logout</a>
     </div>
   </div>
 </c:if>
@@ -95,8 +105,8 @@ h6{
     <div class="w3-col w3-center">
       <span>로그인 후 이용해주세요.</span><br>
       <div class="w3-bar w3-center w3-margin-top">
-	      <a href="#" class="w3-bar-item w3-button w3-small w3-green w3-round w3-margin-right">Login</a>
-	      <a href="#" class="w3-bar-item w3-small w3-button w3-red w3-round">Join</a>
+	      <a href="/clc/member/login.clc" class="w3-bar-item w3-button w3-small w3-green w3-round w3-margin-right">Login</a>
+	      <a href="/clc/member/join.clc" class="w3-bar-item w3-small w3-button w3-red w3-round">Join</a>
       </div>
     </div>
   </div>
@@ -109,16 +119,16 @@ h6{
     <h5>Menu</h5>
   </div>
   <div class="w3-bar-block">
-    <a href="" class="w3-bar-item w3-button w3-padding-16 w3-hide-large w3-dark-grey w3-hover-black" onclick="w3_close()" title="close menu"><i class="fa fa-remove fa-fw"></i>  Close Menu</a>
-    <a href="" class="w3-bar-item w3-button w3-padding"><i class="fa fa-pencil fa-fw" aria-hidden="true"></i>  문의게시판</a>
+    <a href="/clc/search/stationdetail.clc" class="w3-bar-item w3-button w3-padding-16 w3-hide-large w3-dark-grey w3-hover-black" onclick="w3_close()" title="close menu"><i class="fa fa-remove fa-fw"></i>  Close Menu</a>
+    <a href="/clc/board/board.clc" class="w3-bar-item w3-button w3-padding"><i class="fa fa-pencil fa-fw" aria-hidden="true"></i>  문의게시판</a>
     <a href="" class="w3-bar-item w3-button w3-padding"><i class="fa fa-map-marker fa-fw" aria-hidden="true"></i>  지도 검색</a>
  <!-- 마이페이지는 로그인 했을 경우에만 뜨도록 한다 -->
 <c:if test="${not empty SID}">
     <div class="w3-dropdown-hover">
 	    <div class="w3-bar-item w3-button w3-padding"><i class="fa fa-user fa-fw"></i>  마이페이지 <i class="fa fa-caret-down w3-right"></i></div>
     	<div class="w3-dropdown-content w3-bar-block">
-    		<a href="" class="w3-bar-item w3-button"><span class="w3-col m11 w3-right"><i class="fa fa-star fa-fw" aria-hidden="true"></i>&nbsp;&nbsp;즐겨찾기</span></a>
-    		<a href="" class="w3-bar-item w3-button"><span class="w3-col m11 w3-right"><i class="fa fa-info-circle fa-fw" aria-hidden="true"></i>&nbsp;&nbsp;회원정보</span></a>
+    		<a href="/clc/member/mypage.clc" class="w3-bar-item w3-button"><span class="w3-col m11 w3-right"><i class="fa fa-star fa-fw" aria-hidden="true"></i>&nbsp;&nbsp;즐겨찾기</span></a>
+    		<a href="/clc/member/myinfo.clc" class="w3-bar-item w3-button"><span class="w3-col m11 w3-right"><i class="fa fa-info-circle fa-fw" aria-hidden="true"></i>&nbsp;&nbsp;회원정보</span></a>
     	</div>
     </div>
 </c:if>
@@ -136,19 +146,54 @@ h6{
   <hr>
 <!-- 데이터가 넘어가는 영역 -->
 <form method="post" id="frm">
-	<input type="hidden" name="stationid" id="stationid" value="">
+	<input type="hidden" name="stationid" id="stationid" value="${LIST[0].station_id}">
+	<input type="hidden" name="id" id="id" value="${SID}">
 </form>
-
+	<!-- 스크롤탑 버튼 -->
+	<div id="scrollTopBtn" class="w3-circle w3-white w3-card-4 w3-button w3-display-container"><i class="fa fa-chevron-up w3-display-middle" aria-hidden="true"></i></div>
+	
 	<!-- 이 영역에 데이터를 추가하면 됩니다 -->
 	<div class="w3-container">
-		<div class="w3-content w3-center w3-padding" style="max-width: 600px;">
-			<div class="w3-col">
-				<div class="w3-col">${SDATA.mobile_no}</div>
-				<div class="w3-col" id="stationiNm"><h3>${SDATA.station_nm}</h3></div>
-				<!-- <div class="w3-col">처인구정후문 방면</div>  -->
-			<div class="w3-right w3-button w3-round w3-blue w3-margin-bottom stBkAdd" id="${SDATA.station_id}">즐겨찾기 추가</div>
-			</div>
-			
+		<div class="w3-content w3-center" style="max-width: 800px;">
+		
+		<!-- 
+			<div class="w3-col w3-padding-24 w3-card-2 w3-blue-gray">
+				<div class="w3-col">${LIST[0].mobile_no}</div>
+				<div class="w3-col" id="stationiNm" style="font-size: 3em;">${LIST[0].station_nm}</div>
+				<div class="w3-col" style="opacity: 0.8;">${LIST[0].next_station_nm} 방면</div>
+			<div class="w3-right w3-button w3-round w3-blue w3-margin-bottom stBkAdd" id="${LIST[0].station_id}">즐겨찾기 추가</div>
+		 -->
+		 
+		 <!-- 정류소 정보 영역 -->
+			<div class="w3-col w3-padding-24 w3-card-2 w3-blue-gray" id="stationInfo">
+							<div class="w3-col">${LIST[0].mobile_no}</div>
+							<div class="w3-col w3-margin-top" style="font-size: 2.5em;">
+					<c:if test="${fn:length(LIST[0].station_nm) >= 15}">			
+								${LIST[0].station_nm.substring(0, 15)}...
+					</c:if>
+					<c:if test="${fn:length(LIST[0].station_nm) < 15}">			
+								${LIST[0].station_nm}
+					</c:if>
+							</div>
+							<div class="w3-col w3-margin-top" style="opacity: 0.8;">${LIST[0].next_station_nm} 방면</div>
+							<div class="w3-col w3-margin-top">
+								
+				<c:if test="${not empty SID}">
+						<c:if test="${empty BOOKMARK}">			
+								<div class="w3-button w3-round-xxlarge w3-border w3-border-white w3-hover-light-gray addBtn"><i class="fa fa-star-o" aria-hidden="true"></i> 추가</div>				
+						</c:if>
+						
+						<c:if test="${not empty BOOKMARK}">		
+								<div id="${BOOKMARK[0].bmno}" class="w3-button w3-round-xxlarge w3-border w3-border-white w3-hover-light-gray delBtn"><i class="fa fa-star" aria-hidden="true"></i> 삭제</div>				
+						</c:if>
+				</c:if>
+				
+				<c:if test="${empty SID}">
+								<div class="w3-button w3-round-xxlarge w3-border w3-border-white w3-hover-light-gray addBtn"><i class="fa fa-star-o" aria-hidden="true"></i> 추가</div>	
+				</c:if>	
+							</div>
+			</div>		
+		<!-- 
 			<div class="w3-col w3-padding w3-border w3-left-align">
 				도착까지 5분 미만
 			</div>
@@ -163,33 +208,49 @@ h6{
 				<h6 class="title w3-text-green"><b> - </b></h6>
 				<h6 class="title w3-text-green"><b> - </b></h6>
 			</div>
-			<div class="w3-col w3-padding w3-border w3-left-align">
-				경유 노선 정보
-			</div>
-			<div class="w3-col text w3-left-align">
-				<div class="w3-col">
-<!-- 정류소 경유노선 리스트 -->					
-			<c:forEach var="rlist" items="${ROUTELIST}">		
-					<div class="w3-col w3-white w3-border-bottom" id="${rlist.route_id}">
-						<div class="w3-col w3-padding">
-							<div class="w3-col w3-border-bottom w3-border-blue w3-text-gray">${rlist.route_cd}</div>
-							<div class="w3-col m10" style="padding-top: 5px;">
-								<div class="w3-col m4 w3-border-right w3-border-blue">
-									<div class="w3-col"><span style="font-size: 32px;">${rlist.route_nm}</span> ( ${rlist.region} )</div>
-									<div class="w3-col">${rlist.ed_sta_nm} 방면</div>
+		 -->
+
+				<div class="w3-col text w3-left-align w3-card-2">
+					<div class="w3-col w3-padding">
+	<!-- 정류소 경유노선 리스트 -->					
+				<c:forEach var="rlist" items="${LIST}">		
+						<div class="w3-col w3-white w3-button w3-left-align w3-hover-light-gray w3-border-bottom">
+							<div class="w3-col w3-padding">
+								<!-- 노선유형 -->
+								<div class="w3-col w3-border-bottom w3-border-blue w3-text-gray routetp">${rlist.route_tp}</div>							
+								
+								<!-- 노선이름, 방향, 도착시간 -->
+								<div class="w3-col m10 rDirect" style="padding-top: 5px;"  id="${rlist.route_id}">
+									<div class="w3-col m4 w3-border-right w3-border-blue">
+										<div class="w3-col"><span class="routenm" style="font-size: 32px;">${rlist.route_nm}</span> ( ${rlist.region} )</div>
+							
+							<c:if test="${rlist.direction eq '정' }">			
+										<div class="w3-col">${rlist.ed_sta_nm} 방향</div>
+							</c:if>
+							<c:if test="${rlist.direction eq '역' }">			
+										<div class="w3-col">${rlist.st_sta_nm} 방향</div>
+							</c:if>
+										
+									</div>
+									<div class="w3-col m8 w3-padding">
+										<div class="w3-col"><b>약 <span style="font-size: 20px;"> 16 </span>분 [ - 번째 전, 여유]</b></div>
+										<div class="w3-col"><b>약 <span style="font-size: 20px;"> - </span>분 [ - 번째 전, 여유]</b></div>
+									</div>
 								</div>
-								<div class="w3-col m8 w3-padding">
-									<div class="w3-col"><b>약 <span style="font-size: 20px;"> - </span>분 [ - 번째 전, 여유]</b></div>
-									<div class="w3-col"><b>약 <span style="font-size: 20px;"> - </span>분 [ - 번째 전, 여유]</b></div>
+								
+								<!-- 즐겨찾기 버튼 -->
+								<div class="w3-col m2 w3-display-container" style="height: 80.2px;" id="bm${rlist.route_id}">
+									<i class="w3-text-gray w3-display-middle fa fa-star-o fa-3x addBtn" aria-hidden="true" style="cursor: pointer;"></i>
+									<i class="w3-text-amber w3-display-middle fa fa-star fa-3x delBtn w3-hide" aria-hidden="true" style="cursor: pointer;"></i>
 								</div>
 							</div>
-							
 						</div>
+				</c:forEach>
+						
 					</div>
-			</c:forEach>
-					
 				</div>
-			</div>
+
+			
 		</div>
 	</div>
 
