@@ -89,6 +89,7 @@ public class Search {
 		}else {
 			mv.setViewName("search/StationDetail");
 		}
+
 		ArrayList<HashMap> map = stationArrInfo(mv,station_id);
 //		mv.addObject("SDATA", sVO);
 		// 4. 세션에 아이디가 존재할 경우 해당 즐겨찾기를 가져온다.
@@ -146,12 +147,14 @@ public class Search {
 				mv.addObject("BOOKMARK", list);
 			}
 		}
+
 //		mv.addObject("PEEK", peek);
 //		mv.addObject("NPEEK", npeek);
 //		mv.addObject("INFO", rVO);
 		mv.addObject("ROUTE", rlist);
 		return mv;
 	}
+
 	@ResponseBody
 	@RequestMapping("/findBookmarkProc.clc")
 	public List<BookmarkVO> findBookmarkProc(@RequestBody HashMap<String, String> map, HttpSession session, BookmarkVO bmVO) {
@@ -174,4 +177,5 @@ public class Search {
 //		System.out.println(list.size());
 		return list;
 	}	
+
 }

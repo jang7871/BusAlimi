@@ -224,24 +224,25 @@ public class Member {
 		return mv;
 	}
 	
+	
 	@RequestMapping("/myinfo.clc")
 	public ModelAndView myInfo(ModelAndView mv, MemberVO mVO, AvatarVO aVO, HttpSession session) {
 		mService.setMyInfo(mv, mVO, aVO, session);
 		return mv;
 	}
-
+	
+	
+	 
 	@RequestMapping("/myinfoedit.clc")
 	public ModelAndView myInfoEdit(ModelAndView mv, MemberVO mVO, HttpSession session) {
 		mService.setMyInfoEdit(mv, mVO, session);
 		return mv;
 	}
-	
-	@RequestMapping("/myinfodel.clc")
+  @RequestMapping("/myinfodel.clc")
 	public ModelAndView myInfoDel(ModelAndView mv, MemberVO mVO, HttpSession session) {
 		mService.setMyInfoDel(mv, mVO, session);
 		return mv;
 	}
-	
 	@ResponseBody
 	@RequestMapping("bookaddproc.clc")
 	public HashMap<String, String> bookAddproc(@RequestBody HashMap<String, Object> map, HttpSession session, BookmarkVO bmVO) {
@@ -268,5 +269,7 @@ public class Member {
 			map2.put("result", "OK");
 		}
 		return map2;
-	}	 
+
+	}
+
 }
