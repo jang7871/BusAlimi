@@ -62,6 +62,7 @@ a:visited {
 	height: 50px;
 	display: none;
 }
+
 </style>
 <body class="w3-light-grey">
 
@@ -136,6 +137,9 @@ a:visited {
 <!-- 데이터가 넘어가는 영역 -->
 <form method="post" id="frm">
 	<input type="hidden" name="routeid" id="routeid" value ="${param.route_id}">
+
+	<input type="hidden" name="stationid" id="stationid" value ="${param.station_id}">
+
 	<input type="hidden" name="id" id="id" value ="${SID}">
 <!-- 
 	<input type="hidden" name="routenm" id="routenm">
@@ -180,7 +184,7 @@ a:visited {
 			<c:if test="${empty BOOKMARK}">			
 					<div class="w3-button w3-round-xxlarge w3-border w3-border-white w3-hover-light-gray addBtn"><i class="fa fa-star-o" aria-hidden="true"></i> 추가</div>				
 			</c:if>
-			
+
 			<c:if test="${not empty BOOKMARK}">		
 					<div id="${BOOKMARK[0].bmno}" class="w3-button w3-round-xxlarge w3-border w3-border-white w3-hover-light-gray delBtn"><i class="fa fa-star" aria-hidden="true"></i> 삭제</div>				
 			</c:if>
@@ -191,7 +195,7 @@ a:visited {
 	</c:if>	
 				</div>
 			</div>
-			
+
 			<div class="w3-col w3-padding w3-white w3-card-2">
 	<%--
 		<c:forEach var="route" items="${ROUTE}">

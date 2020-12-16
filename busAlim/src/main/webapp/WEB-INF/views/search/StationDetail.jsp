@@ -3,6 +3,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
 <!DOCTYPE html>
 <html>
 
@@ -146,7 +147,7 @@ h6{
   <hr>
 <!-- 데이터가 넘어가는 영역 -->
 <form method="post" id="frm">
-	<input type="hidden" name="station_id" id="stationid" value="${LIST[0].station_id}">
+	<input type="hidden" name="stationid" id="stationid" value="${LIST[0].station_id}">
 	<input type="hidden" name="id" id="id" value="${SID}">
 </form>
 	<!-- 스크롤탑 버튼 -->
