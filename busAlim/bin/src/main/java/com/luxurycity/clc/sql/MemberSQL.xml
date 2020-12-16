@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+	<!DOCTYPE mapper
+		PUBLIC  "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+		
+<mapper namespace="mSQL">
+	<!-- 요안에다가  작업-->
+	<select id="loginCnt" resultType="int" parameterType="mVO">
+		SELECT 
+		    COUNT(*) cnt 
+		FROM 
+		    member 
+		WHERE 
+		    id = #{id}
+		    AND pw = #{pw} 
+		    AND isshow = 'Y' 
+	</select>
+	
+	<select id="getMembAvt" resultType="aVO" parameterType="string">
+		SELECT 
+		    afile, dir, m.ano
+		FROM 
+		    avatar a, member m
+		WHERE
+			m.ano = a.ano 
+		    AND id = #{id}
+	</select>
+</mapper>

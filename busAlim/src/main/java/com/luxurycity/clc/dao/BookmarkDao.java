@@ -36,7 +36,7 @@ public class BookmarkDao {
 	public int delBookmark(int bmno) {
 		return sqlSession.update("bmSQL.delBookmark", bmno);
 	}
-	
+
 	// 즐겨찾기 추가 전담 처리 함수
 	public int bookAdd(HashMap map) {
 		int cnt = 0;

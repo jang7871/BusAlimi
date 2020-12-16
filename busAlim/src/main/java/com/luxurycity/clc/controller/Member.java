@@ -238,7 +238,7 @@ public class Member {
 		mService.setMyInfoEdit(mv, mVO, session);
 		return mv;
 	}
-	
+
 	@ResponseBody
 	@RequestMapping("bookaddproc.clc")
 	public HashMap<String, String> bookAddproc(@RequestBody HashMap<String, Object> map, HttpSession session, BookmarkVO bmVO) {
@@ -265,5 +265,7 @@ public class Member {
 			map2.put("result", "OK");
 		}
 		return map2;
+
 	}
+
 }

@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
 
 import java.util.*;
 
@@ -16,6 +17,7 @@ import javax.servlet.http.HttpSession;
 import com.luxurycity.clc.vo.*;
 import com.luxurycity.clc.dao.*;
 import com.luxurycity.clc.util.*;
+import com.luxurycity.clc.service.*;
 
 @Controller
 @RequestMapping("/search")
@@ -79,6 +81,7 @@ public class Search {
 	@RequestMapping("/stationdetail.clc")
 	public ModelAndView stationDetail(ModelAndView mv, StationVO sVO, HttpSession session) {
 		int station_id = sVO.getStation_id();
+		System.out.println(station_id);
 		List<StationVO> slist = sDao.stationDetail(station_id);
 		//리스트 길이가 0이면 잘못된거니까 다시 메인으로 이동시킨다
 		if(slist.size() == 0) {
@@ -86,6 +89,8 @@ public class Search {
 		}else {
 			mv.setViewName("search/StationDetail");
 		}
+
+		ArrayList<HashMap> map = stationArrInfo(mv,station_id);
 //		mv.addObject("SDATA", sVO);
 		// 4. 세션에 아이디가 존재할 경우 해당 즐겨찾기를 가져온다.
 		String sid = (String) session.getAttribute("SID");
@@ -98,10 +103,20 @@ public class Search {
 				mv.addObject("BOOKMARK", list);
 			}
 		}
+		mv.addObject("MAP", map);
 		mv.addObject("LIST", slist);
 		return mv;
 	}
-	
+	@RequestMapping("/stationArrInfo.clc")
+	@ResponseBody
+	public ArrayList<HashMap> stationArrInfo(ModelAndView mv, int staid) {
+		GetArrInfoByRouteAllList rlist = new GetArrInfoByRouteAllList();
+		ArrayList<HashMap> map= rlist.GetArrInfoByRouteAllList(staid);
+		
+		return map;
+	}// 오키 이제 map으로 반환되는거 확인했음 이중구조로 잘나옴 이제 main.js에서 ajax처리해서 form태그 만들어서 넘기는거 할꺼임
+			
+			
 	@RequestMapping("/busdetail.clc")
 	public ModelAndView busDetail(ModelAndView mv, @ModelAttribute RouteVO rVO, HttpSession session) {
 //		System.out.println(rVO.toString());
@@ -132,13 +147,14 @@ public class Search {
 				mv.addObject("BOOKMARK", list);
 			}
 		}
+
 //		mv.addObject("PEEK", peek);
 //		mv.addObject("NPEEK", npeek);
 //		mv.addObject("INFO", rVO);
 		mv.addObject("ROUTE", rlist);
 		return mv;
 	}
-	
+
 	@ResponseBody
 	@RequestMapping("/findBookmarkProc.clc")
 	public List<BookmarkVO> findBookmarkProc(@RequestBody HashMap<String, String> map, HttpSession session, BookmarkVO bmVO) {
@@ -160,7 +176,6 @@ public class Search {
 		List<BookmarkVO> list = sDao.getBusStaBookmark(bmVO);
 //		System.out.println(list.size());
 		return list;
-	}
-	
+	}	
 
 }
