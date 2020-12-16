@@ -238,7 +238,11 @@ public class Member {
 		mService.setMyInfoEdit(mv, mVO, session);
 		return mv;
 	}
-
+  @RequestMapping("/myinfodel.clc")
+	public ModelAndView myInfoDel(ModelAndView mv, MemberVO mVO, HttpSession session) {
+		mService.setMyInfoDel(mv, mVO, session);
+		return mv;
+	}
 	@ResponseBody
 	@RequestMapping("bookaddproc.clc")
 	public HashMap<String, String> bookAddproc(@RequestBody HashMap<String, Object> map, HttpSession session, BookmarkVO bmVO) {
