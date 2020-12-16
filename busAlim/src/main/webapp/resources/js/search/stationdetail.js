@@ -235,4 +235,8 @@ $(document).ready(function(){
 		$(rfrm).submit();
 	});
 	
+	$('.refresh').click(function(){
+		$('#frm').attr('action','/clc/search/stationdetail.clc');
+		$('#frm').submit();
+	});
 });

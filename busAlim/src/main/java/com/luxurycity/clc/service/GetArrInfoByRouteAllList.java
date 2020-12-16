@@ -44,6 +44,7 @@ public class GetArrInfoByRouteAllList {
                     	 map.put(keyarr.get(i), getTagValue(keyarr.get(i), element));
                     	 routeid = getTagValue("routeId", element);
                      }//map하나 완성하고
+                     
                      nodeinfo.add(map);
                  }
              }//for
