@@ -2,6 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html>
 
@@ -145,7 +146,7 @@ h6{
   <hr>
 <!-- 데이터가 넘어가는 영역 -->
 <form method="post" id="frm">
-	<input type="hidden" name="stationid" id="stationid" value="${LIST[0].station_id}">
+	<input type="hidden" name="station_id" id="stationid" value="${LIST[0].station_id}">
 	<input type="hidden" name="id" id="id" value="${SID}">
 </form>
 	<!-- 스크롤탑 버튼 -->
@@ -190,6 +191,7 @@ h6{
 				<c:if test="${empty SID}">
 								<div class="w3-button w3-round-xxlarge w3-border w3-border-white w3-hover-light-gray addBtn"><i class="fa fa-star-o" aria-hidden="true"></i> 추가</div>	
 				</c:if>	
+								<div class="w3-button w3-round-xxlarge w3-border w3-border-white w3-hover-light-gray refresh"><i class="fa fa-refresh" aria-hidden="true"></i> 새로고침</div>
 							</div>
 			</div>		
 		<!-- 
@@ -231,8 +233,10 @@ h6{
 							</c:if>
 										
 									</div>
+					<c:set var="no" value="${0}" />
 							<c:forEach var="routeinfo" items="${MAP}">
-									<c:if test="${rlist.route_id eq routeinfo.routeId }">			
+									<c:if test="${rlist.route_id eq routeinfo.routeId }">
+										<c:set var="no" value="${no + 1}" />		
 										<div class="w3-col m8 w3-padding">
 											<c:if test="${!empty routeinfo.predictTime1}">	
 												<div class="w3-col"><b>약 <span style="font-size: 20px;"> ${routeinfo.predictTime1} </span>분 [ ${routeinfo.locationNo1} 번째 전, 
@@ -241,11 +245,19 @@ h6{
 																											${routeinfo.remainSeatCnt2 eq -1 ? '정보없음' : '여유'}]</b></div>
 											</c:if>
 											<c:if test="${empty routeinfo.predictTime1}">	
-												<div class="w3-col"><b><span style="font-size: 40px;"> 도착정보 없음 </span></b></div>
+												<div class="w3-col"><b> <span style="font-size: 20px;"> -정보없음- </span> [ ${routeinfo.locationNo1} 번째 전, 
+																											${routeinfo.remainSeatCnt1 eq -1 ? '정보없음' : '여유'}]</b></div>
+												<div class="w3-col"><b> <span style="font-size: 20px;"> -정보없음- </span> [ ${routeinfo.locationNo2} 번째 전,
+																												${routeinfo.remainSeatCnt2 eq -1 ? '정보없음' : '여유'}]</b></div>
 											</c:if>
 										</div>
 									</c:if>
-							</c:forEach>		
+							</c:forEach>
+										<c:if test="${no eq 0}">
+											<div class="w3-col m8 w3-padding">
+												<div class="w3-col"><span style="font-size: 20px;"> 도착 정보 없음 </span></div>
+											</div>
+										</c:if>		
 								</div>
 								
 								<!-- 즐겨찾기 버튼 -->
