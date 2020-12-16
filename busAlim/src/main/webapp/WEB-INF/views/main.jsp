@@ -39,7 +39,9 @@ a:visited {
 <c:if test="${not empty SID}">
   <div class="w3-container w3-row">
     <div class="w3-col s4">
-      <img src="/clc${AVT.dir}${AVT.afile}" class="w3-circle w3-card-4 w3-margin-right" style="width:46px">
+      <a href="/clc/member/myinfo.clc" class="w3-bar-item">
+      	<img src="/clc${AVT.dir}${AVT.afile}" class="w3-circle w3-card-4 w3-margin-right" style="width:46px">
+      </a>
     </div>
     <div class="w3-col s8">
       <span>Welcome, <strong>${SID}</strong></span><br>
