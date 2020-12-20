@@ -6,39 +6,51 @@
 
 <mapper namespace="sSQL">
 	<select id="busRelTotal" resultType="int" parameterType="string">
-       SELECT 
-           COUNT(*) total 
-       FROM 
-           (
-               SELECT
-                   DISTINCT(route_id), route_nm, r.route_cd, route_tp, st_sta_nm, ed_sta_nm, region
-               FROM
-                   route r, district d ,routetype t,( 
-                                       select 
-                                           st_sta_id , station_nm st_sta_nm 
-                                      from  
-                                            station, route 
-                                       where 
-                                          station_id  = st_sta_id  
-                                        ) st,( 
-                                               select 
-                                                ed_sta_id , station_nm ed_sta_nm 
-                                                 from  
-                                                      station, route 
-                                              where 
-                                                station_id  = ed_sta_id  
-                                                 )ed
-               WHERE
-                   r.ed_sta_id = ed.ed_sta_id 
-                    and 
-                    d.district_cd = r.district_cd
-                    AND
-                   r.st_sta_id = st.st_sta_id 
-                   and 
-                   r.route_cd = t.route_cd 
-                   and route_nm like #{keyword} || '%'
-                ORDER BY route_nm
-           )
+		SELECT 
+		     COUNT(*) total 
+		FROM 
+		   (
+		        SELECT
+		            DISTINCT(route_id), route_nm, r.route_cd route_cd, route_tp, st_sta_nm, ed_sta_nm, region
+		        FROM
+		            route r, district d ,routetype t,( 
+		                                select 
+		                                    st_sta_id , station_nm st_sta_nm 
+		                               from  
+		                                     station, route 
+		                                where 
+		                                   station_id  = st_sta_id  
+		                                 ) st,( 
+		                                        select 
+		                                         ed_sta_id , station_nm ed_sta_nm 
+		                                          from  
+		                                               station, route 
+		                                       where 
+		                                         station_id  = ed_sta_id  
+		                                          )ed
+		        WHERE
+		            r.ed_sta_id = ed.ed_sta_id 
+		             and 
+		             d.district_cd = r.district_cd
+		             AND
+		            r.st_sta_id = st.st_sta_id 
+		            and 
+		            r.route_cd = t.route_cd 
+		            and route_nm like #{keyword} || '%'
+		         
+		         UNION
+		         
+		        SELECT
+		            DISTINCT(route_id), route_nm, s.route_cd AS route_cd, route_tp, st_sta_nm, ed_sta_nm, region
+		        FROM
+		            seoulroute s, routetype t, district d
+		        WHERE
+		            s.route_cd = t.route_cd
+		            AND s.district_cd = d.district_cd
+		            AND route_nm LIKE #{keyword} || '%'
+		        ORDER BY
+		            route_nm
+		   )
 	</select>
 	
 	<select id="staRelTotal" resultType="int" parameterType="string">
@@ -47,13 +59,25 @@
 		FROM
 		    (
 		        SELECT 
-		            station_id, station_nm, mobile_no, region 
-		        FROM
-		            station s, district d 
-		        WHERE 
-		            station_nm like #{keyword} || '%'
-		            AND s.district_cd = d.district_cd 
-		        ORDER BY station_nm
+                        station_id, station_nm, mobile_no, region 
+                    FROM
+                        station s, district d 
+                    WHERE 
+                        station_nm like #{keyword}  || '%'
+                        AND s.district_cd = d.district_cd
+                        AND s.district_cd = 2
+                        
+                        UNION
+                        
+                    SELECT 
+                        station_id, station_nm, mobile_no, region 
+                    FROM
+                        seoulstation s, district d 
+                    WHERE 
+                        station_nm like #{keyword}  || '%'
+                        AND s.district_cd = d.district_cd
+                    ORDER BY
+                        station_nm
 		    )
 	</select>
 	
@@ -66,38 +90,53 @@
 		            ROWNUM rno, route.*
 		        FROM
 		            (
+
 		                SELECT
-		                    DISTINCT(route_id), route_nm, r.route_cd route_cd, route_tp, st_sta_nm, ed_sta_nm, region
-		                FROM
-		                    route r, district d ,routetype t,( 
-		                                        select 
-		                                            st_sta_id , station_nm st_sta_nm 
-		                                       from  
-		                                             station, route 
-		                                        where 
-		                                           station_id  = st_sta_id  
-		                                         ) st,( 
-		                                                select 
-		                                                 ed_sta_id , station_nm ed_sta_nm 
-		                                                  from  
-		                                                       station, route 
-		                                               where 
-		                                                 station_id  = ed_sta_id  
-		                                                  )ed
-		                WHERE
-		                    r.ed_sta_id = ed.ed_sta_id 
-		                     and 
-		                     d.district_cd = r.district_cd
-		                     AND
-		                    r.st_sta_id = st.st_sta_id 
-		                    and 
-		                    r.route_cd = t.route_cd 
-		                    and route_nm like #{keyword} || '%'
-		                 ORDER BY route_nm
+                            DISTINCT(route_id), route_nm, r.route_cd route_cd, route_tp, st_sta_nm, ed_sta_nm, region
+                        FROM
+                            route r, district d ,routetype t,( 
+                                                select 
+                                                    st_sta_id , station_nm st_sta_nm 
+                                               from  
+                                                     station, route 
+                                                where 
+                                                   station_id  = st_sta_id  
+                                                 ) st,( 
+                                                        select 
+                                                         ed_sta_id , station_nm ed_sta_nm 
+                                                          from  
+                                                               station, route 
+                                                       where 
+                                                         station_id  = ed_sta_id  
+                                                          )ed
+                        WHERE
+                            r.ed_sta_id = ed.ed_sta_id 
+                             and 
+                             d.district_cd = r.district_cd
+                             AND
+                            r.st_sta_id = st.st_sta_id 
+                            and 
+                            r.route_cd = t.route_cd 
+                            and route_nm like #{keyword}  || '%'
+                         
+                         UNION
+                         
+                        SELECT
+                            DISTINCT(route_id), route_nm, s.route_cd AS route_cd, route_tp, st_sta_nm, ed_sta_nm, region
+                        FROM
+                            seoulroute s, routetype t, district d
+                        WHERE
+                            s.route_cd = t.route_cd
+                            AND s.district_cd = d.district_cd
+                            AND route_nm LIKE #{keyword}  || '%'
+                        ORDER BY
+                            route_nm
+
 		             ) route
 		    )
 		WHERE
 		    rno BETWEEN #{page.startCont} AND #{page.endCont}
+    
 	</select>
 	
 	<select id="staRelList" resultType="sVO" parameterType="sVO">
@@ -109,18 +148,30 @@
 		        ROWNUM rno, station_id, station_nm, REPLACE(mobile_no, ' ', '고유번호없음') mobile_no, region 
 		    FROM
 		        (
-		        SELECT 
-		            station_id, station_nm, mobile_no, region 
-		        FROM
-		            station s, district d 
-		        WHERE 
-		            station_nm like #{keyword} || '%'
-		            AND s.district_cd = d.district_cd 
-		        ORDER BY station_nm
+                    SELECT 
+                        station_id, station_nm, mobile_no, region 
+                    FROM
+                        station s, district d 
+                    WHERE 
+                        station_nm like #{keyword} || '%'
+                        AND s.district_cd = d.district_cd
+                        AND s.district_cd = 2
+                        
+                        UNION
+                        
+                    SELECT 
+                        station_id, station_nm, mobile_no, region 
+                    FROM
+                        seoulstation s, district d 
+                    WHERE 
+                        station_nm like #{keyword}  || '%'
+                        AND s.district_cd = d.district_cd
+                    ORDER BY
+                        station_nm
 		        )
 		    )
 		WHERE
-		    rno BETWEEN #{page.startCont} AND #{page.endCont}
+		    rno BETWEEN #{page.startCont}  AND #{page.endCont}
 	</select>
 	
 	<select id="busKeyList" resultType="rVO" parameterType="string">
@@ -133,13 +184,21 @@
 		    FROM
 		        (
 		        SELECT
-		            DISTINCT route_nm
+		           DISTINCT route_nm
 		        FROM
 		            route
 		        WHERE
 		            route_nm LIKE #{keyword} || '%'
-		        ORDER BY
-		            route_nm
+		            
+		            UNION
+		            
+		        SELECT
+		           DISTINCT route_nm
+		        FROM
+		            seoulroute
+		        WHERE
+		            route_nm LIKE #{keyword} || '%'
+		            ORDER BY route_nm
 		        )
 		    )
 		WHERE
@@ -155,10 +214,20 @@
 		            ROWNUM rno, station_nm
 		        FROM
 		            (
-		                SELECT
+		                 SELECT
 		                    DISTINCT station_nm
 		                FROM
 		                    station
+		                WHERE
+		                    station_nm LIKE #{keyword} || '%'
+		                    AND district_cd = 2
+		                    
+		                    UNION
+		                    
+		                SELECT
+		                    DISTINCT station_nm
+		                FROM 
+		                    seoulstation
 		                WHERE
 		                    station_nm LIKE #{keyword} || '%'
 		                ORDER BY
@@ -171,86 +240,174 @@
 
 	<select id="stationDetail" resultType="sVO" parameterType="int">
 		SELECT
-		    total.*, s1.station_nm AS st_sta_nm, s2.station_nm AS ed_sta_nm
+		    total.station_nm, total.route_id, total.route_nm, total.str_order, total.station_id, total.direction, total.mobile_no, total.route_tp, total.region,
+		    total.next_station_nm, s1.station_nm AS st_sta_nm, s2.station_nm AS ed_sta_nm, staregion
 		FROM
 		    (
 		        SELECT
 		           a.station_nm, rid AS route_id, route_nm, sorder AS str_order, a.station_id, a.direction, a.mobile_no, a.route_tp, a.region, ed_sta_id, st_sta_id,
-		            b.station_id AS next_station_id, c.station_nm AS next_station_nm
+		            b.station_id AS next_station_id, 
+		            CASE WHEN sorder = max THEN '종점'
+		                ELSE c.station_nm
+		            END  AS next_station_nm, staregion
 		        FROM
 		            (
 		                SELECT
 		                    s.station_nm AS station_nm, rs.route_id AS rid, r.route_nm AS route_nm, str_order AS sorder, rs.station_id AS station_id, 
-		                    direction, s.mobile_no AS mobile_no, route_tp, region, ed_sta_id, st_sta_id
+		                    direction, s.mobile_no AS mobile_no, route_tp, d.region, ed_sta_id, st_sta_id, d2.region AS staregion, max
 		                FROM
-		                    station s, routestation rs, route r, routetype rt, district d
+		                    station s, routestation rs, route r, routetype rt, district d, district d2,
+		                     (
+		                        SELECT
+		                            route_id, MAX(str_order) AS max
+		                        FROM
+		                            routestation
+		                        GROUP BY
+		                            route_id
+		                    ) m
 		                WHERE   
 		                    s.station_id = rs.station_id
 		                    AND rs.route_id = r.route_id
 		                    AND rt.route_cd = r.route_cd
 		                    AND d.district_cd = r.district_cd
+		                    AND m.route_id = rs.route_id
+                            AND d2.district_cd = s.district_cd
 		                    AND s.station_id = #{station_id}
 		            ) a, routestation b, station c
 		        WHERE
 		            rid = route_id
 		            AND c.station_id = b.station_id
-		            AND str_order = sorder + 1
+		            AND str_order = (
+		                                            CASE WHEN sorder = max THEN sorder
+		                                                      ELSE sorder + 1
+		                                            END
+		                                        )
 		    ) total, station s1, station s2
 		WHERE
 		    st_sta_id = s1.station_id
 		    AND ed_sta_id = s2.station_id
+            
+    	UNION
+		            
+		SELECT
+		   a.station_nm, rid AS route_id, route_nm, sorder AS str_order, a.station_id, a.direction, a.mobile_no, a.route_tp, a.region, 
+		    CASE WHEN sorder = max THEN '종점'
+		                ELSE c.station_nm
+		    END  AS next_station_nm, 
+		    st_sta_nm, ed_sta_nm, staregion
+		FROM
+		    (
+		            SELECT
+		                s.station_nm AS station_nm, rs.route_id AS rid, r.route_nm AS route_nm, str_order AS sorder,rs.station_id AS station_id, 
+		                CASE WHEN direction IS NULL THEN '무'
+		                          WHEN direction = ed_sta_nm THEN '정'
+		                          WHEN direction = st_sta_nm THEN '역'
+		                END AS direction,
+		                s.mobile_no AS mobile_no, route_tp, d.region, ed_sta_nm, st_sta_nm, d2.region AS staregion, max
+		            FROM
+		                seoulstation s, seoulroutestation rs, seoulroute r, routetype rt, district d, district d2,
+		                (
+		                    SELECT
+		                        route_id, MAX(str_order) AS max
+		                    FROM
+		                        seoulroutestation
+		                    GROUP BY
+		                        route_id
+		                ) m
+		            WHERE   
+		                s.station_id = rs.station_id
+		                AND rs.route_id = r.route_id
+		                AND rt.route_cd = r.route_cd
+		                AND d.district_cd = r.district_cd
+		                AND m.route_id = rs.route_id
+                        AND d2.district_cd = s.district_cd
+		                AND s.station_id = #{station_id}
+		    ) a, seoulroutestation b, seoulstation c
+		WHERE
+		    rid = route_id
+		    AND c.station_id = b.station_id
+		    AND str_order = (
+                                CASE WHEN sorder = max THEN sorder
+                                          ELSE sorder + 1
+                                END
+                            )
 		ORDER BY
 		    route_nm
 	</select>
 
-	<select id="busDetail" resultType="rVO" parameterType="int">
-		SELECT
-			r.route_nm AS route_nm, route_tp, rs.direction AS direction, 
-			s.station_nm AS station_nm, s.station_id AS station_id, st_sta_nm, ed_sta_nm,
-			s.mobile_no mobile_no, rs.str_order str_order,
-			up_first_time, up_last_time, down_first_time, 
-			dowm_last_time AS down_last_time, peek_alloc, npeek_alloc
-		FROM
-			routestation rs, station s, route r, routetype rt,
-               (
-                   SELECT
-                       DISTINCT station_nm st_sta_nm 
-                   FROM  
-                       station, route 
-                   WHERE 
-                      station_id  = st_sta_id
-                      AND station_id = (
-                                           SELECT
-                                               st_sta_id
-                                           FROM
-                                               route
-                                           WHERE
-                                               route_id = #{route_id}
-                                       )
-               ),
-               (
-                   SELECT
-                       DISTINCT station_nm ed_sta_nm 
-                   FROM  
-                       station, route 
-                   WHERE 
-                      station_id  = ed_sta_id
-                      AND station_id = (
-                                            SELECT
-                                                ed_sta_id
-                                            FROM
-                                                route
-                                            WHERE
-                                                route_id = #{route_id}
-                                        )
-               )
-		WHERE
-			rs.route_id = #{route_id}
-               AND rt.route_cd = r.route_cd
-			AND rs.station_id = s.station_id 
-			AND rs.route_id = r.route_id
-		ORDER BY
-			str_order
+	<select id="busDetail" resultType="rVO" parameterType="rVO">
+		<choose>
+			<when test="district_cd eq 2">
+				SELECT
+					r.route_nm AS route_nm, route_tp, rs.direction AS direction, 
+					s.station_nm AS station_nm, s.station_id AS station_id, st_sta_nm, ed_sta_nm,
+					s.mobile_no mobile_no, rs.str_order str_order,
+					up_first_time, up_last_time, down_first_time, 
+					dowm_last_time AS down_last_time, peek_alloc, npeek_alloc
+				FROM
+					routestation rs, station s, route r, routetype rt,
+		               (
+		                   SELECT
+		                       DISTINCT station_nm st_sta_nm 
+		                   FROM  
+		                       station, route 
+		                   WHERE 
+		                      station_id  = st_sta_id
+		                      AND station_id = (
+		                                           SELECT
+		                                               st_sta_id
+		                                           FROM
+		                                               route
+		                                           WHERE
+		                                               route_id = #{route_id}
+		                                       )
+		               ),
+		               (
+		                   SELECT
+		                       DISTINCT station_nm ed_sta_nm 
+		                   FROM  
+		                       station, route 
+		                   WHERE 
+		                      station_id  = ed_sta_id
+		                      AND station_id = (
+		                                            SELECT
+		                                                ed_sta_id
+		                                            FROM
+		                                                route
+		                                            WHERE
+		                                                route_id = #{route_id}
+		                                        )
+		               )
+				WHERE
+					rs.route_id = #{route_id}
+		               AND rt.route_cd = r.route_cd
+					AND rs.station_id = s.station_id 
+					AND rs.route_id = r.route_id
+				ORDER BY
+					str_order
+			</when>
+			
+			<otherwise>
+				SELECT
+				    r.route_nm AS route_nm, route_tp, 
+				    CASE WHEN rs.direction IS NULL THEN '무'
+				              WHEN rs.direction = ed_sta_nm THEN '정'
+				              WHEN rs.direction = st_sta_nm THEN '역'
+				    END  AS direction,
+				    s.station_nm AS station_nm, s.station_id AS station_id, st_sta_nm, ed_sta_nm,
+				    s.mobile_no mobile_no, rs.str_order str_order,
+				    up_first_time, up_last_time, peek_alloc
+				FROM
+				    seoulroutestation rs, seoulstation s, seoulroute r, routetype rt
+				WHERE
+				    rs.route_id = #{route_id}
+				    AND rt.route_cd = r.route_cd
+				    AND rs.station_id = s.station_id 
+				    AND rs.route_id = r.route_id
+				ORDER BY
+    				str_order
+			</otherwise>
+		</choose>
 	</select>
 
 	<select id="busBookmark" resultType="bmVO" parameterType="bmVO">

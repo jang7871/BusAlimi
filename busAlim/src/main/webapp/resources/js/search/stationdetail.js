@@ -5,17 +5,17 @@ function getColor(route_tp) {
 		color = colors[7];
 	} else if(route_tp == '좌석형공항버스') {
 		color = colors[6];
-	} else if(route_tp == '리무진공항버스') {
+	} else if(route_tp == '리무진공항버스' || route_tp == '공항') {
 		color = colors[5];
 	} else if(route_tp == '고속형시외버스') {
 		color = colors[4];
-	} else if(route_tp == '마을버스') {
+	} else if(route_tp == '마을버스' || route_tp == '순환') {
 		color = colors[8];
-	} else if(route_tp == '좌석형시내버스' || route_tp == '일반형농어촌버스') {
+	} else if(route_tp == '좌석형시내버스' || route_tp == '일반형농어촌버스' || route_tp == '간선') {
 		color = colors[2];
-	} else if(route_tp == '따복형시내버스') {
+	} else if(route_tp == '따복형시내버스' || route_tp == '마을') {
 		color = colors[3];
-	} else if(route_tp == '일반형시내버스' || route_tp == '일반형시외버스') {
+	} else if(route_tp == '일반형시내버스' || route_tp == '일반형시외버스' || route_tp == '지선') {
 		color = colors[1];
 	} else {
 		color = colors[0];
@@ -107,7 +107,17 @@ $(document).ready(function(){
 		var stationid = '';
 		var addBtn = '';
 		var delBtn = '';
+		var district = '';
+		
+		// 1. 관할구역과 정류소 아이디 정보를 가져온다.
 		stationid = $('#stationid').val();
+		if($('#staregion').text() == '서울'){
+			district = 1;		
+		} else if($('#staregion').text() == '경기') {
+			district = 2;					
+		} else if($('#staregion').text() == '인천') {
+			district = 3;
+		}
 		
 		// 2. 즐겨찾기 유형을 검사한다.(정류소인가?/ 버스+정류소인가?)
 		var innerText = $(this).text();
@@ -123,8 +133,20 @@ $(document).ready(function(){
 			valType = 'station'
 		}
 		// 3. json 형식으로 만들어준다.
-		var data = {route_id: routeid, station_id: stationid, type: valType};
-//		alert(data.type + ',' + data.station_id + ',' + data.route_id);
+		if(valType == 'busstation') {
+			// 이 때 버스 + 정류소 추가할 경우에는, 버스의 관할구역을 기준으로 즐겨찾기 추가한다.
+			var region = $(this).parent().siblings().eq(1).children().first().children().children().last().text();
+
+			district = '';
+			if(region == '( 서울 )') {
+				district = 1;
+			} else if(region == '( 경기 )') {
+				district = 2;	
+			} else if(region == '( 인천 )') {
+				district = 3;
+			}
+		}
+		var data = {route_id: routeid, station_id: stationid, type: valType, area: district};
 		
 		// 4. ajax 처리한다.
 		$.ajax({
@@ -220,6 +242,16 @@ $(document).ready(function(){
 	// 버스 버튼 클릭 시 해당 버스 상세페이지 이동 이벤트
 	$('.rDirect').click(function(){
 		var route_id = $(this).attr('id');
+		var region = $(this).children().first().children().children().last().text();
+		var district_cd = '';
+		if(region == '( 서울 )') {
+			district_cd = 1;
+		} else if(region == '( 경기 )') {
+			district_cd = 2;	
+		} else if(region == '( 인천 )') {
+			district_cd = 3;
+		}
+		
 		let rfrm = $(document.createElement('form'));
 		$(rfrm).attr('method', 'POST');
 		$(rfrm).attr('action', '/clc/search/busdetail.clc');
@@ -229,7 +261,14 @@ $(document).ready(function(){
 		$(rinput).attr('name', 'route_id');
 		$(rinput).val(route_id);
 		
+		let dinput = $(document.createElement('input'));
+		$(dinput).attr('type', 'hidden');
+		$(dinput).attr('name', 'district_cd');
+		$(dinput).val(district_cd);
+		
+
 		$(rfrm).append(rinput);
+		$(rfrm).append(dinput);
 		$('body').prepend(rfrm);
 		
 		$(rfrm).submit();

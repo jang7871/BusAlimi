@@ -105,7 +105,7 @@ a:visited {
 <c:forEach var="blist" items="${BLIST}">
 		<div class="w3-col w3-card-4 w3-white w3-margin-bottom w3-hover-pale-green rBtn" id="${blist.bmno}" style="cursor: pointer;">
 			<div class="w3-col w3-padding" id="${blist.route_id}">
-				<div class="w3-col w3-border-bottom w3-border-blue w3-text-gray" id="${blist.station_id}">${blist.route_tp}</div>
+				<div class="w3-col w3-border-bottom w3-border-blue w3-text-gray" id="${blist.station_id}">${blist.region} ${blist.route_tp}</div>
 				<div class="w3-col" style="padding-top: 5px;">
 					<div class="w3-col m10">
 						<div class="w3-col m4 w3-border-right w3-border-blue" style="font-size: 40px;">${blist.route_nm}</div>
@@ -114,7 +114,7 @@ a:visited {
 							<div class="w3-col w3-text-blue"><b>${blist.ed_station_nm} 방면</b></div>
 					</c:if>
 					<c:if test="${blist.station_nm ne '0'}">
-							<div class="w3-col w3-text-blue w3-small">${blist.mobile_no}</div>
+							<div class="w3-col w3-text-blue w3-small">${blist.mobile_no != null and blist.mobile_no != ' ' ? blist.mobile_no : '고유번호없음'}</div>
 							<div class="w3-col"><b>${blist.station_nm}</b></div>
 					</c:if>
 						</div>
@@ -138,7 +138,7 @@ a:visited {
 				<div class="w3-col w3-border-bottom w3-border-blue w3-text-gray">${slist.region}</div>
 				<div class="w3-col" style="padding-top: 5px;">	
 					<div class="w3-col m10">
-						<div class="w3-col m4 w3-border-right w3-border-blue" style="font-size: 40px;">${slist.mobile_no}</div>
+						<div class="w3-col m4 w3-border-right w3-border-blue" style="font-size: 40px;">${slist.mobile_no != null and slist.mobile_no != ' ' ? slist.mobile_no : ' - '}</div>
 						<div class="w3-col m8 w3-padding">
 							<div class="w3-col w3-small" style="visibility: hidden;"><b>　　　　　　</b></div>
 							<div class="w3-col"><b>${slist.station_nm}</b></div>

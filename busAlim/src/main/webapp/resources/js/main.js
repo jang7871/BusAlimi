@@ -174,23 +174,23 @@ var busClick = function() {
 			$.each(obj, function(index, item) {
 				var tag = '';
 				var color;
-				if(item.route_cd == 11 || item.route_cd == 14 || item.route_cd == 16 || item.route_cd == 21 || item.route_cd == 22 || item.route_cd == 42){
+				if(item.route_cd == 6 || item.route_cd == 11 || item.route_cd == 14 || item.route_cd == 16 || item.route_cd == 21 || item.route_cd == 22 || item.route_cd == 42){
 					color = colors[0];
-				} else if(item.route_cd == 13 || item.route_cd == 43) {
+				} else if(item.route_cd == 4 || item.route_cd == 13 || item.route_cd == 43) {
 					color = colors[1];
-				} else if(item.route_cd == 12 || item.route_cd == 23 ) {
+				} else if(item.route_cd == 3 || item.route_cd == 12 || item.route_cd == 23 ) {
 					color = colors[2];
-				} else if(item.route_cd == 15 ) {
+				} else if(item.route_cd == 2 || item.route_cd == 15 ) {
 					color = colors[3];
 				} else if(item.route_cd == 41) {
 					color = colors[4];
-				} else if(item.route_cd == 51 ) {
+				} else if(item.route_cd == 1 || item.route_cd == 51 ) {
 					color = colors[5];
 				} else if(item.route_cd == 52 ) {
 					color = colors[6];
 				} else if(item.route_cd == 53 ) {
 					color = colors[7];
-				} else {
+				} else if(item.route_cd == 5 || item.route_cd == 30){
 					color = colors[8];
 				}
 				tag +='<div class="w3-col w3-white w3-margin-bottom w3-hover-pale-green w3-border-bottom busdatalist" id="'+ item.route_id +'" style="cursor: pointer;">';
@@ -296,11 +296,22 @@ $(document).on("click", ".staKeyword", function(){
 $(document).on("click", '.busdatalist', function() {
 		// 검색한 내용이 없으면 리턴
 		var routeid = $(this).attr('id');
+		// 지역을 구분해서 검색 하기 위해 지역 정보를 가져온다.
+		var region = $(this).children().children().eq(1).children().children().eq(1).children().first().text();
+		var district_cd = '';
+		if(region == '서울') {
+			district_cd = 1;
+		} else if(region == '경기') {
+			district_cd = 2;
+		} else if(region == '인천') {
+			district_cd = 3;
+		}
 		if(!routeid){
-			alert('검색할 내용을 입력되지 않았습니다.');
+			alert('검색할 내용이 입력되지 않았습니다.');
 			return;
 		}
 		$('#routeid').val(routeid);
+		$('#routefrm #district_cd').val(district_cd);
 		// 버스 검색 버튼을 누르면 버스 상세 페이지로 이동
 		$('#routefrm').attr('action', '/clc/search/busdetail.clc');
 		$('#routefrm').submit();
@@ -308,8 +319,19 @@ $(document).on("click", '.busdatalist', function() {
 $(document).on("click", '.stadatalist', function() {
 		// 검색한 내용이 없으면 리턴
 		var stationid = $(this).attr('id');
+		/*
+		var district_cd = '';
+		var region = $(this).children().children().first().text();
+		if(region == '서울') {
+			district_cd = 1;
+		} else if(region == '경기') {
+			district_cd = 2;
+		} else if(region == '인천') {
+			district_cd = 3;
+		}
+		*/
 		if(!stationid){
-			alert('검색할 내용을 입력되지 않았습니다.');
+			alert('검색할 내용이 입력되지 않았습니다.');
 			return;
 		}
 //		$.ajax({
@@ -333,6 +355,8 @@ $(document).on("click", '.stadatalist', function() {
 //			}
 //		});
 		$('#stationid').val(stationid);
+//		$('#stationfrm #district_cd').val(district_cd);
+		
 		// 버스 검색 버튼을 누르면 버스 상세 페이지로 이동
 		$('#stationfrm').attr('action', '/clc/search/stationdetail.clc');
 		$('#stationfrm').submit();

@@ -86,17 +86,17 @@ $(document).ready(function(){
 		color = colors[7];
 	} else if(route_tp == '좌석형공항버스') {
 		color = colors[6];
-	} else if(route_tp == '리무진공항버스') {
+	} else if(route_tp == '리무진공항버스' || route_tp == '공항') {
 		color = colors[5];
 	} else if(route_tp == '고속형시외버스') {
 		color = colors[4];
-	} else if(route_tp == '마을버스') {
+	} else if(route_tp == '마을버스' || route_tp == '순환') {
 		color = colors[8];
-	} else if(route_tp == '좌석형시내버스' || route_tp == '일반형농어촌버스') {
+	} else if(route_tp == '좌석형시내버스' || route_tp == '일반형농어촌버스' || route_tp == '간선') {
 		color = colors[2];
-	} else if(route_tp == '따복형시내버스') {
+	} else if(route_tp == '따복형시내버스' || route_tp == '마을') {
 		color = colors[3];
-	} else if(route_tp == '일반형시내버스' || route_tp == '일반형시외버스') {
+	} else if(route_tp == '일반형시내버스' || route_tp == '일반형시외버스' || route_tp == '지선') {
 		color = colors[1];
 	} else {
 		color = colors[0];
@@ -104,6 +104,12 @@ $(document).ready(function(){
 	$('#busInfo').addClass(color);		
 	$('#sBtn').addClass(color);
 	$('#opeInfo').children().find('header').addClass(color);
+	// 방향 데이터가 없는 노선의 경우, 정방향 역방향 버튼을 없앤다.
+	var len = $('.rDirect').toArray();
+	if(len == 0){
+		$('#diBtn').css('display', 'none');
+	}
+	
 	// 정방향, 역방향 이벤트 처리
 	$('#sBtn').click(function(){
 		var pos = $('.sDirect').first().offset();
@@ -155,13 +161,17 @@ $(document).ready(function(){
 		var stationid = '';
 		var addBtn = '';
 		var delBtn = '';
+		var district = '';
+		
+		// 1. 관할구역과 노선아이디 정보를 가져온다.
+		district = $('#district_cd').val();
 		routeid = $('#routeid').val();
 		
 		// 2. 즐겨찾기 유형을 검사한다.(버스인가?/ 버스+정류소인가?)
 		var innerText = $(this).text();
 		if(!innerText) {
 			// 버튼에 글자가 없는 경우(별모양 아이콘)는 버스+정류소 추가
-			valType = 'busstation'
+			valType = 'busstation';
 			stationid = $(this).parent().attr('id').substring(2);
 			// 현재 클릭한 객체(addBtn)과 형제 태그(delBtn)을 각각 변수에 담는다.
 			addBtn = $(this);
@@ -171,7 +181,7 @@ $(document).ready(function(){
 			valType = 'bus'
 		}
 		// 3. json 형식으로 만들어준다.
-		var data = {route_id: routeid, station_id: stationid, type: valType};
+		var data = {route_id: routeid, station_id: stationid, type: valType, area: district};
 //		alert(data.type + ',' + data.station_id + ',' + data.route_id);
 		
 		// 4. ajax 처리한다.

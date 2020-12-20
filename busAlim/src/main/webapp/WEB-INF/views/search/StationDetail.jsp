@@ -168,6 +168,7 @@ h6{
 		 <!-- 정류소 정보 영역 -->
 			<div class="w3-col w3-padding-24 w3-card-2 w3-blue-gray" id="stationInfo">
 							<div class="w3-col">${LIST[0].mobile_no}</div>
+							<div class="w3-col w3-hide" id="staregion">${LIST[0].staregion}</div>
 							<div class="w3-col w3-margin-top" style="font-size: 2.5em;">
 					<c:if test="${fn:length(LIST[0].station_nm) >= 15}">			
 								${LIST[0].station_nm.substring(0, 15)}...
@@ -176,7 +177,9 @@ h6{
 								${LIST[0].station_nm}
 					</c:if>
 							</div>
+							
 							<div class="w3-col w3-margin-top" style="opacity: 0.8;">${LIST[0].next_station_nm} 방면</div>
+
 							<div class="w3-col w3-margin-top">
 								
 				<c:if test="${not empty SID}">
@@ -224,7 +227,7 @@ h6{
 								<!-- 노선이름, 방향, 도착시간 -->
 								<div class="w3-col m10 rDirect" style="padding-top: 5px;"  id="${rlist.route_id}">
 									<div class="w3-col m4 w3-border-right w3-border-blue">
-										<div class="w3-col"><span class="routenm" style="font-size: 32px;">${rlist.route_nm}</span> ( ${rlist.region} )</div>
+										<div class="w3-col"><span class="routenm" style="font-size: 32px;">${rlist.route_nm}</span> <span>( ${rlist.region} )</span></div>
 							
 							<c:if test="${rlist.direction eq '정' }">			
 										<div class="w3-col">${rlist.ed_sta_nm} 방향</div>

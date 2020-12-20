@@ -5,10 +5,16 @@ import com.luxurycity.clc.util.*;
 public class StationVO {
 	private int station_id, district_cd, route_id, route_cd, next_station_id;
 	private double loc_x, loc_y;
-	private String region, station_nm, mobile_no, route_nm, keyword, route_tp, st_sta_nm,ed_sta_nm, next_station_nm, direction;
+	private String region, station_nm, mobile_no, route_nm, keyword, route_tp, st_sta_nm,ed_sta_nm, next_station_nm, direction, staregion;
 	private PageUtil page;
 	
 	
+	public String getStaregion() {
+		return staregion;
+	}
+	public void setStaregion(String staregion) {
+		this.staregion = staregion;
+	}
 	public String getDirection() {
 		return direction;
 	}

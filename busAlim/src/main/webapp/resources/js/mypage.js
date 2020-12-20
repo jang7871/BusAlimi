@@ -84,6 +84,16 @@ $(document).ready(function(){
 	$('.rBtn').click(function(){
 		if($('#deletebtn').hasClass('w3-hide')) {
 			var route_id = $(this).children().first().attr('id');
+			var region = $(this).children().children().first().text().substring(0, 2);
+			var district_cd = '';
+			if(region == '서울') {
+				district_cd = 1;
+			} else if(region == '경기') {
+				district_cd = 2;	
+			} else if(region == '인천') {
+				district_cd = 3;
+			}
+			
 			let rfrm = $(document.createElement('form'));
 			$(rfrm).attr('method', 'GET');
 			$(rfrm).attr('action', '/clc/search/busdetail.clc');
@@ -92,6 +102,11 @@ $(document).ready(function(){
 			$(rinput).attr('type', 'hidden');
 			$(rinput).attr('name', 'route_id');
 			$(rinput).val(route_id);
+			
+			let dinput = $(document.createElement('input'));
+			$(dinput).attr('type', 'hidden');
+			$(dinput).attr('name', 'district_cd');
+			$(dinput).val(district_cd);
 			
 			var station_id = $(this).children().children().first().attr('id');
 			if(station_id != 0) {
@@ -103,9 +118,11 @@ $(document).ready(function(){
 			}
 			
 			$(rfrm).append(rinput);
+			$(rfrm).append(dinput);
 			$('body').prepend(rfrm);
 			
 			$(rfrm).submit();
+			
 		}
 	});
 });

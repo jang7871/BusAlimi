@@ -39,8 +39,8 @@ public class SearchDao {
 		return sqlSession.selectList("sSQL.stationDetail", station_id);
 	}
 	//버스 상세페이지 데이터 꺼내오기
-	public List<RouteVO> busDetail(int route_id) {
-		return sqlSession.selectList("sSQL.busDetail", route_id);
+	public List<RouteVO> busDetail(RouteVO rVO) {
+		return sqlSession.selectList("sSQL.busDetail", rVO);
 	}
 	// 버스 해당 즐겨찾기 찾는 전담 처리 함수
 	public List<BookmarkVO> getBusBookmark(BookmarkVO bmVO) {
