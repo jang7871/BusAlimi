@@ -9,5 +9,6 @@
 						https://www.springframework.org/schema/context/spring-context-4.3.xsd">
 	
 	<bean id="mService" class="com.luxurycity.clc.service.MemberService" />
+	<bean id="mailService" class="com.luxurycity.clc.service.MailSendService" />
 	
 </beans>
