@@ -1,12 +1,46 @@
 package com.luxurycity.clc.vo;
 
 import com.luxurycity.clc.util.*;
-
+import java.sql.Date;
+import java.sql.Time;
+import java.text.*;
 public class BookmarkVO {
-	private int bmno, mno, route_id, station_id, route_cd, bdistrict_cd, sdistrict_cd;
-	private String sid, station_nm, mobile_no, route_nm, ed_station_nm, region, route_tp, id;
+	private int bmno, mno, route_id, station_id, route_cd, bdistrict_cd, sdistrict_cd, area;
+	private String sid, station_nm, mobile_no, route_nm, ed_station_nm, region, route_tp, id, sdate;
 	private PageUtil page;
+	private Date adddate;
+	private Time addtime;
 	
+	public String getSdate() {
+		return sdate;
+	}
+	public void setSdate(String sdate) {
+		this.sdate = sdate;
+	}
+	public void setSdate() {
+		SimpleDateFormat form1 = new SimpleDateFormat("yyyy/MM/dd");
+		SimpleDateFormat form2 = new SimpleDateFormat("HH:mm:ss");
+		sdate = form1.format(adddate) + " " + form2.format(addtime);
+	}
+	public int getArea() {
+		return area;
+	}
+	public void setArea(int area) {
+		this.area = area;
+	}
+	public Date getAdddate() {
+		return adddate;
+	}
+	public void setAdddate(Date adddate) {
+		this.adddate = adddate;
+	}
+	public Time getAddtime() {
+		return addtime;
+	}
+	public void setAddtime(Time addtime) {
+		this.addtime = addtime;
+		setSdate();
+	}
 	public String getId() {
 		return id;
 	}

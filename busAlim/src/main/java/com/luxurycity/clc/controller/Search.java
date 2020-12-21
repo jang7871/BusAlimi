@@ -146,7 +146,7 @@ public class Search {
 		// 1. 노선아이디 값을 가져온다.
 		int route_id = rVO.getRoute_id();
 		// 2. 해당 정보를 가져온다.
-		List<RouteVO> rlist = sDao.busDetail(route_id);
+		List<RouteVO> rlist = sDao.busDetail(rVO);
 
 		// 3. 리스트 길이가 0이면 잘못된거니까 다시 메인으로 이동시킨다
 //		int peek = 0, npeek = 0;

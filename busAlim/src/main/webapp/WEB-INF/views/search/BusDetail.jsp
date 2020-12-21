@@ -141,6 +141,7 @@ a:visited {
 	<input type="hidden" name="routeid" id="routeid" value ="${param.route_id}">
 
 	<input type="hidden" name="stationid" id="stationid" value ="${param.station_id}">
+	<input type="hidden" name="district_cd" id="district_cd" value ="${param.district_cd}">
 
 	<input type="hidden" name="id" id="id" value ="${SID}">
 <!-- 
@@ -236,11 +237,12 @@ a:visited {
 	 --%>			
 				<div class="w3-col">
 					<!-- 정방향, 역방향 버튼 -->
-					<div class="w3-col w3-border w3-margin-bottom">
+			<c:if test="${ROUTE[0].ed_sta_nm != ROUTE[0].st_sta_nm }">
+					<div class="w3-col w3-border w3-margin-bottom" id="diBtn">
 						<div id="sBtn" class="w3-button w3-half w3-border-right w3-padding" style="width: 50%; font-size: 1em;">${ROUTE[0].ed_sta_nm} 방향</div>
 						<div id="rBtn" class="w3-button w3-half w3-padding" style="width: 50%; font-size: 1em;">${ROUTE[0].st_sta_nm} 방향</div>
 					</div>
-					
+			</c:if>		
 					
 					<!-- 경로 영역 -->
 		<c:forEach var="route" items="${ROUTE}">
@@ -262,7 +264,7 @@ a:visited {
 						<c:if test="${not empty route.mobile_no}">
 								<div class="w3-col w3-text-gray">${route.mobile_no}</div>
 						</c:if>
-						<c:if test="${route.mobile_no eq ' '}">
+						<c:if test="${route.mobile_no eq ' ' or route.mobile_no eq null}">
 								<div class="w3-col w3-text-gray">고유번호없음</div>
 						</c:if>
 							</div>
@@ -284,6 +286,40 @@ a:visited {
 								<i class="fa fa-chevron-circle-down w3-display-middle"></i>　
 							</div>
 							<div class="w3-container w3-padding w3-cell w3-left-align rDirect routeBtn" id="${route.station_id}">
+
+					<c:if test="${fn:length(route.station_nm) >= 20}">
+							<div class="w3-col"><b>${route.station_nm.substring(0, 20)}...</b></div>
+					</c:if>
+					<c:if test="${fn:length(route.station_nm) < 20}"> 
+							<div class="w3-col"><b>${route.station_nm}</b></div>
+					</c:if>
+
+
+						
+						<c:if test="${not empty route.mobile_no}">
+								<div class="w3-col w3-text-gray">${route.mobile_no}</div>
+						</c:if>
+						<c:if test="${route.mobile_no eq ' ' or route.mobile_no eq null}">
+								<div class="w3-col w3-text-gray">고유번호없음</div>
+						</c:if>
+							</div>
+							<!-- 버스 + 정류소 즐겨찾기 추가/삭제 버튼 -->
+							<div class="w3-cell w3-display-container" style="width: 40px;" id="bm${route.station_id}">	
+									<i class="w3-text-gray w3-display-middle w3-col fa fa-star-o fa-2x addBtn" aria-hidden="true" style="cursor: pointer;"></i>
+									<i class="w3-text-amber w3-display-middle w3-col fa fa-star fa-2x delBtn w3-hide" aria-hidden="true" style="cursor: pointer;"></i>
+							</div>
+						</div>
+					</div>
+			</c:if>
+			
+			<c:if test="${route.direction eq '무'}">
+					<!-- 방향 데이터 존재하지 않음 -->
+					<div class="w3-col w3-hover-light-gray w3-button" style="padding: 0 16px;">
+						<div class="w3-col m11 w3-right w3-cell-row">
+							<div class="w3-cell w3-display-container w3-blue-gray" style="width: 14.400px;">
+								<i class="fa fa-chevron-circle-down w3-display-middle"></i>　
+							</div>
+							<div class="w3-container w3-padding w3-cell w3-left-align routeBtn" id="${route.station_id}">
 
 					<c:if test="${fn:length(route.station_nm) >= 20}">
 							<div class="w3-col"><b>${route.station_nm.substring(0, 20)}...</b></div>
@@ -321,7 +357,7 @@ a:visited {
       <header class="w3-container"> 
         <span onclick="document.getElementById('opeInfo').style.display='none'" 
         class="w3-button w3-display-topright">&times;</span>
-        <h1 class="w3-center"><i class="fa fa-bus fa-fw" aria-hidden="true"></i> ${ROUTE[0].route_nm} 번 정보</h1>
+        <h1 class="w3-center"><i class="fa fa-bus fa-fw" aria-hidden="true"></i> ${ROUTE[0].route_nm} 정보</h1>
       </header>
       <div class="w3-container w3-padding-large">
         <div class="w3-col w3-border-bottom">
@@ -330,12 +366,25 @@ a:visited {
         </div>
         <div class="w3-col w3-border-bottom">
         	<h4><b>운행시간</b></h4>
+   <c:if test="${not empty ROUTE[0].up_first_time}">   	
         	<h4>기점 : 평일 ${ROUTE[0].up_first_time} ~ ${ROUTE[0].up_last_time}</h4>
         	<h4>종점 : 평일 ${ROUTE[0].down_first_time} ~ ${ROUTE[0].down_last_time}</h4>
+   </c:if>
+   <c:if test="${empty ROUTE[0].up_first_time}">   	
+        	<h4>정보 없음</h4>
+   </c:if>
         </div>
         <div class="w3-col">
         	<h4><b>배차간격</b></h4>
+   <c:if test="${ROUTE[0].npeek_alloc ne 0}">
         	<h4>${ROUTE[0].peek_alloc} ~ ${ROUTE[0].npeek_alloc} 분</h4>
+   </c:if>
+   <c:if test="${ROUTE[0].npeek_alloc eq 0}">
+        	<h4>${ROUTE[0].peek_alloc} 분</h4>
+   </c:if>
+   <c:if test="${ROUTE[0].npeek_alloc eq 0 and ROUTE[0].peek_alloc eq 0}">
+        	<h4>정보 없음</h4>
+   </c:if>
         </div>
       </div>
     </div>

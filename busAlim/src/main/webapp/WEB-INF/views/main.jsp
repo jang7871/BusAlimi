@@ -141,10 +141,7 @@ a:visited {
 	<!-- 버스 데이터 전송 담당 태그 -->
 	<form  method="post" id="routefrm">
 		<input type="hidden" name="route_id" id="routeid">
-<!-- 		<input type="hidden" name="route_nm" id="routenm"> -->
-<!-- 		<input type="hidden" name="route_tp" id="routetype"> -->
-<!-- 		<input type="hidden" name="st_sta_nm" id="routestnm"> -->
-<!-- 		<input type="hidden" name="ed_sta_nm" id="routeednm"> -->
+		<input type="hidden" name="district_cd" id="district_cd">
 	</form>
 	
 	<!-- 정류소 데이터 전송 담당 태그 -->
