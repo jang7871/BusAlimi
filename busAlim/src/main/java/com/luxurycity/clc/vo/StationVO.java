@@ -16,7 +16,7 @@ public class StationVO {
 	}
 	public void setStaregion(String staregion) {
 		this.staregion = staregion;
-
+	}
 	public String getTransfer_nm() {
 		return transfer_nm;
 	}
