@@ -114,6 +114,55 @@ $(document).ready(function(){
 	});
 	
 	
+	$('#confirm').click(function() {
+		var sid = $('#id').val();
+		var spw = $('#pw').val();
+		var scpw = $('#pwconf').val();
+		var sname = $('#name').val();
+		var smail = $('#mail').val();
+		var sgen = $('#gen').val();
+		var savt = $('#avatar:checked').val();
+		var sqt = $('#qt').val();
+		var sans = $('#ans').val();
+		
+		if(!(sid && spw && sname && smail && sgen && savt && sqt && sans)) {
+			alert('입력창에 빠진 내용이 있습니다.')
+			return;
+		} else if(spw != scpw) {
+			alert('비밀번호가 다릅니다.')
+			return;
+		}
+		
+		$.ajax({
+			url:'/clc/member/mailConfirm.clc',
+			type: 'post',
+			dataType: 'text',
+			async: false,
+			data:{
+				mail: smail
+			},
+			success:function(obj){
+				alert(obj);
+				if(obj == 'OK') {
+					var time = target_time();
+					$('#authKey').slideDown(300, function(){
+						$('#confirm').slideUp(100, function(){
+							$('#submit').slideDown(300, function(){
+								setInterval(function(){getCountdown(time);}, 1000);
+								pagestart();
+							});
+						});
+					});
+				} else {
+					alert('## 접속 에러');
+				}
+			},
+			error:function(){
+				alert('### 비동기 통신 에러 ###');
+			}
+		});
+	});
+
 	$('#submit').click(function() {
 		var sid = $('#id').val();
 		var spw = $('#pw').val();
@@ -135,5 +184,34 @@ $(document).ready(function(){
 		$('#frm').attr('action','/clc/member/joinProc.clc');
 		$('#frm').submit();
 	});
+	
+	
+//	var countdown = document.getElementById("tiles"); // get tag element
+	
+	function target_time() {		
+		var target_date = new Date().getTime() + (1000*60*3); // set the countdown date
+		return target_date;
+	}
+	function getCountdown(time){
+
+		var minutes, seconds; // variables for time units
+	
+		// find the amount of "seconds" between now and target
+		var current_date = new Date().getTime();
+		var seconds_left = (time - current_date) / 1000;
+	   
+		minutes = pad( parseInt(seconds_left / 60) );
+		seconds = pad( parseInt( seconds_left % 60 ) );
+	
+		// format countdown string + set tag value
+		$('#tiles').html("<span>" + minutes + "</span><span>" + seconds + "</span>"); 
+/*		countdown.innerHTML = "<span>" + minutes + "</span><span>" + seconds + "</span>"; */
+		
+	};
+	
+	function pad(n) {
+		return (n < 10 ? '0' : '') + n;
+	};
+	
 	
 });
