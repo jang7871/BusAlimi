@@ -38,7 +38,9 @@ a:visited {
 <c:if test="${not empty SID}">
   <div class="w3-container w3-row">
     <div class="w3-col s4">
-      <img src="/clc${AVT.dir}${AVT.afile}" class="w3-circle w3-margin-right" style="width:46px">
+      <a href="/clc/member/myinfo.clc" class="w3-bar-item">
+      	<img src="/clc${AVT.dir}${AVT.afile}" class="w3-circle w3-margin-right" style="width:46px">
+      </a>
     </div>
     <div class="w3-col s8">
       <span>Welcome, <strong>${SID}</strong></span><br>
@@ -75,8 +77,8 @@ a:visited {
     <div class="w3-dropdown-hover">
 	    <div class="w3-bar-item w3-button w3-padding"><i class="fa fa-user fa-fw"></i>  마이페이지 <i class="fa fa-caret-down w3-right"></i></div>
     	<div class="w3-dropdown-content w3-bar-block">
-    		<a href="" class="w3-bar-item w3-button"><span class="w3-col m11 w3-right"><i class="fa fa-star fa-fw" aria-hidden="true"></i>&nbsp;&nbsp;즐겨찾기</span></a>
-    		<a href="" class="w3-bar-item w3-button"><span class="w3-col m11 w3-right"><i class="fa fa-info-circle fa-fw" aria-hidden="true"></i>&nbsp;&nbsp;회원정보</span></a>
+    		<a href="/clc/member/mypage.clc" class="w3-bar-item w3-button"><span class="w3-col m11 w3-right"><i class="fa fa-star fa-fw" aria-hidden="true"></i>&nbsp;&nbsp;즐겨찾기</span></a>
+    		<a href="/clc/member/myinfo.clc" class="w3-bar-item w3-button"><span class="w3-col m11 w3-right"><i class="fa fa-info-circle fa-fw" aria-hidden="true"></i>&nbsp;&nbsp;회원정보</span></a>
     	</div>
     </div>
 </c:if>
