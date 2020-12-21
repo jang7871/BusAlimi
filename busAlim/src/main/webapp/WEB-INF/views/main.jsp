@@ -96,7 +96,10 @@ a:visited {
 	<!-- 이 영역에 데이터를 추가하면 됩니다 -->
 	<div class="w3-container" style="padding: 100px 0;">
 		<div class="w3-content mw700 w3-padding-bottom">
-			<h1 class="w3-col w3-center w3-margin-top w3-text-dark-gray" style="font-size: 42px;"><i class="fa fa-bus" aria-hidden="true"> </i><b> Luxury City</b></h1>
+			<h1 class="w3-col w3-center w3-margin-top w3-text-dark-gray" style="font-size: 42px;"><i class="fa fa-bus" aria-hidden="true"> </i><b> Luxury City</b>
+				<span class="w3-cell w3-button w3-green w3-hover-grey w3-right" style="font-size: 12px; width: 100px; border-radius: 5px 5px; padding: 10px;" id="searchroute">길찾기 <i class="fa fa-search" aria-hidden="true" style="font-size: 1em;"></i></span>
+			</h1>
+			
 			<div class="w3-col w3-padding">
 				
 <!-- 				<form method="POST" action=""> -->
@@ -151,6 +154,10 @@ a:visited {
 <!-- 		<input type="hidden" name="mobile_no" id="mobile"> -->
 <!-- 		<input type="hidden" name="region" id="region"> -->
 	</form>
+	<form method="post" id="searchroutefrm">
+		<input type="hidden" name="start_id" id="startid">
+		<input type="hidden" name="end_id" id="endid">
+	</form>
 
 
 
@@ -164,7 +171,7 @@ a:visited {
 	      <h3>"<b><span class="keyword"></span></b>" 검색 결과</h3>
 	    </header>
 	    <div class="w3-container" id="busdata">	
-	    
+	 
 
 			
 	    </div>
@@ -186,7 +193,7 @@ a:visited {
  	
  	
  	<!-- 정류소 검색 모달창 -->
-	<div id="stamodal" class="w3-modal">
+	<div id="stamodal" class="w3-modal" style="position:absolute; z-index:12;">
 	  <div class="w3-modal-content w3-animate-opacity w3-card-4">
 	    <header class="w3-container w3-border-bottom w3-purple"> 
 	      <span id="closestamodal" class="w3-button w3-display-topright">&times;</span>
@@ -226,6 +233,27 @@ a:visited {
 	  </div>
 	</div>
 	
+	<!--  길찾기 모달 -->
+	<div id="sroutemodal" class="w3-modal" style="position:absolute; z-index:10;">
+	  <div class="w3-modal-content w3-animate-opacity w3-card-4">
+	    <header class="w3-container w3-border-bottom w3-blue"> 
+	      <span id="closesroutemodal" class="w3-button w3-display-topright">&times;</span>
+	      <h3>"<b><span class="keyword"></span></b>길찾기</h3>
+	    </header>
+	    <div class="w3-container" id="routedata">	
+	    	<div class="w3-cell-row w3-margin-top w3-margin-bottom">
+				<input type="text" placeholder="출발 정류소를 입력하세요." id="startroute" style="outline: 0; borde-bottomr: 0px!important; border-left: 5px solid #9c27b0; border-radius: 5px 0 0 5px; padding: 16px; font-size: 1.2857em;" class="w3-cell w3-input" autocomplete="off">
+			</div>
+			<div id="startlist" class="w3-card-2 w3-white" style="display: none; z-index: 2; position: absolute; left: 0; right: 0; font-size: 1.1em;"></div>
+	    	
+	    	<div class="w3-cell-row w3-margin-top w3-margin-bottom">
+				<input type="text" placeholder="도착 정류소를 입력하세요." id="endroute" style="outline: 0; borde-bottomr: 0px!important; border-left: 5px solid #9c27b0; border-radius: 5px 0 0 5px; padding: 16px; font-size: 1.2857em;" class="w3-cell w3-input" autocomplete="off">
+			</div>
+			<div id="endlist" class="w3-card-2 w3-white" style="display: none; z-index: 2; position: absolute; left: 0; right: 0; font-size: 1.1em;"></div>
+			<div class="w3-button w3-cell-row w3-margin-top w3-padding w3-green searchrouteoption"><b>검색</b></div>
+	    </div>
+	  </div>
+	</div>
   <hr>
   <div class="w3-container w3-dark-grey w3-padding-32">
     <div class="w3-row">

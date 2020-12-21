@@ -3,12 +3,45 @@ package com.luxurycity.clc.vo;
 import com.luxurycity.clc.util.*;
 
 public class StationVO {
-	private int station_id, district_cd, route_id, route_cd, next_station_id;
+	private int station_id, district_cd, route_id, route_cd, next_station_id, start_id, end_id, waittime, str_order, cnt;
 	private double loc_x, loc_y;
-	private String region, station_nm, mobile_no, route_nm, keyword, route_tp, st_sta_nm,ed_sta_nm, next_station_nm, direction;
+	private String region, station_nm, transfer_nm,mobile_no, route_nm, keyword, route_tp, st_sta_nm,ed_sta_nm, next_station_nm, direction, start_nm, end_nm;
 	private PageUtil page;
+	private String[] route_list;
 	
 	
+	
+	public String getTransfer_nm() {
+		return transfer_nm;
+	}
+	public void setTransfer_nm(String transfer_nm) {
+		this.transfer_nm = transfer_nm;
+	}
+	public String[] getRoute_list() {
+		return route_list;
+	}
+	public void setRoute_list(String[] route_list) {
+		this.route_list = route_list;
+	}
+	public int getCnt() {
+		return cnt;
+	}
+	public void setCnt(int cnt) {
+		this.cnt = cnt;
+	}
+	public int getWaittime() {
+		return waittime;
+	}
+	public void setWaittime(int waittime) {
+		this.waittime = waittime;
+	}
+	
+	public int getStr_order() {
+		return str_order;
+	}
+	public void setStr_order(int str_order) {
+		this.str_order = str_order;
+	}
 	public String getDirection() {
 		return direction;
 	}
@@ -118,4 +151,29 @@ public class StationVO {
 	public void setRoute_nm(String route_nm) {
 		this.route_nm = route_nm;
 	}
+	public int getStart_id() {
+		return start_id;
+	}
+	public void setStart_id(int start_id) {
+		this.start_id = start_id;
+	}
+	public int getEnd_id() {
+		return end_id;
+	}
+	public void setEnd_id(int end_id) {
+		this.end_id = end_id;
+	}
+	public String getStart_nm() {
+		return start_nm;
+	}
+	public void setStart_nm(String start_nm) {
+		this.start_nm = start_nm;
+	}
+	public String getEnd_nm() {
+		return end_nm;
+	}
+	public void setEnd_nm(String end_nm) {
+		this.end_nm = end_nm;
+	}
+	
 }

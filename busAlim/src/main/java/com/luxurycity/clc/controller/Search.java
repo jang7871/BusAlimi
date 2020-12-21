@@ -107,6 +107,29 @@ public class Search {
 		mv.addObject("LIST", slist);
 		return mv;
 	}
+	@RequestMapping("/searchrouteoption.clc")
+	public ArrayList<StationVO> searchRouteOption(ModelAndView mv, StationVO sVO) {
+		MakeRouteOption opt = new MakeRouteOption(mv, sVO);
+		ArrayList<StationVO> option = opt.getOption();
+		/*
+		List<StationVO> list = sDao.getBusOption(sVO);
+		ArrayList<StationVO> arr = new ArrayList<StationVO>();
+		
+		if(list.size() == 0) {
+			mv.setViewName("redirect:/main.clc");
+		}else {
+			mv.setViewName("search/RouteOption");
+		}
+		for(StationVO VO: list) {
+			System.out.println(VO.getStart_id() + "####################" + VO.getEnd_id() + "#########################" + VO.getRoute_id());
+			StationVO tVO = sDao.getSearchInfo(VO);
+			arr.add(tVO);
+		}
+		mv.addObject("LIST", arr);
+		*/
+		return option;
+	}
+	
 	@RequestMapping("/stationArrInfo.clc")
 	@ResponseBody
 	public ArrayList<HashMap> stationArrInfo(ModelAndView mv, int staid) {
