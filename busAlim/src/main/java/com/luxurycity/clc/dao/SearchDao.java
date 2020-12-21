@@ -54,4 +54,41 @@ public class SearchDao {
 	public List<BookmarkVO> getBusStaBookmark(BookmarkVO bmVO) {
 		return sqlSession.selectList("sSQL.busStaBookmark", bmVO);
 	}
+	// 길찾기 전담 처리 함수
+	public List<StationVO> getBusOption(StationVO sVO) {
+		return sqlSession.selectList("sSQL.searchbusoption", sVO);
+	}
+	// 길찾기 전담 처리 함수
+	public StationVO getSearchInfo(StationVO sVO) {
+		return sqlSession.selectOne("sSQL.searchrouteinfo", sVO);
+	}
+	// 출발지 경유 버스 리스트가져오기
+	public List<StationVO> getStartList(StationVO sVO) {
+		
+		return sqlSession.selectList("sSQL.getstartlist", sVO);
+	}
+	// 출발지 경유 버스 별 경로정보 가져오기
+	public List<StationVO> getStartListRoute(StationVO sVO) {
+		return sqlSession.selectList("sSQL.getstartlistroute", sVO);
+	}
+	// 도착지 경유 버스 리스트 가져오기
+	public List<StationVO> getEndList(StationVO sVO) {
+		return sqlSession.selectList("sSQL.getendlist", sVO);
+	}
+	// 도착지 경유 버스 별 경로정보 가져오기
+	public List<StationVO> getEndListRoute(StationVO sVO) {
+		return sqlSession.selectList("sSQL.getendlistroute", sVO);
+	}
+	// 출발지 경유 버스 별 경로정보 가져오기
+	public StationVO getStartListRouteTotal(StationVO sVO) {
+		return sqlSession.selectOne("sSQL.getstartlistroutetotal", sVO);
+	}
+	// 도착지 경유 버스 별 경로정보 토탈가져오기
+	public StationVO getEndListRouteTotal(StationVO sVO) {
+		return sqlSession.selectOne("sSQL.getendlistroutetotal", sVO);
+	}
+	// 도착지 경유 버스 별 경로정보 토탈가져오기
+	public String getTransfernm(int station_id) {
+		return sqlSession.selectOne("sSQL.gettransfernm", station_id);
+	}
 }
