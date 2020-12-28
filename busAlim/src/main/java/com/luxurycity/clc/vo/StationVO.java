@@ -3,7 +3,7 @@ package com.luxurycity.clc.vo;
 import com.luxurycity.clc.util.*;
 
 public class StationVO {
-	private int station_id, district_cd, route_id, route_cd, next_station_id, start_id, end_id, waittime, str_order, cnt;
+	private int station_id, district_cd, route_id, route_cd, next_station_id, start_id, end_id, waittime, str_order, cnt, distance;
 	private double loc_x, loc_y;
 	private String region, station_nm, transfer_nm,mobile_no, route_nm, keyword, route_tp, st_sta_nm,ed_sta_nm, next_station_nm, direction, start_nm, end_nm, staregion;
 	private PageUtil page;
@@ -11,12 +11,18 @@ public class StationVO {
 	
 	
 
+	public int getDistance() {
+		return distance;
+	}
+	public void setDistance(int distance) {
+		this.distance = distance;
+	}
 	public String getStaregion() {
 		return staregion;
 	}
 	public void setStaregion(String staregion) {
 		this.staregion = staregion;
-
+	}
 	public String getTransfer_nm() {
 		return transfer_nm;
 	}

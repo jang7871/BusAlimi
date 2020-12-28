@@ -241,7 +241,7 @@
 	<select id="stationDetail" resultType="sVO" parameterType="int">
 		SELECT
 		    total.station_nm, total.route_id, total.route_nm, total.str_order, total.station_id, total.direction, total.mobile_no, total.route_tp, total.region,
-		    total.next_station_nm, s1.station_nm AS st_sta_nm, s2.station_nm AS ed_sta_nm, staregion
+		    total.next_station_nm, s1.station_nm AS st_sta_nm, s2.station_nm AS ed_sta_nm, staregion, total.x AS loc_x, total.y AS loc_y
 		FROM
 		    (
 		        SELECT
@@ -249,12 +249,12 @@
 		            b.station_id AS next_station_id, 
 		            CASE WHEN sorder = max THEN '종점'
 		                ELSE c.station_nm
-		            END  AS next_station_nm, staregion
+		            END  AS next_station_nm, staregion, a.x AS x, a.y AS y
 		        FROM
 		            (
 		                SELECT
 		                    s.station_nm AS station_nm, rs.route_id AS rid, r.route_nm AS route_nm, str_order AS sorder, rs.station_id AS station_id, 
-		                    direction, s.mobile_no AS mobile_no, route_tp, d.region, ed_sta_id, st_sta_id, d2.region AS staregion, max
+		                    direction, s.mobile_no AS mobile_no, route_tp, d.region, ed_sta_id, st_sta_id, d2.region AS staregion, max, x, y
 		                FROM
 		                    station s, routestation rs, route r, routetype rt, district d, district d2,
 		                     (
@@ -271,7 +271,7 @@
 		                    AND rt.route_cd = r.route_cd
 		                    AND d.district_cd = r.district_cd
 		                    AND m.route_id = rs.route_id
-                            AND d2.district_cd = s.district_cd
+		                    AND d2.district_cd = s.district_cd
 		                    AND s.station_id = #{station_id}
 		            ) a, routestation b, station c
 		        WHERE
@@ -286,15 +286,15 @@
 		WHERE
 		    st_sta_id = s1.station_id
 		    AND ed_sta_id = s2.station_id
-            
-    	UNION
+		    
+		UNION
 		            
 		SELECT
 		   a.station_nm, rid AS route_id, route_nm, sorder AS str_order, a.station_id, a.direction, a.mobile_no, a.route_tp, a.region, 
 		    CASE WHEN sorder = max THEN '종점'
 		                ELSE c.station_nm
 		    END  AS next_station_nm, 
-		    st_sta_nm, ed_sta_nm, staregion
+		    st_sta_nm, ed_sta_nm, staregion, a.x, a.y
 		FROM
 		    (
 		            SELECT
@@ -303,7 +303,7 @@
 		                          WHEN direction = ed_sta_nm THEN '정'
 		                          WHEN direction = st_sta_nm THEN '역'
 		                END AS direction,
-		                s.mobile_no AS mobile_no, route_tp, d.region, ed_sta_nm, st_sta_nm, d2.region AS staregion, max
+		                s.mobile_no AS mobile_no, route_tp, d.region, ed_sta_nm, st_sta_nm, d2.region AS staregion, max, x, y
 		            FROM
 		                seoulstation s, seoulroutestation rs, seoulroute r, routetype rt, district d, district d2,
 		                (
@@ -320,17 +320,17 @@
 		                AND rt.route_cd = r.route_cd
 		                AND d.district_cd = r.district_cd
 		                AND m.route_id = rs.route_id
-                        AND d2.district_cd = s.district_cd
+		                AND d2.district_cd = s.district_cd
 		                AND s.station_id = #{station_id}
 		    ) a, seoulroutestation b, seoulstation c
 		WHERE
 		    rid = route_id
 		    AND c.station_id = b.station_id
 		    AND str_order = (
-                                CASE WHEN sorder = max THEN sorder
-                                          ELSE sorder + 1
-                                END
-                            )
+		                        CASE WHEN sorder = max THEN sorder
+		                                  ELSE sorder + 1
+		                        END
+		                    )
 		ORDER BY
 		    route_nm
 	</select>
@@ -343,7 +343,7 @@
 					s.station_nm AS station_nm, s.station_id AS station_id, st_sta_nm, ed_sta_nm,
 					s.mobile_no mobile_no, rs.str_order str_order,
 					up_first_time, up_last_time, down_first_time, 
-					dowm_last_time AS down_last_time, peek_alloc, npeek_alloc
+					dowm_last_time AS down_last_time, peek_alloc, npeek_alloc, s.x AS loc_x, s.y AS loc_y, r.route_id AS route_id
 				FROM
 					routestation rs, station s, route r, routetype rt,
 		               (
@@ -388,7 +388,7 @@
 			</when>
 			
 			<otherwise>
-				SELECT
+                SELECT
 				    r.route_nm AS route_nm, route_tp, 
 				    CASE WHEN rs.direction IS NULL THEN '무'
 				              WHEN rs.direction = ed_sta_nm THEN '정'
@@ -396,7 +396,7 @@
 				    END  AS direction,
 				    s.station_nm AS station_nm, s.station_id AS station_id, st_sta_nm, ed_sta_nm,
 				    s.mobile_no mobile_no, rs.str_order str_order,
-				    up_first_time, up_last_time, peek_alloc
+				    up_first_time, up_last_time, peek_alloc, s.x AS loc_x, s.y AS loc_y, r.route_id AS route_id
 				FROM
 				    seoulroutestation rs, seoulstation s, seoulroute r, routetype rt
 				WHERE
@@ -629,5 +629,34 @@
 		from station
 		where station_id = #{station_id}
 
+	</select>
+	
+	<select id="getMapArroundStation" resultType="sVO" parameterType="map">
+	<!-- 주의 radians() 함수를 만들지 않으면 실행되지 않음 -->
+	<!-- radians() 함수 만드는 질의명령 doc '반경 좌표계 함수.sql' 참고 -->
+	SELECT 
+	    station_nm, station_id, x AS loc_x, y AS loc_y, mobile_no, ROUND(distance, 3) * 1000 AS distance
+	FROM (  
+            SELECT 
+                ( 6371 * acos( cos( radians( #{lat} ) ) * cos( radians(y) ) * cos( radians(x) - radians( #{lng}) ) + sin( radians( #{lat}) ) * sin( radians(y) ) ) ) AS distance,
+                station_nm, station_id, mobile_no, x, y
+            FROM 
+                station
+            WHERE
+                district_cd = 2
+            UNION
+            SELECT 
+                ( 6371 * acos( cos( radians( #{lat} ) ) * cos( radians(y) ) * cos( radians(x) - radians( #{lng}) ) + sin( radians(#{lat}) ) * sin( radians(y) ) ) ) AS distance,
+                station_nm, station_id, mobile_no, x, y
+            FROM 
+                seoulstation
+            WHERE
+                district_cd = 1
+	    
+	    ) DATA
+	WHERE 
+	<![CDATA[
+	    DATA.distance <= 1
+ 	]]>
 	</select>
 </mapper>

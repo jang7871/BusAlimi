@@ -552,7 +552,7 @@ $(document).on("click", '.busdatalist', function() {
 			return;
 		}
 		$('#routeid').val(routeid);
-		$('#routefrm #district_cd').val(district_cd);
+		$('#district_cd').val(district_cd);
 		// 버스 검색 버튼을 누르면 버스 상세 페이지로 이동
 		$('#routefrm').attr('action', '/clc/search/busdetail.clc');
 		$('#routefrm').submit();
