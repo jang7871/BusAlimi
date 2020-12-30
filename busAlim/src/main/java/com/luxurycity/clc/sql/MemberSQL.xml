@@ -88,5 +88,13 @@
 		WHERE
 			id = #{id}
 	</update>
+	<update id="delMemb" parameterType="mVO">
+		UPDATE
+			member
+		SET
+			isshow = 'N'
+		WHERE
+			id = #{id}
+	</update>
 
 </mapper>

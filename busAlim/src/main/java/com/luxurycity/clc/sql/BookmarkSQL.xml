@@ -14,32 +14,57 @@
 		        FROM
 		                (
 		                    SELECT 
-		                        bmno, NVL(b.route_id, 0) route_id, NVL(b.station_id, 0) station_id, NVL(r.route_nm, 0) route_nm, NVL(s.station_nm, 0) station_nm, NVL(s.mobile_no, 0) mobile_no, NVL(region, 0) region 
-		                    FROM 
-		                        bookmark b, route r, station s, district d 
-		                    WHERE 
-		                        b.route_id = r.route_id(+) 
-		                        AND s.district_cd = d.district_cd(+) 
-		                        AND b.station_id = s.station_id(+) 
-		                        AND mno = ( 
-		                                       SELECT 
-		                                           mno 
-		                                       FROM 
-		                                           member 
-		                                       WHERE 
-		                                           id = #{id}
-		                                   ) 
-		                        AND b.route_id IS NULL 
-		                        AND isshow = 'Y' 
+                                bmno, NVL(b.route_id, 0) route_id, NVL(b.station_id, 0) station_id, NVL(r.route_nm, 0) route_nm, NVL(s.station_nm, 0) station_nm, NVL(s.mobile_no, 0) mobile_no, NVL(region, 0) region, adddate
+                            FROM 
+                                bookmark b, route r, station s, district d 
+                            WHERE 
+                                b.route_id = r.route_id(+) 
+                                AND s.district_cd = d.district_cd(+) 
+                                AND b.station_id = s.station_id(+) 
+                                AND mno = ( 
+                                               SELECT 
+                                                   mno 
+                                               FROM 
+                                                   member 
+                                               WHERE 
+                                                   id = #{id}
+                                           ) 
+                                AND b.route_id IS NULL 
+                                AND isshow = 'Y'
+                                AND area = 2
+                            
+                            UNION    
+                                
+                            SELECT 
+                                bmno, NVL(b.route_id, 0) route_id, NVL(b.station_id, 0) station_id, NVL(r.route_nm, 0) route_nm, NVL(s.station_nm, 0) station_nm, NVL(s.mobile_no, 0) mobile_no, NVL(region, 0) region, adddate
+                            FROM 
+                                bookmark b, seoulroute r, seoulstation s, district d 
+                            WHERE 
+                                b.route_id = r.route_id(+) 
+                                AND s.district_cd = d.district_cd(+) 
+                                AND b.station_id = s.station_id(+) 
+                                AND mno = ( 
+                                               SELECT 
+                                                   mno 
+                                               FROM 
+                                                   member 
+                                               WHERE 
+                                                   id = #{id}
+                                           ) 
+                                AND b.route_id IS NULL 
+                                AND isshow = 'Y'
+                                AND area = 1
+                            ORDER BY
+                                adddate DESC
 		                ) list
 		    )
 		WHERE
-		    rno BETWEEN #{page.startCont} AND #{page.endCont}
+		    rno BETWEEN #{page.startCont}  AND #{page.endCont}
 	</select>
 	
 	<select id="busList" resultType="bmVO" parameterType="bmVO">
 		SELECT
-		    *
+				*
 		FROM
 		    (
 		        SELECT
@@ -47,17 +72,18 @@
 		        FROM
 		            (
 		                SELECT 
-		                    s.*, station.station_nm AS ed_station_nm 
+		                    s.bmno, s.route_id, s.station_id, s.route_nm, s.station_nm, s.mobile_no, s.route_tp, s.region, s.adddate, station.station_nm AS ed_station_nm 
 		                FROM 
 		                        ( 
 		                            SELECT 
-		                                bmno, NVL(b.route_id, 0) route_id, NVL(b.station_id, 0) station_id, NVL(r.route_nm, 0) route_nm, NVL(s.station_nm, 0) station_nm, NVL(s.mobile_no, 0) mobile_no, route_tp 
+		                                bmno, NVL(b.route_id, 0) route_id, NVL(b.station_id, 0) station_id, NVL(r.route_nm, 0) route_nm, NVL(s.station_nm, 0) station_nm, NVL(s.mobile_no, 0) mobile_no, route_tp, region, adddate
 		                            FROM 
-		                                bookmark b, route r, station s, routetype t 
+		                                bookmark b, route r, station s, routetype t, district d
 		                            WHERE 
 		                                r.route_cd = t.route_cd 
 		                                AND b.route_id = r.route_id(+) 
-		                                AND b.station_id = s.station_id(+) 
+		                                AND b.station_id = s.station_id(+)
+		                                AND r.district_cd = d.district_cd
 		                                AND mno = ( 
 		                                               SELECT 
 		                                                   mno 
@@ -66,15 +92,40 @@
 		                                               WHERE 
 		                                                   id = #{id}
 		                                          ) 
-		                                AND isshow = 'Y' 
+		                                AND isshow = 'Y'
+		                                AND area = 2
 		                        ) s, route, station 
+		                 WHERE 
+		                        s.route_id = route.route_id 
+		                        AND ed_sta_id = station.station_id
+		                        
+		                UNION
+		                
+		                SELECT 
+		                    bmno, NVL(b.route_id, 0) route_id, NVL(b.station_id, 0) station_id, NVL(r.route_nm, 0) route_nm, NVL(s.station_nm, 0) station_nm, NVL(s.mobile_no, 0) mobile_no, route_tp, region, adddate, ed_sta_nm AS ed_station_nm
+		                FROM 
+		                    bookmark b, seoulroute r, seoulstation s, routetype t, district d
 		                WHERE 
-		                    s.route_id = route.route_id 
-		                    AND ed_sta_id = station.station_id
+		                    r.route_cd = t.route_cd 
+		                    AND b.route_id = r.route_id(+) 
+		                    AND b.station_id = s.station_id(+)
+		                    AND r.district_cd = d.district_cd
+		                    AND mno = ( 
+		                                   SELECT 
+		                                       mno 
+		                                   FROM 
+		                                       member 
+		                                   WHERE 
+		                                       id = #{id}
+		                              ) 
+		                    AND isshow = 'Y'
+		                    AND area = 1      
+		                ORDER BY
+		                    adddate DESC
 		            ) list
 		    )
 		WHERE
-		    rno BETWEEN #{page.startCont} AND #{page.endCont}
+		    rno BETWEEN #{page.startCont}  AND #{page.endCont}
 	</select>
 	
 	<select id="totalCnt" resultType="int" parameterType="string">
@@ -132,4 +183,21 @@
 		WHERE
 		    bmno = #{bmno}
 	</update>
+		
+	<insert id="bookAdd" parameterType="map">
+		<selectKey keyProperty="bmno" resultType="int" order="BEFORE">
+			select NVL(MAX(bmno)+1,1001) from bookmark
+		</selectKey>
+			INSERT into 
+				<if test="route_id == 0">bookmark(bmno, mno, station_id, area)</if>
+				<if test="station_id == 0">bookmark(bmno, mno, route_id, area)</if>
+				<if test="route_id != 0 and station_id != 0">bookmark(bmno, mno, route_id, station_id, area)</if>			
+			values( 
+					#{bmno}, 
+					(select mno from member where id = #{id}),
+				<if test="route_id != 0">#{route_id},</if>
+				<if test="station_id != 0">#{station_id},</if>
+					#{area}
+			) 
+	</insert>
 </mapper>

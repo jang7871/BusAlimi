@@ -32,4 +32,15 @@ public class BookmarkDao {
 		}
 		return cnt;
 	}
+	// 즐겨찾기 삭제 전담 처리 함수(하나만)
+	public int delBookmark(int bmno) {
+		return sqlSession.update("bmSQL.delBookmark", bmno);
+	}
+
+	// 즐겨찾기 추가 전담 처리 함수
+	public int bookAdd(HashMap map) {
+		int cnt = 0;
+		cnt = sqlSession.insert("bmSQL.bookAdd", map);
+		return cnt;
+	}
 }

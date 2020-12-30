@@ -174,23 +174,23 @@ var busClick = function() {
 			$.each(obj, function(index, item) {
 				var tag = '';
 				var color;
-				if(item.route_cd == 11 || item.route_cd == 14 || item.route_cd == 16 || item.route_cd == 21 || item.route_cd == 22 || item.route_cd == 42){
+				if(item.route_cd == 6 || item.route_cd == 11 || item.route_cd == 14 || item.route_cd == 16 || item.route_cd == 21 || item.route_cd == 22 || item.route_cd == 42){
 					color = colors[0];
-				} else if(item.route_cd == 13 || item.route_cd == 43) {
+				} else if(item.route_cd == 4 || item.route_cd == 13 || item.route_cd == 43) {
 					color = colors[1];
-				} else if(item.route_cd == 12 || item.route_cd == 23 ) {
+				} else if(item.route_cd == 3 || item.route_cd == 12 || item.route_cd == 23 ) {
 					color = colors[2];
-				} else if(item.route_cd == 15 ) {
+				} else if(item.route_cd == 2 || item.route_cd == 15 ) {
 					color = colors[3];
 				} else if(item.route_cd == 41) {
 					color = colors[4];
-				} else if(item.route_cd == 51 ) {
+				} else if(item.route_cd == 1 || item.route_cd == 51 ) {
 					color = colors[5];
 				} else if(item.route_cd == 52 ) {
 					color = colors[6];
 				} else if(item.route_cd == 53 ) {
 					color = colors[7];
-				} else {
+				} else if(item.route_cd == 5 || item.route_cd == 30){
 					color = colors[8];
 				}
 				tag +='<div class="w3-col w3-white w3-margin-bottom w3-hover-pale-green w3-border-bottom busdatalist" id="'+ item.route_id +'" style="cursor: pointer;">';
@@ -259,7 +259,17 @@ var busClick = function() {
 		});
 	}
 }
-
+// 출발지 검색 이벤트
+var startClick = function() {
+	var startnm = $('#startroute').val();
+	$('#startnm').val(startnm);
+}
+// 도착지 검색 이벤트
+var endClick = function() {
+	var endnm = $('#endroute').val();
+	$('#endnm').val(endnm);
+	
+}
 var busFocusOut = function() {
 	if($('#bsearch').val() == '') {	
 		$('#blist').css('display', 'none');
@@ -293,14 +303,37 @@ $(document).on("click", ".staKeyword", function(){
 	$('#stalist').html('');
 	staClick();
 });
+$(document).on("click", ".startKeyword", function(){
+	$('#startroute').val($(this).text());
+	$('#startlist').html('');
+	startClick();
+});
+$(document).on("click", ".endKeyword", function(){
+	$('#endroute').val($(this).text());
+	$('#endlist').html('');
+	endClick();
+});
 $(document).on("click", '.busdatalist', function() {
 		// 검색한 내용이 없으면 리턴
 		var routeid = $(this).attr('id');
+		// 지역을 구분해서 검색 하기 위해 지역 정보를 가져온다.
+		var region = $(this).children().children().eq(1).children().children().eq(1).children().first().text();
+		var district_cd = '';
+		if(region == '서울') {
+			district_cd = 1;
+		} else if(region == '경기') {
+			district_cd = 2;
+		} else if(region == '인천') {
+			district_cd = 3;
+		}
 		if(!routeid){
-			alert('검색할 내용을 입력되지 않았습니다.');
+			alert('검색할 내용이 입력되지 않았습니다.');
 			return;
 		}
 		$('#routeid').val(routeid);
+
+		$('#district_cd').val(district_cd);
+
 		// 버스 검색 버튼을 누르면 버스 상세 페이지로 이동
 		$('#routefrm').attr('action', '/clc/search/busdetail.clc');
 		$('#routefrm').submit();
@@ -308,14 +341,47 @@ $(document).on("click", '.busdatalist', function() {
 $(document).on("click", '.stadatalist', function() {
 		// 검색한 내용이 없으면 리턴
 		var stationid = $(this).attr('id');
+
+		var district_cd = '';
+		var region = $(this).children().children().first().text();
+		if(region == '서울') {
+			district_cd = 1;
+		} else if(region == '경기') {
+			district_cd = 2;
+		} else if(region == '인천') {
+			district_cd = 3;
+		}
+		
 		if(!stationid){
-			alert('검색할 내용을 입력되지 않았습니다.');
+			alert('검색할 내용이 입력되지 않았습니다.');
 			return;
 		}
 		$('#stationid').val(stationid);
+		$('#districtcd').val(district_cd);
+		
 		// 버스 검색 버튼을 누르면 버스 상세 페이지로 이동
 		$('#stationfrm').attr('action', '/clc/search/stationdetail.clc');
 		$('#stationfrm').submit();
+	});
+$(document).on("click", '.startdatalist', function() {
+		// 검색한 내용이 없으면 리턴
+		var startid = $(this).attr('id');
+		if(!startid){
+			alert('검색할 내용을 입력되지 않았습니다.');
+			return;
+		}
+		$('#startid').val(startid);
+		$('#stamodal').hide();
+	});
+$(document).on("click", '.enddatalist', function() {
+		// 검색한 내용이 없으면 리턴
+		var endid = $(this).attr('id');
+		if(!endid){
+			alert('검색할 내용을 입력되지 않았습니다.');
+			return;
+		}
+		$('#endid').val(endid);
+		$('#stamodal').hide();
 	});
 
 /* ======================================================================================================================== */
@@ -359,6 +425,12 @@ $(document).ready(function(){
 		$('#busdata').html('');
 		$('nav').css('top', '');
 		$('nav').css('bottom', '');
+		$('html, body').css('overflow', ''); 
+		//scroll hidden 해제 
+		$('html, body').off('scroll touchmove mousewheel'); // 터치무브 및 마우스휠 스크롤 가능
+	});
+	$('#closesroutemodal').click(function(){
+		$('#sroutemodal').css('display', 'none');
 		$('html, body').css('overflow', ''); 
 		//scroll hidden 해제 
 		$('html, body').off('scroll touchmove mousewheel'); // 터치무브 및 마우스휠 스크롤 가능
@@ -455,7 +527,88 @@ $(document).ready(function(){
 			}
 		});
 	});
-	
+		// 출발지 검색 리스트 이벤트 ( 다 따로 아이디 값으로 하는 이유는 클래스로 하면 한쪽입력하면 다 바뀜..)
+	$('#startroute').keyup(function(){
+		if($('#startroute').val() == '') {	
+			$('#startlist').css('display', 'none');
+			$('#startlist').html('');
+//			$('#stalist').remove('.staKeyword');
+			return;
+		}
+		// 1. 검색창의 키워드를 가져온다.
+		var keyWord = $('#startroute').val();
+		// 2. 키워드를 json 형식으로 만든다.
+		var data = {keyword: keyWord};
+		// 3. 키워드를 controller에 보낸다.(ajax 처리)
+		$.ajax({
+			url: '/clc/search/starelationlist.clc',
+			type: 'POST',
+			dataType: 'json',
+			data: JSON.stringify(data),
+			contentType: 'application/json',
+			success:function(obj){
+				// 3-1. 리스트 초기화
+				$('#startlist').html('');
+				// 3-2. 조회된 리스트 데이터 갯수 조회
+				var rcnt = Object.keys(obj).length;
+				if(rcnt == 0){
+					// 이때 조회된 데이터가 없으면 리턴
+					return;
+				}
+				// 3-3. 조회된 리스트 append
+				$.each(obj, function(index, item) {
+					var tag = '<div class="w3-col w3-padding-16 w3-button w3-hover-purple startKeyword" style="text-align: left; display: block;">'+ item.station_nm + '</div>';
+					$('#startlist').append(tag);
+				});
+				// 3-4. 보여주기
+				$('#startlist').css('display', 'block');
+			},
+			error:function(){
+				alert('### 통신에 실패했습니다. ###');
+			}
+		});
+	});
+		// 도착지 검색 리스트 이벤트 ( 다 따로 아이디 값으로 하는 이유는 클래스로 하면 한쪽입력하면 다 바뀜..)
+	$('#endroute').keyup(function(){
+		if($('#endroute').val() == '') {	
+			$('#endlist').css('display', 'none');
+			$('#endlist').html('');
+//			$('#stalist').remove('.staKeyword');
+			return;
+		}
+		// 1. 검색창의 키워드를 가져온다.
+		var keyWord = $('#endroute').val();
+		// 2. 키워드를 json 형식으로 만든다.
+		var data = {keyword: keyWord};
+		// 3. 키워드를 controller에 보낸다.(ajax 처리)
+		$.ajax({
+			url: '/clc/search/starelationlist.clc',
+			type: 'POST',
+			dataType: 'json',
+			data: JSON.stringify(data),
+			contentType: 'application/json',
+			success:function(obj){
+				// 3-1. 리스트 초기화
+				$('#endlist').html('');
+				// 3-2. 조회된 리스트 데이터 갯수 조회
+				var rcnt = Object.keys(obj).length;
+				if(rcnt == 0){
+					// 이때 조회된 데이터가 없으면 리턴
+					return;
+				}
+				// 3-3. 조회된 리스트 append
+				$.each(obj, function(index, item) {
+					var tag = '<div class="w3-col w3-padding-16 w3-button w3-hover-purple endKeyword" style="text-align: left; display: block;">'+ item.station_nm + '</div>';
+					$('#endlist').append(tag);
+				});
+				// 3-4. 보여주기
+				$('#endlist').css('display', 'block');
+			},
+			error:function(){
+				alert('### 통신에 실패했습니다. ###');
+			}
+		});
+	});
 
 	// 버스검색 버튼을 클릭하면 나타나는 이벤트
 	$("#srcroute").click(function(){
@@ -467,8 +620,30 @@ $(document).ready(function(){
 		$('#stalist').html('');
 		staClick();	
 	});
-	// 검색 이동
-	
+	// 길찾기 검색
+	$('#searchroute').click(function(){
+		$('#sroutemodal').css('display', 'block');
+		$('html, body').css('overflow', 'hidden'); // 모달팝업 중 html,body의 scroll을 hidden시킴 
+		$('html, body').on('scroll touchmove mousewheel', function(event) { 
+				// 터치무브와 마우스휠 스크롤 방지     
+			event.preventDefault();     
+			event.stopPropagation();     
+			return false; 
+		});
+	});
+	$('.searchrouteoption').click(function(){
+
+		if(!$('#startnm').val()){
+			alert("출발 정류소가 입력되지 않았습니다.");
+			return;
+		}
+		if(!$('#endnm').val()){
+			alert("도착 정류소가 입력되지 않았습니다.");
+			return;
+		}
+		$('#searchroutefrm').attr('action', '/clc/search/searchrouteoption.clc');
+		$('#searchroutefrm').submit();
+	});
 	
 
 	

@@ -1,17 +1,24 @@
 package com.luxurycity.clc.controller;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import com.luxurycity.clc.dao.*;
 import com.luxurycity.clc.service.*;
 import com.luxurycity.clc.vo.*;
+
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.forwardedUrl;
+
 import java.util.*;
 import com.luxurycity.clc.util.*;
 
@@ -26,6 +33,8 @@ public class Member {
 	BookmarkDao bmDao;
 	@Autowired
 	MemberService mService;
+	@Autowired
+	MailSendService mss;	// 인증메일을 보내는 클래스
 	
 	@RequestMapping("/login.clc")
 	public ModelAndView login(ModelAndView mv) {
@@ -35,6 +44,8 @@ public class Member {
 	
 	@RequestMapping("/loginProc.clc")
 	public ModelAndView loginProc(ModelAndView mv, HttpSession session, MemberVO mVO) {
+		
+		 
 		int cnt = 0;
 		// 계정 검사
 		cnt = mDao.loginCnt(mVO);
@@ -54,6 +65,8 @@ public class Member {
 		session.setAttribute("AVT", aVO);
 		// 메인페이지로 리다이렉트
 		mv.setViewName("redirect:/main.clc");
+		 
+		
 		return mv;
 	}
 	
@@ -75,7 +88,7 @@ public class Member {
 		try {
 			cnt = mDao.idCheck(id);
 		}catch(Exception e) {}
-		System.out.println("나오나요?" + cnt);
+		
 		if(cnt != 0) {
 			//이경우 이용중인 id가 이미 있는거임
 			result  = "NO";
@@ -83,7 +96,7 @@ public class Member {
 		return result;
 	}
 	@RequestMapping("/join.clc")
-	public ModelAndView join(ModelAndView mv ) {
+	public ModelAndView join(ModelAndView mv) {
 		//아바타랑 질문 리스트 넘기기
 		mv.addObject("LIST", mDao.getAvtList());
 		mv.addObject("QUE", mDao.getQuest());
@@ -92,25 +105,71 @@ public class Member {
 		mv.setViewName("member/Join");
 		return mv;
 	}
+	
+	@RequestMapping(path="/mailConfirm.clc")
+	@ResponseBody
+	public String mailConfirm(MemberVO mVO, HttpServletResponse resp) {
+		String authKey = mss.sendAuthMail(mVO.getMail());	// 인증메일 보내고 인증키 받기
+		System.out.println("## 인증키 : " + authKey);
+		// 쿠키에 인증키 저장
+		Cookie authCookie = new Cookie("authKey", authKey);
+		authCookie.setPath("/clc/member");
+		authCookie.setMaxAge(60*4);	// 쿠키 유효시간 4분
+		resp.addCookie(authCookie);
+		
+		String result = "OK";
+		
+		return result;
+	}
+	
 	@RequestMapping("/joinProc.clc")
-	public ModelAndView joinProc(ModelAndView mv, HttpSession session, FindVO fVO, MemberVO mVO) {
+	public ModelAndView joinProc(ModelAndView mv, HttpSession session, HttpServletRequest req, 
+							HttpServletResponse resp, FindVO fVO, MemberVO mVO) {
+		// 쿠키에서 인증키값을 골라낸다.
+		String authCode = "";
+		Cookie[] cookies = req.getCookies();
+		for(Cookie cookie : cookies) {
+			String authKey = cookie.getName();
+			
+			if(authKey.equals("authKey")) {
+				authCode = cookie.getValue();
+				break;
+			}
+		}
+				
+		// 인증키 검사
+		String inAuthKey = req.getParameter("inAuthKey");
+		if(!inAuthKey.equals(authCode)) {
+			// 인증키가 다를 경우 바로 함수 종료.
+			System.out.println("### 가입이 안된 이유 : 인증코드가 다릅니다. ###");
+			mv.setViewName("member/Join");
+			return mv;
+		}
+		
 		int cnt = 0;
 		//멤버 테이블 및 파인드 테이블에 인서트하기
 		try {
 			cnt = mDao.addMemb(mVO, fVO);
-		}catch(Exception e) {}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
 		
 		if(cnt == 2) {
 			//이경우 정상적으로 두 테이블에 다들어감
 			session.setAttribute("SID", mVO.getId());
 			mv.setViewName("redirect:/main.clc");
-		}else {
-			System.out.println("인서트 잘못됨..");
+		}else {;
 			mv.setViewName("member/Join");
 		}
+		
+		// 쿠키 삭제
+		Cookie authCookie = new Cookie("authKey", null);
+		authCookie.setMaxAge(0);
+		resp.addCookie(authCookie);
+		 
 		// 뷰 설정하고
 		return mv;
-	}
+	}	
 	
 	@RequestMapping("/findpage.clc")
 	public ModelAndView findPage(ModelAndView mv, String findType) {
@@ -224,6 +283,7 @@ public class Member {
 		return mv;
 	}
 	
+	
 	@RequestMapping("/myinfo.clc")
 	public ModelAndView myInfo(ModelAndView mv, MemberVO mVO, AvatarVO aVO, HttpSession session) {
 		mService.setMyInfo(mv, mVO, aVO, session);
@@ -237,5 +297,38 @@ public class Member {
 		mService.setMyInfoEdit(mv, mVO, session);
 		return mv;
 	}
-	 
+  @RequestMapping("/myinfodel.clc")
+	public ModelAndView myInfoDel(ModelAndView mv, MemberVO mVO, HttpSession session) {
+		mService.setMyInfoDel(mv, mVO, session);
+		return mv;
+	}
+	@ResponseBody
+	@RequestMapping("bookaddproc.clc")
+	public HashMap<String, String> bookAddproc(@RequestBody HashMap<String, Object> map, HttpSession session, BookmarkVO bmVO) {
+		HashMap<String, String> map2 = mService.setBookAdd(map, session, bmVO);
+		return map2;
+	}
+	
+	@ResponseBody
+	@RequestMapping("/bookdelprocAjax.clc")
+	public HashMap<String, String> bookDelProcAjax(@RequestBody HashMap<String, Integer> map, HttpSession session) {
+		HashMap<String, String> map2 = new HashMap<String, String>();
+		
+		String id = (String) session.getAttribute("SID");
+		if(id == null) {
+			map2.put("result", "LOGIN");
+			return map2;
+		}
+		
+		int cnt = 0;
+		cnt = bmDao.delBookmark(map.get("bmno"));
+		if(cnt == 0) {
+			map2.put("result", "NO");
+		} else {
+			map2.put("result", "OK");
+		}
+		return map2;
+
+	}
+
 }

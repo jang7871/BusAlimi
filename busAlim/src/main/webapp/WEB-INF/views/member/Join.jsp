@@ -9,6 +9,7 @@
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="/clc/css/timer.css">
 <script type="text/javascript" src="/clc/js/jquery-3.5.1.min.js"></script>
 <script type="text/javascript" src="/clc/js/join.js"></script>
 <style>
@@ -21,6 +22,16 @@ a:visited {
   text-decoration: none;
 }
 </style>
+<script>
+	function pagestart() {
+		window.setTimeout("pagereload()", 1000*60*3);
+	}
+	
+	function pagereload() {
+		alert('인증요청 시간이 초과되었습니다.');
+		location.href="/clc/member/join.clc";
+	}
+</script>
 <body class="w3-light-grey">
 
 <!-- Top container -->
@@ -85,8 +96,17 @@ a:visited {
     	
   	<div class="w3-col w3-padding"><b>Answer</b></div>
     <div class="w3-col"><input type="text" id="ans" name="answer" class="w3-input w3-border w3-round w3-padding-large" placeholder="Answer"></div>
-  
-  	<div class="w3-col"><div class="w3-col w3-button w3-teal w3-round w3-margin-top w3-padding-large" id="submit">JOIN</div></div>
+	
+  	<div class="w3-col"><div class="w3-col w3-button w3-pale-red w3-round w3-margin-top w3-padding-large" id="confirm">JOIN</div></div>
+	
+	<div class="w3-col w3-margin-bottom" id="authKey" style="display: none;">
+	 	<div class="w3-col w3-content w3-center" id="countdown">
+	        <div class="w3-col" id="tiles"></div>
+	    </div>
+	  	<div class="w3-col w3-padding"><b>AuthKey</b></div>
+	    <div class="w3-col"><input type="text" id="inAuthKey" name="inAuthKey" class="w3-input w3-border w3-round w3-padding-large" placeholder="AuthKey"></div>
+	 </div>
+  	<div class="w3-col"><div class="w3-col w3-button w3-teal w3-round w3-margin-top w3-padding-large" id="submit" style="display: none;">JOIN</div></div>
   	
 
   </form>

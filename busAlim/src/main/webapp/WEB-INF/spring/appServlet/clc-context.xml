@@ -33,6 +33,7 @@
 	<beans:import resource="daoContext.xml" />
 	<beans:import resource="utilContext.xml" />
 	<beans:import resource="srvcContext.xml" />
+	<beans:import resource="mailContext.xml" />
 	
 	<context:component-scan base-package="com.luxurycity.clc" />
 </beans:beans>
