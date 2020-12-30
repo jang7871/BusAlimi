@@ -24,6 +24,8 @@ import com.luxurycity.clc.service.*;
 public class Search {
 	@Autowired
 	SearchDao sDao;
+	@Autowired
+	MakeRouteOption routeOption;
 	
 	@ResponseBody
 	@RequestMapping("/busModal.clc")
@@ -81,7 +83,11 @@ public class Search {
 	@RequestMapping("/stationdetail.clc")
 	public ModelAndView stationDetail(ModelAndView mv, StationVO sVO, HttpSession session) {
 		int station_id = sVO.getStation_id();
-		System.out.println(station_id);
+//		if(sVO.getDistrict_cd() == 0) {
+//			int district_cd = sDao.getDistrict(station_id);
+//			sVO.setDistrict_cd(district_cd);
+//		}
+//		int district = sVO.getDistrict_cd();
 		List<StationVO> slist = sDao.stationDetail(station_id);
 		//리스트 길이가 0이면 잘못된거니까 다시 메인으로 이동시킨다
 		if(slist.size() == 0) {
@@ -89,8 +95,9 @@ public class Search {
 		}else {
 			mv.setViewName("search/StationDetail");
 		}
-
-		ArrayList<HashMap> map = stationArrInfo(mv,station_id);
+		List<StationVO> llist = sDao.getSeoulArrive(station_id);
+		ArrayList<HashMap> map = stationArrInfo(mv,station_id, llist);
+		System.out.println(map.size()+"실시간 정보 데이터 가져온 수#####");
 //		mv.addObject("SDATA", sVO);
 		// 4. 세션에 아이디가 존재할 경우 해당 즐겨찾기를 가져온다.
 		String sid = (String) session.getAttribute("SID");
@@ -107,10 +114,19 @@ public class Search {
 		mv.addObject("LIST", slist);
 		return mv;
 	}
+	@RequestMapping("/stationArrInfo.clc")
+	@ResponseBody
+	public ArrayList<HashMap> stationArrInfo(ModelAndView mv, int staid, List<StationVO> llist) {
+		GetArrInfoByRouteAllList rlist = new GetArrInfoByRouteAllList();
+		ArrayList<HashMap> map= rlist.GetArrInfoByRouteAllList(staid, llist);
+		
+		return map;
+	}
+	
 	@RequestMapping("/searchrouteoption.clc")
-	public ArrayList<StationVO> searchRouteOption(ModelAndView mv, StationVO sVO) {
-		MakeRouteOption opt = new MakeRouteOption(mv, sVO);
-		ArrayList<StationVO> option = opt.getOption();
+	public ModelAndView searchRouteOption(ModelAndView mv, StationVO sVO) {
+		System.out.println(sVO.toString());
+		ArrayList<StationVO> option = routeOption.MakeRouteOptions(sVO);
 		/*
 		List<StationVO> list = sDao.getBusOption(sVO);
 		ArrayList<StationVO> arr = new ArrayList<StationVO>();
@@ -118,26 +134,18 @@ public class Search {
 		if(list.size() == 0) {
 			mv.setViewName("redirect:/main.clc");
 		}else {
-			mv.setViewName("search/RouteOption");
 		}
 		for(StationVO VO: list) {
 			System.out.println(VO.getStart_id() + "####################" + VO.getEnd_id() + "#########################" + VO.getRoute_id());
 			StationVO tVO = sDao.getSearchInfo(VO);
 			arr.add(tVO);
 		}
-		mv.addObject("LIST", arr);
 		*/
-		return option;
+		mv.setViewName("search/RouteOption");
+		mv.addObject("LIST", option);
+		return mv;
 	}
 	
-	@RequestMapping("/stationArrInfo.clc")
-	@ResponseBody
-	public ArrayList<HashMap> stationArrInfo(ModelAndView mv, int staid) {
-		GetArrInfoByRouteAllList rlist = new GetArrInfoByRouteAllList();
-		ArrayList<HashMap> map= rlist.GetArrInfoByRouteAllList(staid);
-		
-		return map;
-	}// 오키 이제 map으로 반환되는거 확인했음 이중구조로 잘나옴 이제 main.js에서 ajax처리해서 form태그 만들어서 넘기는거 할꺼임
 			
 			
 	@RequestMapping("/busdetail.clc")
@@ -145,9 +153,11 @@ public class Search {
 //		System.out.println(rVO.toString());
 		// 1. 노선아이디 값을 가져온다.
 		int route_id = rVO.getRoute_id();
+		int district_cd = rVO.getDistrict_cd();
+		System.out.println("####여기야여기" + rVO.toString());
 		// 2. 해당 정보를 가져온다.
 		List<RouteVO> rlist = sDao.busDetail(rVO);
-
+		
 		// 3. 리스트 길이가 0이면 잘못된거니까 다시 메인으로 이동시킨다
 //		int peek = 0, npeek = 0;
 		if(rlist.size() == 0) {
@@ -159,6 +169,8 @@ public class Search {
 //			peek = rlist.get(0).getPeek_alloc();
 //			npeek = rlist.get(0).getNpeek_alloc();
 		}
+		ArrayList<Integer> arrivelist = busArrInfo(mv, route_id, district_cd);
+		System.out.println(arrivelist.size() + "||" + arrivelist.toString());
 		// 4. 세션에 아이디가 존재할 경우 해당 즐겨찾기를 가져온다.
 		String sid = (String) session.getAttribute("SID");
 		if(sid != null) {
@@ -174,8 +186,16 @@ public class Search {
 //		mv.addObject("PEEK", peek);
 //		mv.addObject("NPEEK", npeek);
 //		mv.addObject("INFO", rVO);
+		mv.addObject("ARRIVE", arrivelist);
 		mv.addObject("ROUTE", rlist);
 		return mv;
+	}
+	@RequestMapping("/busArrInfo.clc")
+	public ArrayList<Integer> busArrInfo(ModelAndView mv, int routeid, int district) {
+		GetArrInfoByRouteList rlist = new GetArrInfoByRouteList();
+		ArrayList<Integer> list= rlist.GetInfoByRouteList(routeid, district);
+		
+		return list;
 	}
 
 	@ResponseBody

@@ -147,6 +147,7 @@ a:visited {
 	<!-- 정류소 데이터 전송 담당 태그 -->
 	<form method="post" id="stationfrm">
 		<input type="hidden" name="station_id" id="stationid">
+		<input type="hidden" name="district_cd" id="districtcd">
 <!-- 		<input type="hidden" name="station_nm" id="stationnm"> -->
 <!-- 		<input type="hidden" name="loc_x" id="x"> -->
 <!-- 		<input type="hidden" name="loc_y" id="y"> -->
@@ -154,8 +155,8 @@ a:visited {
 <!-- 		<input type="hidden" name="region" id="region"> -->
 	</form>
 	<form method="post" id="searchroutefrm">
-		<input type="hidden" name="start_id" id="startid">
-		<input type="hidden" name="end_id" id="endid">
+		<input type="hidden" name="start_nm" id="startnm">
+		<input type="hidden" name="end_nm" id="endnm">
 	</form>
 
 
@@ -232,7 +233,8 @@ a:visited {
 	  </div>
 	</div>
 	
-	<!--  길찾기 모달 -->
+	<!--  길찾기 모달  -->
+	
 	<div id="sroutemodal" class="w3-modal" style="position:absolute; z-index:10;">
 	  <div class="w3-modal-content w3-animate-opacity w3-card-4">
 	    <header class="w3-container w3-border-bottom w3-blue"> 

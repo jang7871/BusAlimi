@@ -1,16 +1,24 @@
 package com.luxurycity.clc.vo;
 
+import java.util.Arrays;
+import java.lang.Comparable;
 import com.luxurycity.clc.util.*;
 
 public class StationVO {
-	private int station_id, district_cd, route_id, route_cd, next_station_id, start_id, end_id, waittime, str_order, cnt;
+	private int station_id, district_cd, route_id, route_cd, next_station_id, start_id, end_id, waittime, str_order, cnt, str_order_cnt;
 	private double loc_x, loc_y;
 	private String region, station_nm, transfer_nm,mobile_no, route_nm, keyword, route_tp, st_sta_nm,ed_sta_nm, next_station_nm, direction, start_nm, end_nm, staregion;
 	private PageUtil page;
 	private String[] route_list;
 	
 	
-
+	
+	public int getStr_order_cnt() {
+		return str_order_cnt;
+	}
+	public void setStr_order_cnt(int str_order_cnt) {
+		this.str_order_cnt = str_order_cnt;
+	}
 	public String getStaregion() {
 		return staregion;
 	}
@@ -180,6 +188,18 @@ public class StationVO {
 	}
 	public void setEnd_nm(String end_nm) {
 		this.end_nm = end_nm;
+	}
+	@Override
+	public String toString() {
+		return "StationVO [station_id=" + station_id + ", district_cd=" + district_cd + ", route_id=" + route_id
+				+ ", route_cd=" + route_cd + ", next_station_id=" + next_station_id + ", start_id=" + start_id
+				+ ", end_id=" + end_id + ", waittime=" + waittime + ", str_order=" + str_order + ", cnt=" + cnt
+				+ ", loc_x=" + loc_x + ", loc_y=" + loc_y + ", region=" + region + ", station_nm=" + station_nm
+				+ ", transfer_nm=" + transfer_nm + ", mobile_no=" + mobile_no + ", route_nm=" + route_nm + ", keyword="
+				+ keyword + ", route_tp=" + route_tp + ", st_sta_nm=" + st_sta_nm + ", ed_sta_nm=" + ed_sta_nm
+				+ ", next_station_nm=" + next_station_nm + ", direction=" + direction + ", start_nm=" + start_nm
+				+ ", end_nm=" + end_nm + ", staregion=" + staregion + ", page=" + page + ", route_list="
+				+ Arrays.toString(route_list) + "]";
 	}
 	
 }

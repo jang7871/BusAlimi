@@ -34,9 +34,17 @@ public class SearchDao {
 	public List<StationVO> getStakeyList(String keyword){
 		return sqlSession.selectList("sSQL.staKeyList", keyword);
 	}
+	//서울정류소 해당 정류소 도착 버스및 ord정보 가져오기
+	public List<StationVO> getSeoulArrive(int station_id) {
+		return sqlSession.selectList("sSQL.getseoularrive", station_id);
+	}
 	//정류소 상세페이지 데이터 꺼내오기
 	public List<StationVO> stationDetail(int station_id) {
 		return sqlSession.selectList("sSQL.stationDetail", station_id);
+	}
+	//정류소 지역 꺼내오기
+	public int getDistrict(int station_id) {
+		return sqlSession.selectOne("sSQL.getdistrict", station_id);
 	}
 	//버스 상세페이지 데이터 꺼내오기
 	public List<RouteVO> busDetail(RouteVO rVO) {
@@ -63,17 +71,17 @@ public class SearchDao {
 		return sqlSession.selectOne("sSQL.searchrouteinfo", sVO);
 	}
 	// 출발지 경유 버스 리스트가져오기
-	public List<StationVO> getStartList(StationVO sVO) {
+	public List<StationVO> getStartList(int start_id) {
 		
-		return sqlSession.selectList("sSQL.getstartlist", sVO);
+		return sqlSession.selectList("sSQL.getstartlist", start_id);
 	}
 	// 출발지 경유 버스 별 경로정보 가져오기
 	public List<StationVO> getStartListRoute(StationVO sVO) {
 		return sqlSession.selectList("sSQL.getstartlistroute", sVO);
 	}
 	// 도착지 경유 버스 리스트 가져오기
-	public List<StationVO> getEndList(StationVO sVO) {
-		return sqlSession.selectList("sSQL.getendlist", sVO);
+	public List<StationVO> getEndList(int end_id) {
+		return sqlSession.selectList("sSQL.getendlist", end_id);
 	}
 	// 도착지 경유 버스 별 경로정보 가져오기
 	public List<StationVO> getEndListRoute(StationVO sVO) {
@@ -90,5 +98,11 @@ public class SearchDao {
 	// 도착지 경유 버스 별 경로정보 토탈가져오기
 	public String getTransfernm(int station_id) {
 		return sqlSession.selectOne("sSQL.gettransfernm", station_id);
+	}
+	public List<Integer> getStartId(StationVO sVO) {
+		return sqlSession.selectList("sSQL.getstart_id", sVO);
+	}
+	public List<Integer> getEndId(StationVO sVO) {
+		return sqlSession.selectList("sSQL.getend_id", sVO);
 	}
 }
