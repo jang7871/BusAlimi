@@ -16,13 +16,13 @@
 요청내용 : /clc/member/bookdelproc.clc
 파라미터 : bmno, SID
 컨트롤러 : com.luxurycity.clc.controller.Member.bookDelProc()
-
+뷰 : redirect ] /member/mypage.clc
 ------------------------------------------------------------
-# 마이페이지 폼보기 요청
-요청내용 : /clc/member/mypage.clc
-파라미터 : SID, list<BookmarkVO>
-컨트롤러 : com.luxurycity.clc.controller.member.MyPage
-뷰	  : /WEB-INF/views/com/luxurycity/clc/member/MyPage.jsp
+* 상세페이지 즐겨찾기 삭제 요청 (권영선)
+요청내용 : /clc/member/bookdelprocAjax.clc
+파라미터 : bmno, SID
+컨트롤러 : com.luxurycity.clc.controller.Member.bookDelProcAjax()
+뷰		 : Ajax ]
 ------------------------------------------------------------
 # 회원정보 페이지 폼 보기 요청
 요청내용 : /clc/member/myinfo.clc
@@ -54,10 +54,10 @@
 컨트롤러 : com.luxurycity.clc.controller.search.StationDetail
 뷰	  : /WEB-INF/views/com/luxurycity/clc/search/StationDetail.jsp
 ------------------------------------------------------------
-# 즐겨찾기 추가 요청
-요청내용 : /clc/search/bookaddproc.clc
-파라미터 : 버스는 route_id 정류소 station_id
-컨트롤러 : com.luxurycity.clc.controller.search.BookAddproc
+# 즐겨찾기 추가 요청 (권영선)
+요청내용 : /clc/member/bookaddproc.clc
+파라미터 : (route_id || station_id || route_id, station_id), type
+컨트롤러 : com.luxurycity.clc.controller.Search.bookAddproc()
 뷰	  : redirect] /clc/member/mypage.clc
 뷰	  : /WEB-INF/views/com/luxurycity/clc/search/StationDetail.jsp
 ------------------------------------------------------------
@@ -177,6 +177,12 @@
 컨트롤러 : com.luxurycity.clc.controller.member.idCheck
 뷰	  : 비동기]
 ------------------------------------------------------------
+# 상세페이지 띄울 시 정류소 + 노선 즐겨찾기 조회 요청
+요청내용 : /clc/search/findBookmarkProc.clc
+파라미터 : [station_id], [route_id], type(경우에 따라 처리)
+컨트롤러 : com.luxurycity.clc.controller.Search.findBookmarkProc()
+뷰	  : 비동기]
+------------------------------------------------------------
 
 
 ##############################################################
@@ -200,4 +206,38 @@ DB 데이터 집어넣기 처리
 파라미터 : 무
 컨트롤러 : com.luxurycity.clc.controller.dbinit.RouteStationInputProc
 뷰	  : redirect ] /clc/main.clc
-=======
+==============================================================
+##############################################################
+지도 검색
+##############################################################
+------------------------------------------------------------------
+# 지도 검색 메인 뷰 요청
+요청내용 : /clc/search/mapSearch.clc
+파라미터 : 
+컨트롤러 : com.increpas.sunny.controller.Search.mapSearch()
+뷰		 : /WEB-INF/views/search/mapSearch.jsp
+------------------------------------------------------------------
+# 지도 검색 연관검색 리스트 요청
+요청내용 : /clc/search/mapRelList.clc
+파라미터 : keyword, nowPage, searchType
+컨트롤러 : com.increpas.sunny.controller.Search.mapRelList()
+뷰		 : Ajax ] 
+------------------------------------------------------------------
+# (지도 중심좌표 기준) 반경 1KM 내 정류소 정보 가져오기 요청
+요청내용 : /clc/search/mapAroundStation.clc
+파라미터 : 지도의 중심좌표(lat, lng)
+컨트롤러 : com.increpas.sunny.controller.Search.mapAroundStation()
+뷰		 : Ajax ]
+------------------------------------------------------------------
+# 지도 정류소 검색 요청 ( 정류소 위치를 지도에 표시한다. )
+요청내용 : /clc/search/mapStationDetail.clc
+파라미터 : station_id, x , y
+컨트롤러 : com.increpas.sunny.controller.Search.mapStationDetail()
+뷰		 : Ajax ]
+------------------------------------------------------------------
+# 지도 노선 검색 요청 ( 노선 경로를 선 형태로 지도에 표시한다. )
+요청내용 : /clc/search/mapRouteDetail.clc
+파라미터 : route_id, district_cd
+컨트롤러 : com.increpas.sunny.controller.Search.mapRouteDetail()
+뷰		 : Ajax ]
+------------------------------------------------------------------

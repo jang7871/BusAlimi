@@ -108,15 +108,48 @@ a:visited {
 			    <c:forEach var="list" items= "${LIST}">
 			 		<div class="w3-col w3-white w3-margin-bottom w3-hover-pale-green w3-border-bottom busdatalist" id="'+ item.route_id +'" style="cursor: pointer;">
 						<div class="w3-col w3-padding">
-							<div class="w3-col m4 w3-border-right w3-border-bottom w3-border-blue w3-text-gray">${list.route_tp} </div>
-							<div class="w3-col m8 w3-border-bottom w3-border-blue w3-text-gray"> 소요시간 : <b>${list.waittime}</b> 분</div>
+
+							<div class="w3-col m3 w3-border-blue w3-text-grey w3-center" >&nbsp;</div>
+							<c:if test="${empty list.route_nm}">
+								<div class="w3-col m3 w3-border-blue w3-text-grey w3-center"><i class="fa fa-bus w3-text-green" aria-hidden="true"></i>${list.route_list[0]}</div>
+								<div class="w3-col m3 w3-border-blue w3-text-grey w3-center"><i class="fa fa-bus w3-text-green" aria-hidden="true"></i>${list.route_list[1]}</div>
+								<div class="w3-col m3 w3-border-blue w3-text-blue w3-center">&nbsp;</div>
+								<div class="w3-col m2 w3-border-blue w3-text-blue w3-center" style="height:22px"> <i class="fa fa-dot-circle-o w3-right" aria-hidden="true"></i></div>
+								<div class="w3-col m4  w3-text-blue w3-center"><div class="w3-border-bottom w3-border-blue w3-col m11" style="height:9px">&nbsp;</div><div class="w3-border-top w3-border-blue w3-col m11" style="height:13px">&nbsp;</div><div><i class="fa fa-arrow-circle-o-right w3-rightw3-col m1" aria-hidden="true"></i></div></div>
+								<div class="w3-col m4  w3-text-blue w3-center"><div class="w3-border-bottom w3-border-blue" style="height:9px">&nbsp;</div><div class="w3-border-top w3-border-blue" style="height:13px">&nbsp;</div></div>
+								<div class="w3-col m2 w3-border-blue w3-text-blue w3-center" style="height:22px"> <i class="fa fa-dot-circle-o  w3-left" aria-hidden="true"></i></div>
+								<div class="w3-col m4 w3-border-bottom w3-border-blue w3-text-gray w3-center" style="height:46px"><b>${list.start_nm}</b> </div>
+								<div class="w3-col m4 w3-border-bottom w3-border-blue  w3-text-gray w3-center" style="height:46px"><b>${empty list.transfer_nm ? '없음' : list.transfer_nm}</b></div>
+								<div class="w3-col m4 w3-border-bottom w3-border-blue w3-text-gray w3-center" style="height:46px"><b>${list.end_nm}</b></div>
+							</c:if>
+							<c:if test="${!empty list.route_nm}">
+								<div class="w3-col m6 w3-border-blue w3-text-grey w3-center"><i class="fa fa-bus w3-text-green" aria-hidden="true"></i>${list.route_nm}</div>
+								<div class="w3-col m3 w3-border-blue w3-text-blue w3-center">&nbsp;</div>
+								<div class="w3-col m2 w3-border-blue w3-text-blue w3-center" style="height:22px"> <i class="fa fa-dot-circle-o w3-right" aria-hidden="true"></i></div>
+								<div class="w3-col m8  w3-text-blue w3-center"><div class="w3-border-bottom w3-border-blue" style="height:9px">&nbsp;</div><div class="w3-border-top w3-border-blue" style="height:13px">&nbsp;</div></div>
+								<div class="w3-col m2 w3-border-blue w3-text-blue w3-center" style="height:22px"> <i class="fa fa-dot-circle-o  w3-left" aria-hidden="true"></i></div>
+								<div class="w3-col m4 w3-border-bottom w3-border-blue w3-text-gray w3-center" style="height:46px"><b>${list.start_nm}</b> </div>
+								<div class="w3-col m4 w3-border-bottom w3-border-blue  w3-text-gray w3-center" style="height:46px">&nbsp;</div>
+								<div class="w3-col m4 w3-border-bottom w3-border-blue w3-text-gray w3-center" style="height:46px"><b>${list.end_nm}</b></div>
+							</c:if>
 							<div class="w3-col" style="padding-top: 5px;">	
 								<div class="w3-col">
-									<div class="w3-col m4 w3-border-right w3-border-blue" style="font-size: 40px;"><i class="fa fa-bus w3-text-green" aria-hidden="true"></i>${list.route_nm}</div>			
-									<div class="w3-col m8 w3-padding">
-										<div class="w3-col w3-text-blue w3-small">${list.region}</div>
-										<div class="w3-col"><b>${list.st_sta_nm}<i class="fa fa-arrows-h" aria-hidden="true"></i> ${list.ed_sta_nm}</b></div>				
+								<c:if test="${empty list.transfer_nm }">
+									<div class="w3-col m3 w3-border-right w3-border-blue" style="font-size: 20px;"><i class="fa fa-bus w3-text-green" aria-hidden="true"></i>${list.route_nm}</div>			
+									<div class="w3-col m9 w3-padding">
+										<div class="w3-col"><b>${list.start_nm}<i class="fa fa-arrows-h" aria-hidden="true"></i> ${list.end_nm}</b> <span class="w3-right">이동 정거장 수 : [${list.str_order_cnt}]</span></div>				
 									</div>					
+								</c:if>								
+								<c:if test="${!empty list.transfer_nm }">
+									<div class="w3-col m3 w3-border-right w3-border-blue" style="font-size: 20px;"><i class="fa fa-bus w3-text-green" aria-hidden="true"></i>${list.route_list[0]}</div>			
+									<div class="w3-col m9 w3-padding">
+										<div class="w3-col"><b>${list.start_nm}<i class="fa fa-arrows-h" aria-hidden="true"></i> ${list.transfer_nm}</b></div>				
+									</div>					
+									<div class="w3-col m3 w3-border-right w3-border-blue" style="font-size: 20px;"><i class="fa fa-bus w3-text-green" aria-hidden="true"></i>${list.route_list[1]}</div>			
+									<div class="w3-col m9 w3-padding">
+										<div class="w3-col"><b>${list.transfer_nm}<i class="fa fa-arrows-h" aria-hidden="true"></i> ${list.end_nm}</b><span class="w3-right">이동 정거장 수 : [${list.str_order_cnt - 2}]</span></div>				
+									</div>					
+								</c:if>								
 								</div>					
 							</div>					
 						</div>					

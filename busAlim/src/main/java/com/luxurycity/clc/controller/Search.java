@@ -25,6 +25,8 @@ import com.luxurycity.clc.service.*;
 public class Search {
 	@Autowired
 	SearchDao sDao;
+	@Autowired
+	MakeRouteOption routeOption;
 	
 	@ResponseBody
 	@RequestMapping("/busModal.clc")
@@ -82,7 +84,11 @@ public class Search {
 	@RequestMapping("/stationdetail.clc")
 	public ModelAndView stationDetail(ModelAndView mv, StationVO sVO, HttpSession session) {
 		int station_id = sVO.getStation_id();
-		System.out.println(station_id);
+//		if(sVO.getDistrict_cd() == 0) {
+//			int district_cd = sDao.getDistrict(station_id);
+//			sVO.setDistrict_cd(district_cd);
+//		}
+//		int district = sVO.getDistrict_cd();
 		List<StationVO> slist = sDao.stationDetail(station_id);
 		//리스트 길이가 0이면 잘못된거니까 다시 메인으로 이동시킨다
 		if(slist.size() == 0) {
@@ -90,8 +96,9 @@ public class Search {
 		}else {
 			mv.setViewName("search/StationDetail");
 		}
-
-		ArrayList<HashMap> map = stationArrInfo(mv,station_id);
+		List<StationVO> llist = sDao.getSeoulArrive(station_id);
+		ArrayList<HashMap> map = stationArrInfo(mv,station_id, llist);
+		System.out.println(map.size()+"실시간 정보 데이터 가져온 수#####");
 //		mv.addObject("SDATA", sVO);
 		// 4. 세션에 아이디가 존재할 경우 해당 즐겨찾기를 가져온다.
 		String sid = (String) session.getAttribute("SID");
@@ -133,12 +140,36 @@ public class Search {
 	
 	@RequestMapping("/stationArrInfo.clc")
 	@ResponseBody
-	public ArrayList<HashMap> stationArrInfo(ModelAndView mv, int staid) {
+	public ArrayList<HashMap> stationArrInfo(ModelAndView mv, int staid, List<StationVO> llist) {
 		GetArrInfoByRouteAllList rlist = new GetArrInfoByRouteAllList();
-		ArrayList<HashMap> map= rlist.GetArrInfoByRouteAllList(staid);
+		ArrayList<HashMap> map= rlist.GetArrInfoByRouteAllList(staid, llist);
 		
 		return map;
-	}// 오키 이제 map으로 반환되는거 확인했음 이중구조로 잘나옴 이제 main.js에서 ajax처리해서 form태그 만들어서 넘기는거 할꺼임
+	}
+	
+	@RequestMapping("/searchrouteoption.clc")
+	public ModelAndView searchRouteOption(ModelAndView mv, StationVO sVO) {
+		System.out.println(sVO.toString());
+		ArrayList<StationVO> option = routeOption.MakeRouteOptions(sVO);
+		/*
+		List<StationVO> list = sDao.getBusOption(sVO);
+		ArrayList<StationVO> arr = new ArrayList<StationVO>();
+		
+		if(list.size() == 0) {
+			mv.setViewName("redirect:/main.clc");
+		}else {
+		}
+		for(StationVO VO: list) {
+			System.out.println(VO.getStart_id() + "####################" + VO.getEnd_id() + "#########################" + VO.getRoute_id());
+			StationVO tVO = sDao.getSearchInfo(VO);
+			arr.add(tVO);
+		}
+		*/
+		mv.setViewName("search/RouteOption");
+		mv.addObject("LIST", option);
+		return mv;
+	}
+	
 			
 			
 	@RequestMapping("/busdetail.clc")
@@ -146,9 +177,10 @@ public class Search {
 //		System.out.println(rVO.toString());
 		// 1. 노선아이디 값을 가져온다.
 		int route_id = rVO.getRoute_id();
+		int district_cd = rVO.getDistrict_cd();
+		System.out.println("####여기야여기" + rVO.toString());
 		// 2. 해당 정보를 가져온다.
 		List<RouteVO> rlist = sDao.busDetail(rVO);
-
 		// 3. 리스트 길이가 0이면 잘못된거니까 다시 메인으로 이동시킨다
 //		int peek = 0, npeek = 0;
 		if(rlist.size() == 0) {
@@ -160,6 +192,8 @@ public class Search {
 //			peek = rlist.get(0).getPeek_alloc();
 //			npeek = rlist.get(0).getNpeek_alloc();
 		}
+		ArrayList<Integer> arrivelist = busArrInfo(mv, route_id, district_cd);
+		System.out.println(arrivelist.size() + "||" + arrivelist.toString());
 		// 4. 세션에 아이디가 존재할 경우 해당 즐겨찾기를 가져온다.
 		String sid = (String) session.getAttribute("SID");
 		if(sid != null) {
@@ -175,8 +209,16 @@ public class Search {
 //		mv.addObject("PEEK", peek);
 //		mv.addObject("NPEEK", npeek);
 //		mv.addObject("INFO", rVO);
+		mv.addObject("ARRIVE", arrivelist);
 		mv.addObject("ROUTE", rlist);
 		return mv;
+	}
+	@RequestMapping("/busArrInfo.clc")
+	public ArrayList<Integer> busArrInfo(ModelAndView mv, int routeid, int district) {
+		GetArrInfoByRouteList rlist = new GetArrInfoByRouteList();
+		ArrayList<Integer> list= rlist.GetInfoByRouteList(routeid, district);
+		
+		return list;
 	}
 
 	@ResponseBody
@@ -202,6 +244,7 @@ public class Search {
 		return list;
 	}	
 	
+
 	// 친구 이름 검색
 	@ResponseBody
 	@RequestMapping(path="/searchfriend.clc", method=RequestMethod.POST)
@@ -214,6 +257,80 @@ public class Search {
 		
 		map.put("sid", sid);
 		List<MemberVO> list = sDao.getFriendList(map);
+		
+		return list;
+	}
+
+	@RequestMapping("/mapSearch.clc")
+	public ModelAndView mapSearch(ModelAndView mv) {
+		mv.setViewName("search/mapSearch");
+		return mv;
+	}
+	
+	@ResponseBody
+	@RequestMapping("/mapRelList.clc")
+	public List mapRelList(@RequestBody HashMap<String, Object> map, RouteVO rVO, StationVO sVO, PageUtil page) {
+		// 검색 키워드, 검색유형(버스, 정류소), nowPage 가져오기
+		String keyword = (String) map.get("keyword");
+		String type = (String) map.get("type");
+		int nowPage = (int) map.get("nowPage");
+		
+		// 검색유형이 '버스'인 경우와 '정류소'인 경우로 나눠서 처리
+		List list = null;
+		
+		if(type.equals("bus")) {
+			rVO.setKeyword(keyword);
+			int total = sDao.getBusTotal(keyword);
+			page.setTotalCount(total);
+			page.setNowPage(nowPage);
+			page.setPage(page.getNowPage(), total, 200, 5);
+			rVO.setPage(page);
+			list = sDao.getBusRellist(rVO);
+			for(int i = 0; i < list.size(); i++) {
+				((RouteVO) list.get(i)).setPage(page);
+			}
+		} else if(type.equals("station")) {
+			sVO.setKeyword(keyword);
+			int total = sDao.getStaTotal(keyword);
+			page.setTotalCount(total);
+			page.setNowPage(nowPage);
+			page.setPage(page.getNowPage(), total, 200, 5);
+			sVO.setPage(page);
+			list = sDao.getStaRelList(sVO);
+			for(int i = 0; i < list.size(); i++) {
+				((StationVO) list.get(i)).setPage(page);
+			}			
+		}
+		
+		return list;
+	}
+	
+	@ResponseBody
+	@RequestMapping("/mapStationDetail.clc")
+	public List<StationVO> mapStationDetail(@RequestBody HashMap<String, Integer> map) {
+		int station_id = map.get("station_id");
+		List<StationVO> list = sDao.stationDetail(station_id);
+//		StationVO sVO = list.get(0);
+		
+		return list;
+	}
+	
+	@ResponseBody
+	@RequestMapping("/mapAroundStation.clc")
+	public List<StationVO> mapAroundStation(@RequestBody HashMap<String, Double> map) {
+		// 중심좌표 정보 보내고 주변 정류소 리스트 받는다.
+		List<StationVO> list = sDao.getMapArroundStation(map);
+		
+		return list;
+	}
+	
+	@ResponseBody
+	@RequestMapping("/mapRouteDetail.clc")
+	public List<RouteVO> mapRouteDetail(@RequestBody HashMap<String, Integer> map, RouteVO rVO){
+		rVO.setDistrict_cd(map.get("district_cd"));
+		rVO.setRoute_id(map.get("route_id"));
+		
+		List<RouteVO> list = sDao.busDetail(rVO);
 		
 		return list;
 	}

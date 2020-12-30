@@ -245,14 +245,35 @@ a:visited {
 			</c:if>		
 					
 					<!-- 경로 영역 -->
-		<c:forEach var="route" items="${ROUTE}">
+		<c:forEach var="route" items="${ROUTE}" varStatus = "st">
 			
 			<c:if test="${route.direction eq '정'}">
 					<!-- 정방향 -->
 					<div class="w3-col w3-hover-light-gray w3-button " style="padding: 0 16px;">
 						<div class="w3-col m11 w3-right w3-cell-row">
 							<div class="w3-cell w3-display-container w3-teal" style="width: 14.400px;">
-								<i class="fa fa-chevron-circle-down w3-display-middle"></i>　
+					<c:set var="no" value="${0}" />
+								<c:forEach var="loc" items="${ARRIVE}">
+									<c:if test= "${st.count+1 eq loc}">
+										<c:set var="no" value="${no + 1}" />
+										<font size="6em" color="white">
+											<div class="w3-display-middle" style="width:40px; height:40px; border-radius:20px 20px; background-color: green;">
+												<i class="fa fa-bus w3-display-middle"></i>	
+											</div>
+										</font>
+									</c:if>
+									<c:if test= "${route.station_id eq loc}">
+										<c:set var="no" value="${no + 1}" />
+										<font size="6em" color="white">
+											<div class="w3-display-middle" style="width:40px; height:40px; border-radius:20px 20px; background-color: green;">
+												<i class="fa fa-bus w3-display-middle"></i>	
+											</div>
+										</font>
+									</c:if>
+								</c:forEach>
+								<c:if test="${no eq 0}">
+									<i class="fa fa-chevron-circle-down w3-display-middle"></i>
+								</c:if>
 							</div>
 							<div class="w3-container w3-padding w3-cell w3-left-align sDirect routeBtn" id="${route.station_id}">
 					<c:if test="${fn:length(route.station_nm) >= 20}">
@@ -283,7 +304,28 @@ a:visited {
 					<div class="w3-col w3-hover-light-gray w3-button" style="padding: 0 16px;">
 						<div class="w3-col m11 w3-right w3-cell-row">
 							<div class="w3-cell w3-display-container w3-red" style="width: 14.400px;">
-								<i class="fa fa-chevron-circle-down w3-display-middle"></i>　
+								<c:set var="no" value="${0}" />
+								<c:forEach var="loc" items="${ARRIVE}">
+									<c:if test= "${st.count+1 eq loc}">
+										<c:set var="no" value="${no + 1}" />
+										<font size="6em" color="white">
+											<div class="w3-display-middle" style="width:40px; height:40px; border-radius:20px 20px; background-color: red;">
+												<i class="fa fa-bus w3-display-middle"></i>	
+											</div>
+										</font>
+									</c:if>
+									<c:if test= "${route.station_id eq loc}">
+										<c:set var="no" value="${no + 1}" />
+										<font size="6em" color="white">
+											<div class="w3-display-middle" style="width:40px; height:40px; border-radius:20px 20px; background-color: red;">
+												<i class="fa fa-bus w3-display-middle"></i>	
+											</div>
+										</font>
+									</c:if>
+								</c:forEach>
+								<c:if test="${no eq 0}">
+									<i class="fa fa-chevron-circle-down w3-display-middle"></i>
+								</c:if>
 							</div>
 							<div class="w3-container w3-padding w3-cell w3-left-align rDirect routeBtn" id="${route.station_id}">
 
@@ -317,7 +359,29 @@ a:visited {
 					<div class="w3-col w3-hover-light-gray w3-button" style="padding: 0 16px;">
 						<div class="w3-col m11 w3-right w3-cell-row">
 							<div class="w3-cell w3-display-container w3-blue-gray" style="width: 14.400px;">
-								<i class="fa fa-chevron-circle-down w3-display-middle"></i>　
+								<c:set var="no" value="${0}" />
+								<c:forEach var="loc" items="${ARRIVE}">
+									<c:if test= "${st.count+1 eq loc}">
+										<c:set var="no" value="${no + 1}" />
+										<font size="6em" color="white">
+											<div class="w3-display-middle" style="width:40px; height:40px; border-radius:20px 20px; background-color: #0B243B;">
+												<i class="fa fa-bus w3-display-middle"></i>	
+											</div>
+										</font>
+									</c:if>
+									<c:if test= "${route.station_id eq loc}">
+										<c:set var="no" value="${no + 1}" />
+										<font size="6em" color="white">
+											<div class="w3-display-middle" style="width:40px; height:40px; border-radius:20px 20px; background-color: #0B243B;">
+												<i class="fa fa-bus w3-display-middle"></i>	
+											</div>
+										</font>
+									</c:if>
+								</c:forEach>
+								<c:if test="${no eq 0}">
+									<i class="fa fa-chevron-circle-down w3-display-middle"></i>
+								</c:if>
+
 							</div>
 							<div class="w3-container w3-padding w3-cell w3-left-align routeBtn" id="${route.station_id}">
 

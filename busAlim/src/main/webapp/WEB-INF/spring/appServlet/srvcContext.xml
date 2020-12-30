@@ -10,5 +10,6 @@
 	
 	<bean id="mService" class="com.luxurycity.clc.service.MemberService" />
 	<bean id="mailService" class="com.luxurycity.clc.service.MailSendService" />
+	<bean id="routeOption" class="com.luxurycity.clc.service.MakeRouteOption" />
 	
 </beans>
