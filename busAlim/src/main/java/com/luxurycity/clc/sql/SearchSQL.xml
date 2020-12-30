@@ -237,6 +237,13 @@
 		WHERE
 		    rno BETWEEN 1 AND 5
 	</select>
+	<select id="getseoularrive" resultType="sVO" parameterType="Integer">
+		select
+		    b.route_id, a.station_id, str_order, a.station_nm
+		from seoulstation a, seoulroutestation b
+		where a.station_id = #{station_id}
+		    and a.station_id = b.station_id
+	</select>
 
 	<select id="stationDetail" resultType="sVO" parameterType="int">
 		SELECT
@@ -558,12 +565,20 @@
 		and j.route_id = o.route_id
 		and g.route_id = #{route_id}
 	</select>
-	<select id="getstartlist" resultType="sVO" parameterType="sVO">
+  
+	<select id="getstartlist" resultType="sVO" parameterType="Integer">
 		select
 		    b.route_id, a.station_id, str_order, a.station_nm start_nm
 		from station a, routestation b
 		where a.station_id = #{start_id}
 		    and a.station_id = b.station_id
+		union
+		select
+		    b.route_id, a.station_id, str_order, a.station_nm start_nm
+		from seoulstation a, seoulroutestation b
+		where a.station_id = #{start_id}
+		    and a.station_id = b.station_id
+
 	</select>
 	<select id="getstartlistroute" resultType="sVO" parameterType="sVO">
 		select
@@ -575,60 +590,150 @@
 		    and a.station_id = b.station_id
 		    and a.route_id = #{route_id}
 		    and str_order <![CDATA[>]]> #{str_order}
+		union
+		select
+		    a.route_id, route_nm, str_order, a.station_id, station_nm
+		from
+		    seoulroutestation a, seoulstation b, seoulroute c
+		where
+		    a.route_id = c.route_id
+		    and a.station_id = b.station_id
+		    and a.route_id = #{route_id}
+		    and str_order <![CDATA[>]]> #{str_order}
 	</select>
 	<select id="getstartlistroutetotal" resultType="sVO" parameterType="sVO">
-		select count(*) cnt
-		from (
-				select
-				    a.route_id, route_nm, str_order, a.station_id, station_nm
-				from
-				    routestation a, station b, route c
-				where
-				    a.route_id = c.route_id
-				    and a.station_id = b.station_id
-				    and a.route_id = #{route_id}
-				    and str_order <![CDATA[>]]> #{str_order}
-		        )
+		select MAX(cnt) cnt
+		from(
+			select count(*) cnt
+			from (
+					select
+					    a.route_id, route_nm, str_order, a.station_id, station_nm
+					from
+					    routestation a, station b, route c
+					where
+					    a.route_id = c.route_id
+					    and a.station_id = b.station_id
+					    and a.route_id = #{route_id}
+					    and str_order <![CDATA[>]]> #{str_order}
+			        )
+			union
+			select count(*) cnt
+			from (
+					select
+					    a.route_id, route_nm, str_order, a.station_id, station_nm
+					from
+					    seoulroutestation a, seoulstation b, seoulroute c
+					where
+					    a.route_id = c.route_id
+					    and a.station_id = b.station_id
+					    and a.route_id = #{route_id}
+					    and str_order <![CDATA[>]]> #{str_order}
+			        )
+		 )       
 	</select>
-	<select id="getendlist" resultType="sVO" parameterType="sVO">
+	<select id="getendlist" resultType="sVO" parameterType="Integer">
 		select
 		    b.route_id, a.station_id, str_order, a.station_nm end_nm
 		from station a, routestation b
 		where a.station_id = #{end_id}
 		    and a.station_id = b.station_id
+
+		union
+		select
+		    b.route_id, a.station_id, str_order, a.station_nm end_nm
+		from seoulstation a, seoulroutestation b
+		where a.station_id = #{end_id}
+		    and a.station_id = b.station_id
 	</select>
 	<select id="getendlistroute" resultType="sVO" parameterType="sVO">
-		select
-		    a.route_id, route_nm, str_order, a.station_id, station_nm
-		from 
-		    routestation a, station b, route c
-		where 
-		    a.route_id = c.route_id
-		    and a.station_id = b.station_id
-		    and a.route_id = #{route_id}
-		    and str_order <![CDATA[<]]> #{str_order}
-		    
+		select route_id, route_nm, str_order, station_id, station_nm
+        from(
+			select
+			    a.route_id, route_nm, str_order, a.station_id, station_nm
+			from 
+			    routestation a, station b, route c
+			where 
+			    a.route_id = c.route_id
+			    and a.station_id = b.station_id
+			    and a.route_id = #{route_id}
+			    and str_order <![CDATA[<]]> #{str_order}
+			union
+			select
+			    a.route_id, route_nm, str_order, a.station_id, station_nm
+			from 
+			    seoulroutestation a, seoulstation b, seoulroute c
+			where 
+			    a.route_id = c.route_id
+			    and a.station_id = b.station_id
+			    and a.route_id = #{route_id}
+			    and str_order <![CDATA[<]]> #{str_order}
+			)
+      	  order by str_order desc
+			    
 	</select>
 	<select id="getendlistroutetotal" resultType="sVO" parameterType="sVO">
-		select count(*) cnt
-		from (
-				select
-				    a.route_id, route_nm, str_order, a.station_id, station_nm
-				from
-				    routestation a, station b, route c
-				where
-				    a.route_id = c.route_id
-				    and a.station_id = b.station_id
-				    and a.route_id = #{route_id}
-				    and str_order <![CDATA[<]]> #{str_order}
-		        )
+		select MAX(cnt) cnt
+		from(
+			select count(*) cnt
+			from (
+					select
+					    a.route_id, route_nm, str_order, a.station_id, station_nm
+					from
+					    routestation a, station b, route c
+					where
+					    a.route_id = c.route_id
+					    and a.station_id = b.station_id
+					    and a.route_id = #{route_id}
+					    and str_order <![CDATA[<]]> #{str_order}
+			        )
+			 union
+			select count(*) cnt
+			from (
+					select
+					    a.route_id, route_nm, str_order, a.station_id, station_nm
+					from
+					    seoulroutestation a, seoulstation b, seoulroute c
+					where
+					    a.route_id = c.route_id
+					    and a.station_id = b.station_id
+					    and a.route_id = #{route_id}
+					    and str_order <![CDATA[<]]> #{str_order}
+			        )
+		)
 	</select>
 	<select id="gettransfernm" resultType="string" parameterType="Integer">
 		
 		select station_nm transfer_nm
 		from station
 		where station_id = #{station_id}
+	</select>
 
+	<select id="getdistrict" resultType="Integer" parameterType="Integer">
+		select district_cd
+		from station
+		where station_id = #{station_id}
+		union
+		select district_cd
+		from seoulstation
+		where station_id = #{station_id}
+	</select>
+	<select id="getstart_id" resultType="Integer" parameterType="sVO">
+		select station_id start_id
+        from seoulstation
+        where station_nm = #{start_nm}
+        union
+        select station_id start_id
+        from station
+        where station_nm = #{start_nm}
+	</select>
+	<select id="getend_id" resultType="Integer" parameterType="sVO">
+		select station_id end_id
+        from seoulstation
+        where station_nm = #{end_nm}
+        union
+        select station_id end_id
+        from station
+        where station_nm = #{end_nm}
 	</select>
 	
 	<select id="getMapArroundStation" resultType="sVO" parameterType="map">

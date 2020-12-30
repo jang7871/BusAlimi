@@ -1,9 +1,12 @@
 package com.luxurycity.clc.vo;
 
+import java.util.Arrays;
+import java.lang.Comparable;
 import com.luxurycity.clc.util.*;
 
 public class StationVO {
-	private int station_id, district_cd, route_id, route_cd, next_station_id, start_id, end_id, waittime, str_order, cnt, distance;
+
+	private int station_id, district_cd, route_id, route_cd, next_station_id, start_id, end_id, waittime, str_order, cnt, str_order_cnt, distance;
 	private double loc_x, loc_y;
 	private String region, station_nm, transfer_nm,mobile_no, route_nm, keyword, route_tp, st_sta_nm,ed_sta_nm, next_station_nm, direction, start_nm, end_nm, staregion;
 	private PageUtil page;
@@ -11,11 +14,20 @@ public class StationVO {
 	
 	
 
+
 	public int getDistance() {
 		return distance;
 	}
 	public void setDistance(int distance) {
 		this.distance = distance;
+	}
+
+	
+	public int getStr_order_cnt() {
+		return str_order_cnt;
+	}
+	public void setStr_order_cnt(int str_order_cnt) {
+		this.str_order_cnt = str_order_cnt;
 	}
 	public String getStaregion() {
 		return staregion;
@@ -23,6 +35,7 @@ public class StationVO {
 	public void setStaregion(String staregion) {
 		this.staregion = staregion;
 	}
+
 	public String getTransfer_nm() {
 		return transfer_nm;
 	}

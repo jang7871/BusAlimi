@@ -245,9 +245,37 @@ h6{
 										<c:set var="no" value="${no + 1}" />		
 										<div class="w3-col m8 w3-padding">
 											<c:if test="${!empty routeinfo.predictTime1}">	
-												<div class="w3-col"><b>약 <span style="font-size: 20px;"> ${routeinfo.predictTime1} </span>분 [ ${routeinfo.locationNo1} 번째 전, 
+												<div class="w3-col"><b>이번 버스 : 약 <span style="font-size: 20px;"><c:if test="${empty routeinfo.predictTime1}"> 출발대기중
+																													</c:if>
+																													<c:if test="${!empty routeinfo.predictTime1}"> 
+																													 ${routeinfo.predictTime1}
+																													분 [${routeinfo.locationNo1} 번째 전]
+																													</c:if>
+																													</span> 
+																													[ 
+																													<c:if test="${routeinfo.lowPlate1 eq 0}">
+																										 				일반버스
+																													 </c:if>
+																													<c:if test="${routeinfo.lowPlate1 eq 1}">
+																														저상버스
+																													</c:if>
+																													 ,
 																											${routeinfo.remainSeatCnt1 eq -1 ? '정보없음' : '여유'}]</b></div>
-												<div class="w3-col"><b>약 <span style="font-size: 20px;"> ${routeinfo.predictTime2} </span>분 [ ${routeinfo.locationNo2} 번째 전,
+												<div class="w3-col"><b>다음 버스 : 약 <span style="font-size: 20px;"><c:if test="${empty routeinfo.predictTime2}"> 출발대기중
+																													</c:if>
+																													<c:if test="${!empty routeinfo.predictTime2}"> 
+																													 ${routeinfo.predictTime2}
+																													분 [${routeinfo.locationNo2} 번째 전]
+																													</c:if>
+																													</span> 
+																													[ 
+																													<c:if test="${routeinfo.lowPlate2 eq 0}">
+																										 				일반버스
+																													 </c:if>
+																													<c:if test="${routeinfo.lowPlate2 eq 1}">
+																														저상버스
+																													</c:if>
+																													 ,
 																											${routeinfo.remainSeatCnt2 eq -1 ? '정보없음' : '여유'}]</b></div>
 											</c:if>
 											<c:if test="${empty routeinfo.predictTime1}">	
@@ -256,6 +284,59 @@ h6{
 												<div class="w3-col"><b> <span style="font-size: 20px;"> -정보없음- </span> [ ${routeinfo.locationNo2} 번째 전,
 																												${routeinfo.remainSeatCnt2 eq -1 ? '정보없음' : '여유'}]</b></div>
 											</c:if>
+										</div>
+									</c:if>
+									<c:if test="${rlist.route_id eq routeinfo.busRouteId }">
+										<c:set var="no" value="${no + 1}" />		
+										<div class="w3-col m8 w3-padding">
+												<div class="w3-col"><b>이번 버스 : <span style="font-size: 20px;"> ${routeinfo.arrmsg1} </span> [
+																											 <c:if test="${routeinfo.busType1 eq 0}">
+																											 			일반버스
+																											 </c:if>
+																											 <c:if test="${routeinfo.busType1 eq 1}">
+																											 			저상버스
+																											 </c:if>
+																											 <c:if test="${routeinfo.busType1 eq 2}">
+																											 			굴절버스
+																											 </c:if>
+																											 , 
+																											 <c:if test="${routeinfo.reride_Num1 eq 0}">
+																											 			정보 없음
+																											 </c:if>
+																											 <c:if test="${routeinfo.reride_Num1 eq 3}">
+																											 			여유
+																											 </c:if>
+																											 <c:if test="${routeinfo.reride_Num1 eq 4}">
+																											 			보통
+																											 </c:if>
+																											 <c:if test="${routeinfo.reride_Num1 eq 5}">
+																											 			혼잡
+																											 </c:if>
+																																			]</b></div>
+												<div class="w3-col"><b>다음 버스 : <span style="font-size: 20px;"> ${routeinfo.arrmsg2} </span> [
+																											 <c:if test="${routeinfo.busType2 eq 0}">
+																											 			일반버스
+																											 </c:if>
+																											 <c:if test="${routeinfo.busType2 eq 1}">
+																											 			저상버스
+																											 </c:if>
+																											 <c:if test="${routeinfo.busType2 eq 2}">
+																											 			굴절버스
+																											 </c:if>
+																											 , 
+																											 <c:if test="${routeinfo.reride_Num2 eq 0}">
+																											 			정보 없음
+																											 </c:if>
+																											 <c:if test="${routeinfo.reride_Num2 eq 3}">
+																											 			여유
+																											 </c:if>
+																											 <c:if test="${routeinfo.reride_Num2 eq 4}">
+																											 			보통
+																											 </c:if>
+																											 <c:if test="${routeinfo.reride_Num2 eq 5}">
+																											 			혼잡
+																											 </c:if>
+																																			]</b></div>
 										</div>
 									</c:if>
 							</c:forEach>
