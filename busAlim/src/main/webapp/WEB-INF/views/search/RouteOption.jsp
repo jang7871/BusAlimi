@@ -108,6 +108,7 @@ a:visited {
 			    <c:forEach var="list" items= "${LIST}">
 			 		<div class="w3-col w3-white w3-margin-bottom w3-hover-pale-green w3-border-bottom busdatalist" id="'+ item.route_id +'" style="cursor: pointer;">
 						<div class="w3-col w3-padding">
+
 							<div class="w3-col m3 w3-border-blue w3-text-grey w3-center" >&nbsp;</div>
 							<c:if test="${empty list.route_nm}">
 								<div class="w3-col m3 w3-border-blue w3-text-grey w3-center"><i class="fa fa-bus w3-text-green" aria-hidden="true"></i>${list.route_list[0]}</div>

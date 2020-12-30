@@ -155,8 +155,10 @@ a:visited {
 <!-- 		<input type="hidden" name="region" id="region"> -->
 	</form>
 	<form method="post" id="searchroutefrm">
+
 		<input type="hidden" name="start_nm" id="startnm">
 		<input type="hidden" name="end_nm" id="endnm">
+
 	</form>
 
 
@@ -233,6 +235,7 @@ a:visited {
 	  </div>
 	</div>
 	
+
 	<!--  길찾기 모달  -->
 	
 	<div id="sroutemodal" class="w3-modal" style="position:absolute; z-index:10;">

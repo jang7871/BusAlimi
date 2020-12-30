@@ -264,7 +264,7 @@ var startClick = function() {
 	var startnm = $('#startroute').val();
 	$('#startnm').val(startnm);
 }
-// 출발지 검색 이벤트
+// 도착지 검색 이벤트
 var endClick = function() {
 	var endnm = $('#endroute').val();
 	$('#endnm').val(endnm);
@@ -331,7 +331,9 @@ $(document).on("click", '.busdatalist', function() {
 			return;
 		}
 		$('#routeid').val(routeid);
+
 		$('#district_cd').val(district_cd);
+
 		// 버스 검색 버튼을 누르면 버스 상세 페이지로 이동
 		$('#routefrm').attr('action', '/clc/search/busdetail.clc');
 		$('#routefrm').submit();
@@ -339,7 +341,7 @@ $(document).on("click", '.busdatalist', function() {
 $(document).on("click", '.stadatalist', function() {
 		// 검색한 내용이 없으면 리턴
 		var stationid = $(this).attr('id');
-		
+
 		var district_cd = '';
 		var region = $(this).children().children().first().text();
 		if(region == '서울') {
@@ -630,6 +632,7 @@ $(document).ready(function(){
 		});
 	});
 	$('.searchrouteoption').click(function(){
+
 		if(!$('#startnm').val()){
 			alert("출발 정류소가 입력되지 않았습니다.");
 			return;

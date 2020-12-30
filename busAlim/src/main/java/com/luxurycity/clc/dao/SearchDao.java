@@ -71,15 +71,18 @@ public class SearchDao {
 		return sqlSession.selectOne("sSQL.searchrouteinfo", sVO);
 	}
 	// 출발지 경유 버스 리스트가져오기
+
 	public List<StationVO> getStartList(int start_id) {
 		
 		return sqlSession.selectList("sSQL.getstartlist", start_id);
+
 	}
 	// 출발지 경유 버스 별 경로정보 가져오기
 	public List<StationVO> getStartListRoute(StationVO sVO) {
 		return sqlSession.selectList("sSQL.getstartlistroute", sVO);
 	}
 	// 도착지 경유 버스 리스트 가져오기
+
 	public List<StationVO> getEndList(int end_id) {
 		return sqlSession.selectList("sSQL.getendlist", end_id);
 	}
@@ -105,4 +108,5 @@ public class SearchDao {
 	public List<Integer> getEndId(StationVO sVO) {
 		return sqlSession.selectList("sSQL.getend_id", sVO);
 	}
+
 }

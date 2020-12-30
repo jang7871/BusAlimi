@@ -381,6 +381,7 @@ a:visited {
 								<c:if test="${no eq 0}">
 									<i class="fa fa-chevron-circle-down w3-display-middle"></i>
 								</c:if>
+
 							</div>
 							<div class="w3-container w3-padding w3-cell w3-left-align routeBtn" id="${route.station_id}">
 

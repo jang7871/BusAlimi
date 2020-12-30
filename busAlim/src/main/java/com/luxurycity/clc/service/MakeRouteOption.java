@@ -140,6 +140,7 @@ public class MakeRouteOption {
 		}catch(Exception e) {
 			System.out.println("esvo가 널");
 		}
+
 		return esvo;
 	}
 	//출발지 경유 버스별 경로정보를 가지는 이중배열 반환해주는 함수
@@ -176,12 +177,15 @@ public class MakeRouteOption {
 			int total = sDao.getEndListRouteTotal(sVO).getCnt();
 			etotal.add(total);
 		}
+
 		System.out.println("!@#%" + etotal.toString());
+
 		return etotal;
 	}
 	//루트를 반환해주는 함수
 	public ArrayList<StationVO> getRouteOption(ArrayList<ArrayList<StationVO>> start, ArrayList<ArrayList<StationVO>> end
 			, ArrayList<Integer> stotal, ArrayList<Integer> etotal){
+
 		ArrayList<StationVO> tmp = new ArrayList<StationVO>();
 		//환승이 없는경우
 		for(int i = 0 ; i < start.size(); i++) {
@@ -225,7 +229,7 @@ public class MakeRouteOption {
 				}
 			}
 		}
-
 		return tmp;
+
 	}
 }
