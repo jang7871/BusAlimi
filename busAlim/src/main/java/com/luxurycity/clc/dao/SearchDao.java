@@ -103,6 +103,10 @@ public class SearchDao {
 		return sqlSession.selectOne("sSQL.gettransfernm", station_id);
 	}
 
+	// 친구 정보 가져오기
+	public List<MemberVO> getFriendList(HashMap<String, String> map) {
+		return sqlSession.selectList("sSQL.friendKeyList", map);
+
 	// 중심좌표 기준 근접 정류소 리스트 가져오는 전담 처리 함수
 	public List<StationVO> getMapArroundStation(HashMap<String, Double> map) {
 		return sqlSession.selectList("sSQL.getMapArroundStation", map);
@@ -112,5 +116,6 @@ public class SearchDao {
 	}
 	public List<Integer> getEndId(StationVO sVO) {
 		return sqlSession.selectList("sSQL.getend_id", sVO);
+
 	}
 }

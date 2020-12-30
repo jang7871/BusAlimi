@@ -19,6 +19,8 @@
 		<typeAlias alias="fVO" type="com.luxurycity.clc.vo.FindVO" />
 		<typeAlias alias="rVO" type="com.luxurycity.clc.vo.RouteVO" />
 		<typeAlias alias="sVO" type="com.luxurycity.clc.vo.StationVO" />
+		<typeAlias alias="frndVO" type="com.luxurycity.clc.vo.FriendVO" />
+		<typeAlias alias="msgVO" type="com.luxurycity.clc.vo.MessageVO" />
 		<typeAlias alias="page" type="com.luxurycity.clc.util.PageUtil" />
 	</typeAliases>
 

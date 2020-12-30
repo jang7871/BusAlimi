@@ -237,6 +237,28 @@
 		WHERE
 		    rno BETWEEN 1 AND 5
 	</select>
+	
+	<!-- 친구 검색  -->
+	<select id="friendKeyList" resultType="mVO" parameterType="hashmap">
+		SELECT
+		    mno, id, name, mail, joindate, ano, gen, NVL(cnt, 0) cnt
+		FROM
+		    (
+		    SELECT
+		        frid, count(frid) cnt
+		    FROM
+		        friend
+		    WHERE
+		        id = #{sid}
+		    GROUP BY
+		        frid
+		    ) c,
+		    member m
+		WHERE
+		    c.frid(+) = m.id
+		    AND isshow = 'Y'
+		    AND name LIKE #{keyword} || '%'
+  </select>
 	<select id="getseoularrive" resultType="sVO" parameterType="Integer">
 		select
 		    b.route_id, a.station_id, str_order, a.station_nm

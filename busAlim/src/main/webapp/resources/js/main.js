@@ -643,11 +643,153 @@ $(document).ready(function(){
 		$('#searchroutefrm').submit();
 	});
 	
-
 	
 	$('#login').click(function(){
 		$(location).attr('href','/clc/member/login.clc');
 	});
 
 });
+// 친구 관련 기능
+/* =============================================================================================== */
+// 친구 등록 및 삭제 함수
+var fr_add_delbtn = function(e) {
+	
+	var frid = $(e).prev().html().trim();
+	var data = {frid: frid};
+	var starO = $(e).children().attr('class');
+	if(starO.indexOf('fa-star-o') != -1) {
+		// 친구 추가 요청
+		var mark = '?';
+		connect(e, mark);
+	} else {
+		// 친구 삭제
+		var mark = '*';
+		connect(e, mark);	
+	}
+
+	$.ajax({
+		url: '/clc/member/add_delfriend.clc',
+		type: 'POST',
+		dataType: 'json',
+		contentType: 'application/json; charset=UTF-8',
+		data: JSON.stringify(data),
+		success: function(obj){
+		},
+		error: function(){
+			alert('### 비동기 통신 실패 ###');
+		}
+	})
+	
+	$(e).children().toggleClass('w3-hide');
+};
+// 친구추가 요청을 위한 웹소켓
+var websocket;
+function connect(e, mark) {
+	websocket = new WebSocket("ws://localhost/clc/chat-clc");
+	
+	websocket.onopen = onOpen(e, mark);
+	websocket.onclose = onClose;
+	websocket.onerror = onError;
+	websocket.close();
+};
+
+function onOpen(e, mark) {
+	var sid = $('#sid').text();
+	var id = $(e).prev().text();
+	alert(id + '님을 선택하셨습니다.');
+	websocket.send(mark+sid+' : '+id);
+};
+
+function onClose(evt) {
+	var code = evt.code;
+	var reason = evt.reason;
+	var wasClean = evt.wasClean;
+	
+	if(wasClean) {
+		console.log('Connection closed normally.');
+	} else {
+		console.log('Connection closed normally.' + reason + 'Code : ' + code);
+	}
+};
+// 웹 소켓 연결 도중 에러 발생시 호출되는 함수
+function onError(evt) {
+	$('#message').val('Error: ' + evt);
+}
+
+function disconnect() {
+	websocket.close();
+};
+
+$(document).ready(function() {
+	var sid = $('#sid').html();
+	// 친구 검색 리스트  이벤트
+	$('#friendname').keyup(function() {
+		// 1. 검색창 키워드를 가져온다
+		var keyword = $('#friendname').val();
+		// 2. 키워드를 json 형식으로 만든다.
+		var data = {keyword: keyword};
+		// 3. 키워드를 controller에 보낸다.(ajax 처리)
+		$.ajax({
+			url: '/clc/search/searchfriend.clc',
+			type: 'POST',
+			dataType: 'json',
+			data: JSON.stringify(data),
+			contentType: 'application/json',
+			success:function(obj){
+				// 3-1. 리스트 초기화
+				$('#friendlist').html('');
+				// 3-2. 조회된 리스트 데이터 갯수 조회
+				var rcnt = Object.keys(obj).length;
+				if(rcnt == 0) {
+					// 조회된 데이터가 없으면 리턴
+					return;
+				}
+				// 3-3. 조회된 리스트 append
+				$.each(obj, function(index, item) {
+					if(sid == item.id) {
+						
+					} else {
+						if(item.cnt == 0) {							
+							var tag = '<div class="w3-col m11 w3-cell-row w3-button" style="text-align: left; display: block;">';
+							tag += '<div class="w3-container w3-padding w3-cell w3-left-align">'+item.name+', &nbsp;</div>';
+							tag += '<div class="w3-container w3-padding w3-cell w3-left-align">'+item.id+'</div>';
+							tag += '<div class="w3-cell w3-display-container" id="'+item.mno+'" style="width: 40px;" onclick="fr_add_delbtn(this)">';
+							tag += '<i class="w3-text-gray w3-display-middle w3-col fa fa-star-o fa-1x" aria-hidden="true" style="cursor: pointer;"></i>';
+							tag += '</div>';
+							tag += '</div>';
+							$('#friendlist').append(tag);
+							$('#friendlist').css('display', 'block');
+						} else if(item.cnt == 1) {
+							var tag = '<div class="w3-col m11 w3-cell-row w3-button" style="text-align: left; display: block;">';
+							tag += '<div class="w3-container w3-padding w3-cell w3-left-align">'+item.name+', &nbsp;</div>';
+							tag += '<div class="w3-container w3-padding w3-cell w3-left-align">'+item.id+'</div>';
+							tag += '<div class="w3-cell w3-display-container" id="'+item.mno+'" style="width: 40px;" onclick="fr_add_delbtn(this)">';
+							tag += '<i class="w3-text-amber w3-display-middle w3-col fa fa-star fa-1x" aria-hidden="true" style="cursor: pointer;"></i>';
+							tag += '</div>';
+							tag += '</div>';
+							$('#friendlist').append(tag);
+							$('#friendlist').css('display', 'block');
+						}
+					}
+				});
+					
+			},
+			error:function(){
+				alert('### 비동기 통신에 실패하였습니다.');
+			}
+		})
+	})
+	// 친구 검색 모달창 활성화
+	$('#searchfriend').click(function() {
+		$('#frimodal').css('display', 'block');
+	});
+	
+	// 천구 검색 모달창 닫기
+	$('#closefrimodal').click(function() {
+		$('#frimodal').css('display', 'none');
+		$('#friendlist').css('display', 'none');
+		disconnect();
+	});
+	
+})
 	
