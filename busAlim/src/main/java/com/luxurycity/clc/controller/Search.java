@@ -6,6 +6,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
@@ -200,5 +201,21 @@ public class Search {
 //		System.out.println(list.size());
 		return list;
 	}	
+	
+	// 친구 이름 검색
+	@ResponseBody
+	@RequestMapping(path="/searchfriend.clc", method=RequestMethod.POST)
+	public List<MemberVO> searchFriend(@RequestBody HashMap<String, String> map, HttpSession session) {
+		String sid = (String) session.getAttribute("SID");
+		if(sid == null || sid.length() == 0) {
+			List<MemberVO> list = null;
+			return list;
+		}
+		
+		map.put("sid", sid);
+		List<MemberVO> list = sDao.getFriendList(map);
+		
+		return list;
+	}
 
 }

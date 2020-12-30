@@ -91,4 +91,8 @@ public class SearchDao {
 	public String getTransfernm(int station_id) {
 		return sqlSession.selectOne("sSQL.gettransfernm", station_id);
 	}
+	// 친구 정보 가져오기
+	public List<MemberVO> getFriendList(HashMap<String, String> map) {
+		return sqlSession.selectList("sSQL.friendKeyList", map);
+	}
 }

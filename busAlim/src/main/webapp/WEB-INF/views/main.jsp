@@ -35,6 +35,7 @@ a:visited {
 <!-- Sidebar/menu -->
 <nav class="w3-sidebar w3-collapse w3-white w3-animate-left" style="z-index:3;width:300px;" id="mySidebar"><br>
 
+
 	<!-- 로그인 했을 경우 -->
 <c:if test="${not empty SID}">
   <div class="w3-container w3-row">
@@ -44,8 +45,10 @@ a:visited {
       </a>
     </div>
     <div class="w3-col s8">
-      <span>Welcome, <strong>${SID}</strong></span><br>
+      <span>Welcome, <strong id="sid">${SID}</strong></span><br>
       <a href="/clc/member/logout.clc" class="w3-col m9 w3-tiny w3-round w3-button w3-orange w3-text-white" style="margin-top: 5px;">Logout</a>
+      <a href="/clc/member/friendlist.clc" class="w3-bar-item w3-button"><i class="fa fa-envelope"></i></a>
+      <div class="w3-bar-item w3-button" id="searchfriend"><i class="fa fa-user"></i></div>      
     </div>
   </div>
 </c:if>
@@ -253,6 +256,26 @@ a:visited {
 	    </div>
 	  </div>
 	</div>
+	
+ 	<!-- 친구 검색 모달창 -->
+	<div id="frimodal" class="w3-modal" style="position:absolute; z-index:12;">
+	  <div class="w3-modal-content w3-animate-opacity w3-card-4">
+	    <header class="w3-container w3-border-bottom w3-orange"> 
+	      <span id="closefrimodal" class="w3-button w3-display-topright">&times;</span>
+	      <h3>친구검색</h3>
+	    </header>
+	   
+	    <div class="w3-container" id="frienddata">	
+	    	<div class="w3-cell-row w3-margin-top w3-margin-bottom">
+				<input type="text" placeholder="이름을 입력하세요." id="friendname" style="outline: 0; borde-bottomr: 0px!important; border-left: 5px solid orange; border-radius: 5px 0 0 5px; padding: 16px; font-size: 1.2857em;" class="w3-cell w3-input" autocomplete="off">
+			</div>
+			<div id="friendlist" class="w3-card-2 w3-white" style="display: none; z-index: 2; position: absolute; left: 0; right: 0; font-size: 1.1em;"></div>
+			<div class="w3-button w3-cell-row w3-margin-top w3-padding w3-orange"><b>검색</b></div>
+	    </div>
+			
+	    </div>
+	  </div>
+	</div>
   <hr>
   <div class="w3-container w3-dark-grey w3-padding-32">
     <div class="w3-row">
@@ -281,7 +304,7 @@ a:visited {
   </footer>
 
   <!-- End page content -->
-</div>
+
 
 <script>
 // Get the Sidebar

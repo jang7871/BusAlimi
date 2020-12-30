@@ -5,6 +5,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,11 +14,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.socket.WebSocketSession;
+
 import com.luxurycity.clc.dao.*;
 import com.luxurycity.clc.service.*;
 import com.luxurycity.clc.vo.*;
-
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.forwardedUrl;
 
 import java.util.*;
 import com.luxurycity.clc.util.*;
@@ -35,7 +36,12 @@ public class Member {
 	MemberService mService;
 	@Autowired
 	MailSendService mss;	// 인증메일을 보내는 클래스
+	@Autowired
+	ChatHandler chat;
+	@Autowired
+	PageUtil page;
 	
+	private ArrayList<HashMap<String, String>> message = new ArrayList<HashMap<String, String>>();
 	@RequestMapping("/login.clc")
 	public ModelAndView login(ModelAndView mv) {
 		mv.setViewName("member/Login");
@@ -329,6 +335,178 @@ public class Member {
 		}
 		return map2;
 
+	}
+	
+	// 친구 추가 및 삭제 요청
+	@ResponseBody
+	@RequestMapping("/add_delfriend.clc")
+	public HashMap<String, String> add_delFriend(@RequestBody HashMap<String, String> map, HttpSession session) {
+		String sid = (String) session.getAttribute("SID");
+		map.put("id", sid);
+		mDao.addFriend(map);
+		
+		HashMap<String, String> list = new HashMap<String, String>();
+		
+		list.put("result", "OK");
+		
+		int cnt = 0;
+		try {
+			cnt = Integer.parseInt(map.get("cnt"));
+		} catch(Exception e) {}
+		
+		if(cnt == 0) {
+			System.out.println("친구"+map.get("frid")+"를 추가합니다.");
+		} else if(cnt != 0) {
+			System.out.println("친구"+map.get("frid")+"를 삭제합니다.");	
+		}
+		
+		
+		return list;
+	}
+	
+	// 친구 목록 리스트 요청
+	@RequestMapping("/friendlist.clc")
+	public ModelAndView getFriendList(ModelAndView mv, HttpSession session, HttpServletRequest req) {
+		// 세션 검사
+		String sid = "";
+		
+		try {
+			sid = (String) session.getAttribute("SID");
+			if(sid == null || sid.length() == 0) {
+				mv.setViewName("redirect:/member/login.clc");
+				return mv;
+			} else {
+				// 나에게 메세지가 왔는지 확인하기
+				ArrayList<HashMap<String, String>> list = chat.messageBox;
+				
+				int cnt = 0;
+				for(int i = 0; i < chat.messageBox.size(); i++) {
+					cnt = mDao.addMsg(chat.messageBox.get(i));
+				}
+				
+				if(cnt != 0) {
+					System.out.println("메세지 전달 성공.");
+				}
+				// messageBox 비우기
+				for(int i = chat.messageBox.size(); i > 0; i--) {
+					chat.messageBox.remove(0);
+				}
+				
+				// 메세지 불러오기
+				List<MessageVO> msgList = mDao.getMsgList(sid);
+				if(msgList.size() != 0) {
+					mv.addObject("MESSAGE", msgList);
+				}
+
+ 			}
+			
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		// 친구 요청 유뮤 검사
+		int cnt = 0;
+		for(int i = 0; i < chat.requestBox.size(); i++) {
+			HashMap<String, String> map = chat.requestBox.get(i);
+			
+			String value = "";	// 친구요청받는사람
+			Set set = map.keySet();
+			Iterator iter = set.iterator();
+			while(iter.hasNext()) {
+				String key = (String) iter.next();	// 친구요청하는사람
+				value = map.get(key);	
+				
+				if(sid.equals(value)) {
+					cnt += 1;
+					String reqq = key + "님의 친구 요청을 수락하시겠습니까?";
+					MessageVO msgVO = new MessageVO();
+					msgVO.setMessage(reqq);
+					msgVO.setId(key);
+					msgVO.setReid(value);
+					mv.addObject("msgVO", msgVO);
+					break;
+				}
+			}
+			
+			
+			if(cnt != 0) {
+				chat.requestBox.remove(i);
+				break;				
+			}
+		}
+		// 페이징
+		int nowPage = 1;
+		try {
+			nowPage = Integer.parseInt(req.getParameter("nowPage"));
+		} catch(Exception e) {}
+		
+		int total = mDao.getMsgCnt(sid);
+		
+		page = new PageUtil(nowPage, total, 5, 5);
+
+		// 친구 목록 불러오기
+		List<MemberVO> friend = mDao.getfriendList(sid);
+		
+		mv.addObject("PAGE", page);
+		mv.addObject("FRIEND", friend);
+		mv.setViewName("member/FriendList");
+		return mv;
+	}
+	
+	// 친구 요쳥 수락 처리
+	@RequestMapping(path="/response.clc")
+	public ModelAndView response(ModelAndView mv, FriendVO frndVO) {
+		System.out.println("## 함수 실행");
+		int cnt = 0;
+		try {
+			cnt = mDao.addFri(frndVO);
+		} catch(Exception e) {
+			e.printStackTrace();
+		} 
+		mv.setViewName("member/FriendList");
+		return mv;
+	}
+	
+	// 메세지 확인 처리 요청
+	@ResponseBody
+	@RequestMapping(path="/msgCheck.clc", method=RequestMethod.POST)
+	public HashMap<String, String> msgCheck(@RequestBody HashMap<String, String> map) {
+		String result = "";
+		
+		int msgnoo = 0;
+		int cnt = 0;
+		try {
+			msgnoo = Integer.parseInt(map.get("msgno"));
+			cnt = mDao.msgCheck(msgnoo);
+		} catch(Exception e) {}
+		
+		if(cnt != 0) {
+			result = "OK";
+		}
+
+		map.put("result", result);
+		return map;
+	}
+	
+	// 메세지 삭제 요청
+	@ResponseBody
+	@RequestMapping(path="/msgDel.clc", method=RequestMethod.POST)
+	public HashMap<String, String> msgDel(@RequestBody HashMap<String, String> map) {
+		String result = "";
+		
+		int msgnoo = 0;
+		int cnt = 0;
+		try {
+			msgnoo = Integer.parseInt(map.get("msgno"));
+			cnt = mDao.msgDel(msgnoo);
+		} catch(Exception e) {}
+		
+		if(cnt != 0) {
+			result = "OK";
+		}
+
+		map.put("result", result);
+		return map;
 	}
 
 }

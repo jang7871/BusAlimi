@@ -3,7 +3,7 @@ import java.sql.Date;
 import java.sql.Time;
 import java.text.*;
 public class MemberVO {
-	private int mno, ano;
+	private int mno, ano, cnt;
 	private String id, name, pw, mail, sdate, afile, gen;
 	private Date joindate;
 	private Time jointime;
@@ -18,6 +18,12 @@ public class MemberVO {
 	}
 	public void setAno(int ano) {
 		this.ano = ano;
+	}
+	public int getCnt() {
+		return cnt;
+	}
+	public void setCnt(int cnt) {
+		this.cnt = cnt;
 	}
 	public String getId() {
 		return id;
