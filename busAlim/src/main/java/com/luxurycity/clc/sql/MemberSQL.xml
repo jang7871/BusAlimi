@@ -55,6 +55,47 @@
 			id = #{id}
 			AND isshow = 'Y'
 	</select>
+	<select id="friendList" resultType="mVO" parameterType="string">
+		SELECT
+		    m.id, m.name, a.afile
+		FROM
+		    (
+		    SELECT
+		        id, frid
+		    FROM
+		        friend
+		    WHERE
+		        id = #{sid}
+		        AND isshow = 'Y'
+		    ) c,
+		    member m,
+		    avatar a
+		WHERE
+		    c.frid = m.id
+		    AND m.ano = a.ano
+	</select>
+	<select id="getMsgList" resultType="msgVO" parameterType="string">
+		SELECT
+			ms.msgno, ms.id, ms.reid, ms.message, ms.adddate addDate, ms.adddate addTime, 
+			ms.msgcheck, m.name, afile
+		FROM
+			message ms, member m, avatar a
+		WHERE
+			ms.reid = #{sid}
+			AND ms.id = m.id
+			AND m.ano = a.ano
+			AND ms.isshow = 'Y'
+		ORDER BY
+			ms.adddate DESC
+	</select>
+	<insert id="addMsg" parameterType="java.util.HashMap">
+			INSERT INTO
+				message(msgno, id, reid, message)
+			VALUES(
+				(SELECT NVL(MAX(msgno), 100000)+1 FROM message), 
+				#{sid}, #{reid}, #{msg}
+			)
+	</insert>
 	<insert id="addMemb" parameterType="mVO" >
 		INSERT INTO
 			member(mno, id, pw, name, mail, gen, ano)
@@ -77,7 +118,72 @@
 		    ), 
 		    #{mno}, #{qno}, #{answer}) 
 	</insert>
-
+	<!-- 친구 추가 -->
+	<!-- 프로시저 사용하기 -->
+	<select id="addFriend" statementType="CALLABLE">
+		{
+			CALL friendProc(
+				#{id},
+				#{frid},
+				#{cnt, mode=OUT, jdbcType=VARCHAR}
+			)
+		}
+	</select>
+	<!-- 메세지 총 갯수 가져오기 -->
+	<select id="msgCnt" resultType="int" parameterType="string">
+		SELECT
+			COUNT(*) cnt
+		FROM
+			message
+		WHERE
+			reid = #{sid}
+	</select>
+	<!-- 메세지 삭제 -->
+	<update id="msgDel" parameterType="int">
+		UPDATE
+			message
+		SET
+			isshow = 'N'
+		WHERE
+			msgno = #{msgno}
+	</update>
+	<!-- 메세지 수신 확인 -->
+	<update id="msgCheck" parameterType="int">
+		UPDATE
+			message
+		SET
+			msgcheck = 'Y'
+		WHERE
+			msgno = #{msgno}
+	</update>
+	<!-- 친구요청수락 -->
+	<update id="respFri" parameterType="frndVO">
+		UPDATE
+			friend
+		SET
+			isshow = 'Y'
+		WHERE
+			frno =
+    		(
+    		SELECT
+        		frno
+    		FROM
+        		friend
+    		WHERE
+        		id = #{id}
+        		AND frid = #{frid}
+    		)
+	</update>
+	<!-- 친구 삭제 -->
+	<update id="delFriend" parameterType="frndVO">
+		UPDATE
+			friend
+		SET
+			isshow = 'N'
+		WHERE
+			id = #{id}
+			AND frid = #{frid}
+	</update>
 	<update id="editMemb" parameterType="mVO">
 		UPDATE
 			member

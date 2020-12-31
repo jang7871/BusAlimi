@@ -6,6 +6,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
@@ -114,28 +115,7 @@ public class Search {
 		mv.addObject("LIST", slist);
 		return mv;
 	}
-	@RequestMapping("/searchrouteoption.clc")
-	public ArrayList<StationVO> searchRouteOption(ModelAndView mv, StationVO sVO) {
-		MakeRouteOption opt = new MakeRouteOption(mv, sVO);
-		ArrayList<StationVO> option = opt.getOption();
-		/*
-		List<StationVO> list = sDao.getBusOption(sVO);
-		ArrayList<StationVO> arr = new ArrayList<StationVO>();
-		
-		if(list.size() == 0) {
-			mv.setViewName("redirect:/main.clc");
-		}else {
-			mv.setViewName("search/RouteOption");
-		}
-		for(StationVO VO: list) {
-			System.out.println(VO.getStart_id() + "####################" + VO.getEnd_id() + "#########################" + VO.getRoute_id());
-			StationVO tVO = sDao.getSearchInfo(VO);
-			arr.add(tVO);
-		}
-		mv.addObject("LIST", arr);
-		*/
-		return option;
-	}
+
 	
 	@RequestMapping("/stationArrInfo.clc")
 	@ResponseBody
@@ -242,5 +222,96 @@ public class Search {
 //		System.out.println(list.size());
 		return list;
 	}	
+	
+
+	// 친구 이름 검색
+	@ResponseBody
+	@RequestMapping(path="/searchfriend.clc", method=RequestMethod.POST)
+	public List<MemberVO> searchFriend(@RequestBody HashMap<String, String> map, HttpSession session) {
+		String sid = (String) session.getAttribute("SID");
+		if(sid == null || sid.length() == 0) {
+			List<MemberVO> list = null;
+			return list;
+		}
+		
+		map.put("sid", sid);
+		List<MemberVO> list = sDao.getFriendList(map);
+		
+		return list;
+	}
+
+	@RequestMapping("/mapSearch.clc")
+	public ModelAndView mapSearch(ModelAndView mv) {
+		mv.setViewName("search/mapSearch");
+		return mv;
+	}
+	
+	@ResponseBody
+	@RequestMapping("/mapRelList.clc")
+	public List mapRelList(@RequestBody HashMap<String, Object> map, RouteVO rVO, StationVO sVO, PageUtil page) {
+		// 검색 키워드, 검색유형(버스, 정류소), nowPage 가져오기
+		String keyword = (String) map.get("keyword");
+		String type = (String) map.get("type");
+		int nowPage = (int) map.get("nowPage");
+		
+		// 검색유형이 '버스'인 경우와 '정류소'인 경우로 나눠서 처리
+		List list = null;
+		
+		if(type.equals("bus")) {
+			rVO.setKeyword(keyword);
+			int total = sDao.getBusTotal(keyword);
+			page.setTotalCount(total);
+			page.setNowPage(nowPage);
+			page.setPage(page.getNowPage(), total, 200, 5);
+			rVO.setPage(page);
+			list = sDao.getBusRellist(rVO);
+			for(int i = 0; i < list.size(); i++) {
+				((RouteVO) list.get(i)).setPage(page);
+			}
+		} else if(type.equals("station")) {
+			sVO.setKeyword(keyword);
+			int total = sDao.getStaTotal(keyword);
+			page.setTotalCount(total);
+			page.setNowPage(nowPage);
+			page.setPage(page.getNowPage(), total, 200, 5);
+			sVO.setPage(page);
+			list = sDao.getStaRelList(sVO);
+			for(int i = 0; i < list.size(); i++) {
+				((StationVO) list.get(i)).setPage(page);
+			}			
+		}
+		
+		return list;
+	}
+	
+	@ResponseBody
+	@RequestMapping("/mapStationDetail.clc")
+	public List<StationVO> mapStationDetail(@RequestBody HashMap<String, Integer> map) {
+		int station_id = map.get("station_id");
+		List<StationVO> list = sDao.stationDetail(station_id);
+//		StationVO sVO = list.get(0);
+		
+		return list;
+	}
+	
+	@ResponseBody
+	@RequestMapping("/mapAroundStation.clc")
+	public List<StationVO> mapAroundStation(@RequestBody HashMap<String, Double> map) {
+		// 중심좌표 정보 보내고 주변 정류소 리스트 받는다.
+		List<StationVO> list = sDao.getMapArroundStation(map);
+		
+		return list;
+	}
+	
+	@ResponseBody
+	@RequestMapping("/mapRouteDetail.clc")
+	public List<RouteVO> mapRouteDetail(@RequestBody HashMap<String, Integer> map, RouteVO rVO){
+		rVO.setDistrict_cd(map.get("district_cd"));
+		rVO.setRoute_id(map.get("route_id"));
+		
+		List<RouteVO> list = sDao.busDetail(rVO);
+		
+		return list;
+	}
 
 }

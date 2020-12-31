@@ -4,8 +4,22 @@ import com.luxurycity.clc.util.*;
 public class RouteVO {
 	private int route_id, route_cd, st_sta_id, ed_sta_id, peek_alloc, npeek_alloc, district_cd, station_id, str_order;
 	private String route_nm, up_first_time, up_last_time, down_first_time, down_last_time, region, station_nm, mobile_no, direction, route_tp, st_sta_nm, ed_sta_nm, keyword;
+	private double loc_x, loc_y;
 	private PageUtil page;
 	
+	
+	public double getLoc_x() {
+		return loc_x;
+	}
+	public void setLoc_x(double loc_x) {
+		this.loc_x = loc_x;
+	}
+	public double getLoc_y() {
+		return loc_y;
+	}
+	public void setLoc_y(double loc_y) {
+		this.loc_y = loc_y;
+	}
 	public String getKeyword() {
 		return keyword;
 	}
