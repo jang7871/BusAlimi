@@ -655,7 +655,7 @@ $(document).ready(function(){
 var fr_add_delbtn = function(e) {
 	
 	var frid = $(e).prev().html().trim();
-	var data = {frid: frid};
+	var data = {frid:frid};
 	var starO = $(e).children().attr('class');
 	if(starO.indexOf('fa-star-o') != -1) {
 		// 친구 추가 요청
@@ -683,10 +683,8 @@ var fr_add_delbtn = function(e) {
 	$(e).children().toggleClass('w3-hide');
 };
 // 친구추가 요청을 위한 웹소켓
-var websocket;
-function connect(e, mark) {
-	websocket = new WebSocket("ws://localhost/clc/chat-clc");
-	
+var websocket = new WebSocket("ws://localhost/clc/chat-clc");
+function connect(e, mark) {	
 	websocket.onopen = onOpen(e, mark);
 	websocket.onclose = onClose;
 	websocket.onerror = onError;
@@ -697,7 +695,7 @@ function onOpen(e, mark) {
 	var sid = $('#sid').text();
 	var id = $(e).prev().text();
 	alert(id + '님을 선택하셨습니다.');
-	websocket.send(mark+sid+' : '+id);
+	websocket.send(mark+sid+':'+id);
 };
 
 function onClose(evt) {

@@ -136,6 +136,7 @@ a:visited {
 <!-- 받은 메세지 -->
 <div class="w3-container">
     <h5>Recent Comments</h5>
+<c:if test="${PAGE.endCont-1 > 0 }">
 <c:forEach var="message" items="${MESSAGE}" begin="${PAGE.startCont-1}" end="${PAGE.endCont-1}">    
     <div class="w3-row">
       <div class="w3-col m2 text-center">
@@ -164,6 +165,7 @@ a:visited {
       </div>
     </div>
 </c:forEach>
+</c:if>
 </div>
   <br>
 
